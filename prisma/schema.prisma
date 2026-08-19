@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  CANCELLED
+}
+
+enum InvoiceTaxType {
+  CGST_SGST
+  IGST
+}
+
+model Invoice {
+  id Int @id @default(autoincrement())
+
+  invoiceNumber String   @unique
+  invoiceDate   DateTime
+  financialYear String
+
+  status  InvoiceStatus  @default(DRAFT)
+  taxType InvoiceTaxType
+
+  // Seller snapshot
+  sellerName      String
+  sellerGSTIN     String?
+  sellerPAN       String?
+  sellerAddress   String?
+  sellerState     String?
+  sellerStateCode String?
+  sellerEmail     String?
+  sellerPhone     String?
+
+  // Buyer snapshot
+  buyerName      String
+  buyerGSTIN     String?
+  buyerPAN       String?
+  buyerAddress   String?
+  buyerState     String?
+  buyerStateCode String?
+  buyerEmail     String?
+  buyerPhone     String?
+  buyerAadhaar   String?
+
+  // Additional invoice metadata (Umiya template fields)
+  deliveryNote      String?
+  buyerOrderNo      String?
+  buyerOrderDate    DateTime?
+  dispatchDocNo     String?
+  deliveryNoteDate  DateTime?
+  dispatchedThrough String?
+  destination       String?
+
+  // Amounts
+  subtotal   Decimal @db.Decimal(15, 2)
+  totalCGST  Decimal @default(0) @db.Decimal(15, 2)
+  totalSGST  Decimal @default(0) @db.Decimal(15, 2)
+  totalIGST  Decimal @default(0) @db.Decimal(15, 2)
+  roundOff   Decimal @default(0) @db.Decimal(15, 2)
+  grandTotal Decimal @db.Decimal(15, 2)
+
+  // Optional invoice information
+  notes              String?
+  termsAndConditions String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items InvoiceItem[]
+
+  @@index([invoiceDate])
+  @@index([financialYear])
+  @@index([status])
+  @@index([buyerGSTIN])
+}
+
+model InvoiceSequence {
+  id Int @id @default(autoincrement())
+
+  financialYear String @unique
+  lastNumber    Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model InvoiceItem {
+  id Int @id @default(autoincrement())
+
+  invoiceId Int
+  invoice   Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  description String
+  hsn         String?
+  quantity    Decimal @db.Decimal(15, 3)
+  unit        String?
+  rate        Decimal @db.Decimal(15, 2)
+
+  gstRate Decimal @db.Decimal(5, 2)
+
+  taxableAmount Decimal @db.Decimal(15, 2)
+
+  cgstAmount Decimal @default(0) @db.Decimal(15, 2)
+  sgstAmount Decimal @default(0) @db.Decimal(15, 2)
+  igstAmount Decimal @default(0) @db.Decimal(15, 2)
+
+  totalAmount Decimal @db.Decimal(15, 2)
+
+  createdAt DateTime @default(now())
+
+  @@index([invoiceId])
+}
