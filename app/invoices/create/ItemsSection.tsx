@@ -11,6 +11,10 @@ type Props = {
 const cellInputClass =
   "w-full rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-sm text-zinc-900 outline-none focus:border-zinc-500";
 
+// Positive decimal with up to 3 decimal places (e.g. "1", "62.774").
+// Also allows transient states like "" and "62." while typing.
+const QUANTITY_PATTERN = /^\d*(\.\d{0,3})?$/;
+
 export default function ItemsSection({
   items,
   updateItem,
@@ -76,12 +80,16 @@ export default function ItemsSection({
                 </td>
                 <td className="px-2 py-2">
                   <input
-                    type="number"
+                    type="text"
+                    inputMode="decimal"
                     className={cellInputClass}
                     value={item.quantity}
-                    onChange={(e) =>
-                      updateItem(index, { quantity: e.target.value })
-                    }
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (QUANTITY_PATTERN.test(value)) {
+                        updateItem(index, { quantity: value });
+                      }
+                    }}
                   />
                 </td>
                 <td className="px-2 py-2">
