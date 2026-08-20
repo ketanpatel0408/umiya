@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireUser } from "@/lib/auth/guards";
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireUser();
+  if (!auth.ok) return auth.response;
+
   const { id } = await params;
 
   if (!/^\d+$/.test(id) || Number(id) <= 0) {
@@ -22,7 +26,10 @@ export async function GET(
       },
     });
 
-    if (!invoice) {
+    if (
+      !invoice ||
+      (auth.user.role !== "ADMIN" && invoice.ownerId !== auth.user.id)
+    ) {
       return NextResponse.json(
         { error: "Invoice not found" },
         { status: 404 }

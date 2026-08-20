@@ -24,3 +24,11 @@ export const InvoiceTaxType = {
 } as const
 
 export type InvoiceTaxType = (typeof InvoiceTaxType)[keyof typeof InvoiceTaxType]
+
+
+export const UserRole = {
+  ADMIN: 'ADMIN',
+  USER: 'USER'
+} as const
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]

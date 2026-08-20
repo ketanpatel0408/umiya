@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  User: 'User',
   Invoice: 'Invoice',
   InvoiceSequence: 'InvoiceSequence',
   InvoiceItem: 'InvoiceItem'
@@ -72,11 +73,35 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const UserScalarFieldEnum = {
+  id: 'id',
+  username: 'username',
+  passwordHash: 'passwordHash',
+  fullName: 'fullName',
+  email: 'email',
+  role: 'role',
+  isActive: 'isActive',
+  sellerName: 'sellerName',
+  sellerPhone: 'sellerPhone',
+  sellerAddress: 'sellerAddress',
+  sellerGSTIN: 'sellerGSTIN',
+  sellerPAN: 'sellerPAN',
+  sellerState: 'sellerState',
+  sellerStateCode: 'sellerStateCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  lastLoginAt: 'lastLoginAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
 export const InvoiceScalarFieldEnum = {
   id: 'id',
   invoiceNumber: 'invoiceNumber',
   invoiceDate: 'invoiceDate',
   financialYear: 'financialYear',
+  ownerId: 'ownerId',
   status: 'status',
   taxType: 'taxType',
   sellerName: 'sellerName',

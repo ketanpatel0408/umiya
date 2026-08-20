@@ -140,7 +140,46 @@ export function InvoiceDetailsSection({ form, updateField }: Props) {
   );
 }
 
-export function SellerSection({ form, updateField }: Props) {
+type SellerSectionProps = Props & {
+  sellerStatus?: "loading" | "ready" | "missing" | "error";
+};
+
+export function SellerSection({
+  form,
+  updateField,
+  sellerStatus = "ready",
+}: SellerSectionProps) {
+  if (sellerStatus === "loading") {
+    return (
+      <SectionCard title="Seller Details">
+        <p className="col-span-2 text-sm text-zinc-500">
+          Loading seller details...
+        </p>
+      </SectionCard>
+    );
+  }
+
+  if (sellerStatus === "missing") {
+    return (
+      <SectionCard title="Seller Details">
+        <p className="col-span-2 text-sm text-red-600">
+          Seller Details are not configured for your account. Please contact
+          the administrator.
+        </p>
+      </SectionCard>
+    );
+  }
+
+  if (sellerStatus === "error") {
+    return (
+      <SectionCard title="Seller Details">
+        <p className="col-span-2 text-sm text-red-600">
+          Unable to load your seller details. Please refresh the page.
+        </p>
+      </SectionCard>
+    );
+  }
+
   return (
     <SectionCard title="Seller Details">
       <Field label="Seller Name">

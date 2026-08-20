@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Prisma, InvoiceTaxType } from "@/generated/prisma/client";
+import { requireUser } from "@/lib/auth/guards";
 
 export async function GET() {
+  const auth = await requireUser();
+  if (!auth.ok) return auth.response;
+
   try {
     const invoices = await prisma.invoice.findMany({
+      // Admins see every invoice; normal users only see invoices they own.
+      where: auth.user.role === "ADMIN" ? undefined : { ownerId: auth.user.id },
       include: {
         items: true,
       },
@@ -192,6 +198,9 @@ function calculateItem(item: IncomingItem, taxType: InvoiceTaxType) {
 }
 
 export async function POST(request: NextRequest) {
+  const auth = await requireUser();
+  if (!auth.ok) return auth.response;
+
   let body: IncomingInvoice;
 
   try {
@@ -252,6 +261,7 @@ export async function POST(request: NextRequest) {
           invoiceDate,
           financialYear,
           taxType,
+          ownerId: auth.user.id,
 
           sellerName: (body.sellerName as string).trim(),
           sellerGSTIN: (body.sellerGSTIN as string | null | undefined) ?? null,

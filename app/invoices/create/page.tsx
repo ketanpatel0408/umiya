@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Save, ArrowLeft, Eye, X } from "lucide-react";
@@ -22,14 +22,23 @@ import TotalsSummary from "./TotalsSummary";
 import InvoiceDocument from "../[id]/InvoiceDocument";
 import type { Invoice } from "../types";
 
+type SellerStatus = "loading" | "ready" | "missing" | "error";
+
 export default function CreateInvoicePage() {
   const router = useRouter();
+  const [sellerStatus, setSellerStatus] = useState<SellerStatus>("loading");
   const [form, setForm] = useState<InvoiceFormState>(() => ({
     invoiceDate: todayISODate(),
     financialYear: defaultFinancialYear(todayISODate()),
     taxType: "CGST_SGST",
 
-    ...invoiceConfig.seller,
+    sellerName: "",
+    sellerAddress: "",
+    sellerPhone: "",
+    sellerGSTIN: "",
+    sellerPAN: "",
+    sellerState: "",
+    sellerStateCode: "",
 
     buyerName: "",
     buyerAddress: "",
@@ -57,6 +66,43 @@ export default function CreateInvoicePage() {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+
+  // Seller Details must always reflect the logged-in user, never a
+  // hardcoded/default seller or another user's data.
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetch("/api/auth/me");
+        if (!res.ok) {
+          if (active) setSellerStatus("error");
+          return;
+        }
+        const user = await res.json();
+        if (!active) return;
+        if (!user.sellerName) {
+          setSellerStatus("missing");
+          return;
+        }
+        setForm((prev) => ({
+          ...prev,
+          sellerName: user.sellerName ?? "",
+          sellerAddress: user.sellerAddress ?? "",
+          sellerPhone: user.sellerPhone ?? "",
+          sellerGSTIN: user.sellerGSTIN ?? "",
+          sellerPAN: user.sellerPAN ?? "",
+          sellerState: user.sellerState ?? "",
+          sellerStateCode: user.sellerStateCode ?? "",
+        }));
+        setSellerStatus("ready");
+      } catch {
+        if (active) setSellerStatus("error");
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const totals = useMemo(
     () => computeTotals(form.items, form.taxType),
@@ -185,7 +231,11 @@ export default function CreateInvoicePage() {
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="flex flex-col gap-6 lg:col-span-2">
             <InvoiceDetailsSection form={form} updateField={updateField} />
-            <SellerSection form={form} updateField={updateField} />
+            <SellerSection
+              form={form}
+              updateField={updateField}
+              sellerStatus={sellerStatus}
+            />
             <BuyerSection form={form} updateField={updateField} />
             <MetadataSection form={form} updateField={updateField} />
             <ItemsSection
@@ -211,7 +261,7 @@ export default function CreateInvoicePage() {
               </button>
               <button
                 onClick={handleSave}
-                disabled={saving}
+                disabled={saving || sellerStatus !== "ready"}
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <Save size={16} />
