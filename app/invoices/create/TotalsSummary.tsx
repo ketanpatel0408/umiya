@@ -4,7 +4,7 @@ import { formatCurrency } from "../utils";
 export default function TotalsSummary({ totals }: { totals: ComputedTotals }) {
   return (
     <div className="rounded-xl border border-zinc-200 bg-white p-5">
-      <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-zinc-500">
+      <h2 className="mb-4 text-lg font-semibold tracking-wide text-zinc-500">
         Live Totals (estimate)
       </h2>
       <dl className="flex flex-col gap-2 text-sm">

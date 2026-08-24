@@ -1,6 +1,11 @@
 import { useState } from "react";
 import type { InvoiceFormState } from "./formHelpers";
-import { isoToDisplayDate, displayToISODate } from "./formHelpers";
+import {
+  isoToDisplayDate,
+  displayToISODate,
+  FINANCIAL_YEARS,
+  financialYearRangeLabel,
+} from "./formHelpers";
 
 type Props = {
   form: InvoiceFormState;
@@ -92,19 +97,30 @@ function SectionCard({
   );
 }
 
-export function InvoiceDetailsSection({ form, updateField }: Props) {
+export function InvoiceDetailsSection({
+  form,
+  updateField,
+  mode = "create",
+}: Props & { mode?: "create" | "edit" }) {
   return (
     <SectionCard title="Invoice Details">
-      <Field label="Invoice Number">
-        <input
-          className={`${inputClass} cursor-not-allowed bg-zinc-100 text-zinc-500`}
-          value="Auto-generated on save"
-          readOnly
-          disabled
-        />
+      <Field label="Financial Year" required>
+        <select
+          className={`${inputClass} ${mode === "edit" ? "cursor-not-allowed bg-zinc-100 text-zinc-500" : ""}`}
+          value={form.financialYear}
+          disabled={mode === "edit"}
+          onChange={(e) => updateField("financialYear", e.target.value)}
+        >
+          {FINANCIAL_YEARS.map((fy) => (
+            <option key={fy} value={fy}>
+              {fy}
+            </option>
+          ))}
+        </select>
         <span className="mt-1 text-xs text-zinc-400">
-          Invoice number will be assigned automatically when the invoice is
-          saved.
+          {mode === "edit"
+            ? "Financial Year cannot be changed."
+            : `Valid range: ${financialYearRangeLabel(form.financialYear)}`}
         </span>
       </Field>
       <Field label="Invoice Date" required>
@@ -113,17 +129,45 @@ export function InvoiceDetailsSection({ form, updateField }: Props) {
           onChange={(iso) => updateField("invoiceDate", iso)}
         />
       </Field>
-      <Field label="Financial Year">
+
+      <label className="col-span-1 flex items-center gap-2 text-sm sm:col-span-2">
         <input
-          className={`${inputClass} cursor-not-allowed bg-zinc-100 text-zinc-500`}
-          value={form.financialYear}
-          readOnly
-          disabled
+          type="checkbox"
+          className="h-4 w-4 rounded border-zinc-300"
+          checked={form.useExistingInvoiceNumber}
+          disabled={mode === "edit"}
+          onChange={(e) =>
+            updateField("useExistingInvoiceNumber", e.target.checked)
+          }
         />
+        <span className="font-medium text-zinc-700">
+          Use Existing Invoice Number
+        </span>
+      </label>
+
+      <Field label="Invoice Number" required={form.useExistingInvoiceNumber}>
+        {form.useExistingInvoiceNumber ? (
+          <input
+            className={inputClass}
+            placeholder="e.g. 25-26/087"
+            value={form.invoiceNumber}
+            onChange={(e) => updateField("invoiceNumber", e.target.value)}
+          />
+        ) : (
+          <input
+            className={`${inputClass} cursor-not-allowed bg-zinc-100 text-zinc-500`}
+            value="Auto-generated on save"
+            readOnly
+            disabled
+          />
+        )}
         <span className="mt-1 text-xs text-zinc-400">
-          Derived automatically from Invoice Date.
+          {form.useExistingInvoiceNumber
+            ? "Enter the exact historical invoice number, e.g. 25-26/087."
+            : "Invoice number will be assigned automatically from the selected Financial Year's sequence."}
         </span>
       </Field>
+
       <Field label="Tax Type" required>
         <select
           className={inputClass}

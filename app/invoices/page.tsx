@@ -3,9 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Skeleton from "@mui/material/Skeleton";
-import { Plus, Eye, Search, AlertCircle } from "lucide-react";
+import { Plus, Eye, Pencil, Search, AlertCircle } from "lucide-react";
 import type { Invoice } from "./types";
 import { formatCurrency, formatDate } from "./utils";
+import { FINANCIAL_YEARS } from "./create/formHelpers";
 
 type Status = "ALL" | "DRAFT" | "ISSUED" | "CANCELLED";
 
@@ -16,12 +17,16 @@ const STATUS_OPTIONS: { value: Status; label: string }[] = [
   { value: "CANCELLED", label: "Cancelled" },
 ];
 
+const FY_FILTER_OPTIONS = ["ALL", ...FINANCIAL_YEARS] as const;
+type FyFilter = (typeof FY_FILTER_OPTIONS)[number];
+
 export default function InvoicesPage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<Status>("ALL");
+  const [financialYear, setFinancialYear] = useState<FyFilter>("ALL");
 
   const fetchInvoices = async () => {
     setLoading(true);
@@ -45,14 +50,16 @@ export default function InvoicesPage() {
   const filteredInvoices = useMemo(() => {
     return invoices.filter((invoice) => {
       const matchesStatus = status === "ALL" || invoice.status === status;
+      const matchesFY =
+        financialYear === "ALL" || invoice.financialYear === financialYear;
       const term = search.trim().toLowerCase();
       const matchesSearch =
         term === "" ||
         invoice.invoiceNumber.toLowerCase().includes(term) ||
         invoice.buyerName.toLowerCase().includes(term);
-      return matchesStatus && matchesSearch;
+      return matchesStatus && matchesFY && matchesSearch;
     });
-  }, [invoices, search, status]);
+  }, [invoices, search, status, financialYear]);
 
   return (
     <div className="min-h-full flex-1 bg-zinc-50 px-4 py-8 sm:px-8">
@@ -98,6 +105,19 @@ export default function InvoicesPage() {
             {STATUS_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={financialYear}
+            onChange={(e) => setFinancialYear(e.target.value as FyFilter)}
+            className="rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none focus:border-zinc-500 sm:w-48"
+          >
+            <option value="ALL">All Financial Years</option>
+            {FINANCIAL_YEARS.map((fy) => (
+              <option key={fy} value={fy}>
+                FY {fy}
               </option>
             ))}
           </select>
@@ -186,14 +206,23 @@ function InvoiceRow({ invoice }: { invoice: Invoice }) {
       <td className="px-4 py-3">
         <StatusBadge status={invoice.status} />
       </td>
-      <td className="px-4 py-3 text-center">
-        <Link
-          href={`/invoices/${invoice.id}`}
-          className="inline-flex items-center justify-center rounded-md p-1.5 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
-          title="View invoice"
-        >
-          <Eye size={18} />
-        </Link>
+      <td className="px-4 py-3">
+        <div className="flex items-center justify-center gap-1">
+          <Link
+            href={`/invoices/${invoice.id}/edit`}
+            className="inline-flex items-center justify-center rounded-md p-1.5 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+            title="Edit invoice"
+          >
+            <Pencil size={18} />
+          </Link>
+          <Link
+            href={`/invoices/${invoice.id}`}
+            className="inline-flex items-center justify-center rounded-md p-1.5 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+            title="View invoice"
+          >
+            <Eye size={18} />
+          </Link>
+        </div>
       </td>
     </tr>
   );

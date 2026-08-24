@@ -3,8 +3,8 @@ import type { InvoiceItem } from "../types";
 /** Column widths/alignment, mirroring the original div-based item grid. */
 const COLUMNS = [
   { width: "w-[6%]", align: "text-center" },
-  { width: "w-[37%]", align: "text-left" },
-  { width: "w-[8%]", align: "text-center" },
+  { width: "w-[36%]", align: "text-left" },
+  { width: "w-[9%]", align: "text-center" },
   { width: "w-[10%]", align: "text-right" },
   { width: "w-[6%]", align: "text-center" },
   { width: "w-[13%]", align: "text-right" },
@@ -13,24 +13,24 @@ const COLUMNS = [
 ] as const;
 
 const HEADERS = [
-  "SrNo.",
-  "Description",
-  "HSN",
-  "Qty",
-  "Unit",
-  "Rate",
-  "GST %",
-  "Amount",
+  { label: "SrNo.", align: "text-center" },
+  { label: "Description", align: "text-left" },
+  { label: "HSN", align: "text-center" },
+  { label: "Qty", align: "text-right" },
+  { label: "Unit", align: "text-center" },
+  { label: "Rate", align: "text-right" },
+  { label: "GST %", align: "text-right" },
+  { label: "Amount", align: "text-right" },
 ];
 
 export default function InvoiceItemsTable({ items }: { items: InvoiceItem[] }) {
   return (
     <div className="table-auto w-full border-collapse border-b border-current text-sm">
       <div className="header flex">
-        {HEADERS.map((label, i) => (
+        {HEADERS.map(({ label, align }, i) => (
           <div
             key={label}
-            className={`font-bold ${COLUMNS[i].align === "text-left" ? "text-center" : "text-center"} p-1 ${COLUMNS[i].width} border-current border-b ${
+            className={`font-bold ${align} p-1 ${COLUMNS[i].width} border-current border-b ${
               i < HEADERS.length - 1 ? "border-r" : ""
             }`}
           >

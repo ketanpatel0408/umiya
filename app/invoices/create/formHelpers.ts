@@ -1,4 +1,4 @@
-import type { InvoiceTaxType } from "../types";
+import type { Invoice, InvoiceTaxType } from "../types";
 
 export type ItemForm = {
   description: string;
@@ -9,10 +9,45 @@ export type ItemForm = {
   gstRate: string;
 };
 
+export const FINANCIAL_YEARS = ["2024-25", "2025-26", "2026-27"] as const;
+export type FinancialYear = (typeof FINANCIAL_YEARS)[number];
+
+/** Inclusive Apr 1 - Mar 31 date ranges (ISO) for each supported Financial Year. */
+const FY_DATE_RANGES: Record<FinancialYear, { start: string; end: string }> = {
+  "2024-25": { start: "2024-04-01", end: "2025-03-31" },
+  "2025-26": { start: "2025-04-01", end: "2026-03-31" },
+  "2026-27": { start: "2026-04-01", end: "2027-03-31" },
+};
+
+/** Returns true if isoDate falls within the given Financial Year's range. */
+export function isDateInFinancialYear(isoDate: string, fy: string): boolean {
+  const range = FY_DATE_RANGES[fy as FinancialYear];
+  if (!range || !isoDate) return false;
+  return isoDate >= range.start && isoDate <= range.end;
+}
+
+/** Human-readable display range for a Financial Year, e.g. "01 Apr 2025 - 31 Mar 2026". */
+export function financialYearRangeLabel(fy: string): string {
+  const range = FY_DATE_RANGES[fy as FinancialYear];
+  if (!range) return "";
+  const fmt = (iso: string) => {
+    const d = new Date(iso);
+    return d.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+  return `${fmt(range.start)} - ${fmt(range.end)}`;
+}
+
 export type InvoiceFormState = {
   invoiceDate: string;
   financialYear: string;
   taxType: InvoiceTaxType;
+
+  useExistingInvoiceNumber: boolean;
+  invoiceNumber: string;
 
   sellerName: string;
   sellerAddress: string;
@@ -179,7 +214,10 @@ export function buildPreviewInvoice(form: InvoiceFormState) {
 
   return {
     id: 0,
-    invoiceNumber: "Auto-generated on save",
+    invoiceNumber:
+      form.useExistingInvoiceNumber && form.invoiceNumber
+        ? form.invoiceNumber
+        : "Auto-generated on save",
     invoiceDate: form.invoiceDate,
     financialYear: form.financialYear,
     status: "DRAFT" as const,
@@ -229,14 +267,93 @@ export function buildPreviewInvoice(form: InvoiceFormState) {
   };
 }
 
+/**
+ * Converts a persisted Invoice (as returned by GET /api/invoices/[id]) into
+ * editable InvoiceFormState for the Edit Invoice page. invoiceNumber is
+ * intentionally excluded from form state since it must never change.
+ */
+export function toFormState(invoice: Invoice): InvoiceFormState {
+  return {
+    invoiceDate: invoice.invoiceDate.slice(0, 10),
+    financialYear: invoice.financialYear,
+    taxType: invoice.taxType,
+
+    useExistingInvoiceNumber: true,
+    invoiceNumber: invoice.invoiceNumber,
+
+    sellerName: invoice.sellerName ?? "",
+    sellerAddress: invoice.sellerAddress ?? "",
+    sellerPhone: invoice.sellerPhone ?? "",
+    sellerGSTIN: invoice.sellerGSTIN ?? "",
+    sellerPAN: invoice.sellerPAN ?? "",
+    sellerState: invoice.sellerState ?? "",
+    sellerStateCode: invoice.sellerStateCode ?? "",
+
+    buyerName: invoice.buyerName ?? "",
+    buyerAddress: invoice.buyerAddress ?? "",
+    buyerGSTIN: invoice.buyerGSTIN ?? "",
+    buyerPAN: invoice.buyerPAN ?? "",
+    buyerAadhaar: invoice.buyerAadhaar ?? "",
+    buyerState: invoice.buyerState ?? "",
+    buyerStateCode: invoice.buyerStateCode ?? "",
+
+    deliveryNote: invoice.deliveryNote ?? "",
+    buyerOrderNo: invoice.buyerOrderNo ?? "",
+    buyerOrderDate: invoice.buyerOrderDate ? invoice.buyerOrderDate.slice(0, 10) : "",
+    dispatchDocNo: invoice.dispatchDocNo ?? "",
+    deliveryNoteDate: invoice.deliveryNoteDate
+      ? invoice.deliveryNoteDate.slice(0, 10)
+      : "",
+    dispatchedThrough: invoice.dispatchedThrough ?? "",
+    destination: invoice.destination ?? "",
+
+    notes: invoice.notes ?? "",
+    termsAndConditions: invoice.termsAndConditions ?? "",
+
+    items: invoice.items.map((item) => ({
+      description: item.description,
+      hsn: item.hsn ?? "",
+      quantity: item.quantity,
+      unit: item.unit ?? "",
+      rate: item.rate,
+      gstRate: item.gstRate,
+    })),
+  };
+}
+
+/** Expected shape: "24-25/001", "26-27/16", etc. (YY-YY/N...). */
+const INVOICE_NUMBER_PATTERN = /^\d{2}-\d{2}\/\d+$/;
+
 export function validateForm(form: InvoiceFormState): string[] {
   const errors: string[] = [];
 
   if (!form.invoiceDate || Number.isNaN(new Date(form.invoiceDate).getTime())) {
     errors.push("Invoice Date must be a valid date.");
   }
-  if (!form.financialYear.trim()) errors.push("Financial Year is required.");
+  if (!form.financialYear.trim()) {
+    errors.push("Financial Year is required.");
+  } else if (!(FINANCIAL_YEARS as readonly string[]).includes(form.financialYear)) {
+    errors.push(
+      `Financial Year must be one of: ${FINANCIAL_YEARS.join(", ")}.`
+    );
+  } else if (
+    form.invoiceDate &&
+    !isDateInFinancialYear(form.invoiceDate, form.financialYear)
+  ) {
+    errors.push(
+      `Invoice Date does not belong to Financial Year ${form.financialYear} (${financialYearRangeLabel(
+        form.financialYear
+      )}).`
+    );
+  }
   if (!form.taxType) errors.push("Tax Type is required.");
+  if (form.useExistingInvoiceNumber) {
+    if (!form.invoiceNumber.trim()) {
+      errors.push("Invoice Number is required when using an existing invoice number.");
+    } else if (!INVOICE_NUMBER_PATTERN.test(form.invoiceNumber.trim())) {
+      errors.push("Invoice Number must be in the format YY-YY/NNN, e.g. 25-26/087.");
+    }
+  }
   if (!form.buyerName.trim()) errors.push("Buyer Name is required.");
   if (!form.buyerAddress.trim()) errors.push("Buyer Address is required.");
 

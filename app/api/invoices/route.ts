@@ -29,13 +29,21 @@ export async function GET() {
   }
 }
 
-/** Indian financial year runs Apr 1 - Mar 31, e.g. "2026-27". */
-function financialYearFromDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = date.getMonth(); // 0-indexed; April = 3
-  const startYear = month >= 3 ? year : year - 1;
-  const endYear = (startYear + 1) % 100;
-  return `${startYear}-${endYear.toString().padStart(2, "0")}`;
+const VALID_FINANCIAL_YEARS = ["2024-25", "2025-26", "2026-27"];
+
+/** Inclusive Apr 1 - Mar 31 date ranges (ISO) for each supported Financial Year. */
+const FY_DATE_RANGES: Record<string, { start: string; end: string }> = {
+  "2024-25": { start: "2024-04-01", end: "2025-03-31" },
+  "2025-26": { start: "2025-04-01", end: "2026-03-31" },
+  "2026-27": { start: "2026-04-01", end: "2027-03-31" },
+};
+
+/** Returns true if the (UTC) date falls within the given Financial Year's range. */
+function isDateInFinancialYear(date: Date, financialYear: string): boolean {
+  const range = FY_DATE_RANGES[financialYear];
+  if (!range) return false;
+  const iso = date.toISOString().slice(0, 10);
+  return iso >= range.start && iso <= range.end;
 }
 
 /** "2026-27" -> "26-27" prefix used in the invoice number. */
@@ -49,6 +57,17 @@ function formatSequence(n: number): string {
   return n < 10 ? `0${n}` : `${n}`;
 }
 
+/** Expected shape: "24-25/001", "26-27/16", etc. (YY-YY/N...). */
+const INVOICE_NUMBER_PATTERN = /^\d{2}-\d{2}\/\d+$/;
+
+/** Thrown when a manually-entered invoice number already exists. */
+class ManualInvoiceNumberConflictError extends Error {
+  constructor(invoiceNumber: string) {
+    super(`Invoice number ${invoiceNumber} already exists`);
+    this.name = "ManualInvoiceNumberConflictError";
+  }
+}
+
 type IncomingItem = {
   description?: unknown;
   hsn?: unknown;
@@ -60,6 +79,7 @@ type IncomingItem = {
 
 type IncomingInvoice = {
   invoiceNumber?: unknown;
+  useExistingInvoiceNumber?: unknown;
   invoiceDate?: unknown;
   financialYear?: unknown;
   taxType?: unknown;
@@ -122,6 +142,36 @@ function validateInvoiceBody(body: IncomingInvoice): string[] {
     Number.isNaN(new Date(body.invoiceDate as string).getTime())
   ) {
     errors.push("invoiceDate must be a valid date");
+  }
+
+  if (
+    !isNonEmptyString(body.financialYear) ||
+    !VALID_FINANCIAL_YEARS.includes(body.financialYear as string)
+  ) {
+    errors.push(
+      `financialYear must be one of: ${VALID_FINANCIAL_YEARS.join(", ")}`
+    );
+  } else if (
+    isNonEmptyString(body.invoiceDate as string) &&
+    !Number.isNaN(new Date(body.invoiceDate as string).getTime()) &&
+    !isDateInFinancialYear(
+      new Date(body.invoiceDate as string),
+      body.financialYear as string
+    )
+  ) {
+    errors.push(
+      `invoiceDate does not belong to financialYear ${body.financialYear}`
+    );
+  }
+
+  if (body.useExistingInvoiceNumber) {
+    if (!isNonEmptyString(body.invoiceNumber)) {
+      errors.push("invoiceNumber is required when useExistingInvoiceNumber is true");
+    } else if (
+      !INVOICE_NUMBER_PATTERN.test((body.invoiceNumber as string).trim())
+    ) {
+      errors.push("invoiceNumber must be in the format YY-YY/NNN, e.g. 25-26/087");
+    }
   }
 
   if (
@@ -234,26 +284,46 @@ export async function POST(request: NextRequest) {
   const grandTotal = subtotal.plus(totalCGST).plus(totalSGST).plus(totalIGST).plus(roundOff);
 
   const invoiceDate = new Date(body.invoiceDate as string);
-  const financialYear = financialYearFromDate(invoiceDate);
+  const financialYear = body.financialYear as string;
   const prefix = financialYearPrefix(financialYear);
+  const useExistingInvoiceNumber = Boolean(body.useExistingInvoiceNumber);
+  const manualInvoiceNumber = useExistingInvoiceNumber
+    ? (body.invoiceNumber as string).trim()
+    : null;
 
   try {
     const invoice = await prisma.$transaction(async (tx) => {
-      // Atomic, database-safe sequence allocation: upsert-then-increment in
-      // a single statement via raw SQL avoids the read-modify-write race
-      // condition of SELECT + JS increment + INSERT. Postgres row-level
-      // locking (implicit in UPDATE ... RETURNING) serializes concurrent
-      // requests for the same financialYear.
-      const rows = await tx.$queryRaw<{ lastNumber: number }[]>`
-        INSERT INTO "InvoiceSequence" ("financialYear", "lastNumber", "createdAt", "updatedAt")
-        VALUES (${financialYear}, 1, NOW(), NOW())
-        ON CONFLICT ("financialYear")
-        DO UPDATE SET "lastNumber" = "InvoiceSequence"."lastNumber" + 1, "updatedAt" = NOW()
-        RETURNING "lastNumber"
-      `;
+      let invoiceNumber: string;
 
-      const sequenceNumber = rows[0].lastNumber;
-      const invoiceNumber = `${prefix}/${formatSequence(sequenceNumber)}`;
+      if (manualInvoiceNumber) {
+        // Manual/historical invoice number: verify uniqueness explicitly
+        // (the DB unique constraint on invoiceNumber is the final guard),
+        // and do NOT touch the FY sequence counter.
+        const existing = await tx.invoice.findUnique({
+          where: { invoiceNumber: manualInvoiceNumber },
+          select: { id: true },
+        });
+        if (existing) {
+          throw new ManualInvoiceNumberConflictError(manualInvoiceNumber);
+        }
+        invoiceNumber = manualInvoiceNumber;
+      } else {
+        // Atomic, database-safe sequence allocation: upsert-then-increment in
+        // a single statement via raw SQL avoids the read-modify-write race
+        // condition of SELECT + JS increment + INSERT. Postgres row-level
+        // locking (implicit in UPDATE ... RETURNING) serializes concurrent
+        // requests for the same financialYear.
+        const rows = await tx.$queryRaw<{ lastNumber: number }[]>`
+          INSERT INTO "InvoiceSequence" ("financialYear", "lastNumber", "createdAt", "updatedAt")
+          VALUES (${financialYear}, 1, NOW(), NOW())
+          ON CONFLICT ("financialYear")
+          DO UPDATE SET "lastNumber" = "InvoiceSequence"."lastNumber" + 1, "updatedAt" = NOW()
+          RETURNING "lastNumber"
+        `;
+
+        const sequenceNumber = rows[0].lastNumber;
+        invoiceNumber = `${prefix}/${formatSequence(sequenceNumber)}`;
+      }
 
       return tx.invoice.create({
         data: {
@@ -320,8 +390,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(invoice, { status: 201 });
   } catch (error) {
     if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2002"
+      error instanceof ManualInvoiceNumberConflictError ||
+      (error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002")
     ) {
       return NextResponse.json(
         { error: "Invoice number already exists" },
