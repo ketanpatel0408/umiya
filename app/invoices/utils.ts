@@ -15,17 +15,14 @@ export function formatCurrency(value: string | number): string {
   return currencyFormatter.format(amount);
 }
 
-const dateFormatter = new Intl.DateTimeFormat("en-IN", {
-  day: "2-digit",
-  month: "short",
-  year: "numeric",
-});
-
 /**
- * Formats an ISO date string as a readable date, e.g. "19 Aug 2026".
+ * Formats an ISO date string as DD/MM/YYYY, e.g. "19/08/2026".
  */
 export function formatDate(value: string): string {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "-";
-  return dateFormatter.format(date);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 }
