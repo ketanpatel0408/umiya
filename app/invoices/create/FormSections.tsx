@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { InvoiceFormState } from "./formHelpers";
 import {
   isoToDisplayDate,
@@ -279,15 +279,123 @@ export function SellerSection({
   );
 }
 
+type SavedBuyer = {
+  buyerName: string;
+  buyerGSTIN: string | null;
+  buyerPAN: string | null;
+  buyerAddress: string | null;
+  buyerState: string | null;
+  buyerStateCode: string | null;
+  buyerAadhaar: string | null;
+};
+
+/**
+ * Buyer Name input that suggests buyers from previous invoices; picking one
+ * fills the rest of the Buyer Details.
+ */
+function BuyerNameInput({ form, updateField }: Props) {
+  const [buyers, setBuyers] = useState<SavedBuyer[]>([]);
+  const [open, setOpen] = useState(false);
+  const [highlight, setHighlight] = useState(0);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/buyers")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data: SavedBuyer[]) => {
+        if (active) setBuyers(data);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const query = form.buyerName.trim().toLowerCase();
+  const suggestions = buyers
+    .filter(
+      (b) =>
+        !query ||
+        b.buyerName.toLowerCase().includes(query) ||
+        (b.buyerGSTIN ?? "").toLowerCase().includes(query)
+    )
+    .slice(0, 8);
+
+  function selectBuyer(b: SavedBuyer) {
+    updateField("buyerName", b.buyerName);
+    updateField("buyerAddress", b.buyerAddress ?? "");
+    updateField("buyerGSTIN", b.buyerGSTIN ?? "");
+    updateField("buyerPAN", b.buyerPAN ?? "");
+    updateField("buyerAadhaar", b.buyerAadhaar ?? "");
+    updateField("buyerState", b.buyerState ?? "");
+    updateField("buyerStateCode", b.buyerStateCode ?? "");
+    setOpen(false);
+  }
+
+  return (
+    <div className="relative">
+      <input
+        className={inputClass}
+        value={form.buyerName}
+        autoComplete="off"
+        placeholder="Type to search previous buyers"
+        onChange={(e) => {
+          updateField("buyerName", e.target.value);
+          setOpen(true);
+          setHighlight(0);
+        }}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        onKeyDown={(e) => {
+          if (!open || suggestions.length === 0) return;
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setHighlight((h) => (h + 1) % suggestions.length);
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            setHighlight((h) => (h - 1 + suggestions.length) % suggestions.length);
+          } else if (e.key === "Enter") {
+            e.preventDefault();
+            selectBuyer(suggestions[highlight]);
+          } else if (e.key === "Escape") {
+            setOpen(false);
+          }
+        }}
+      />
+      {open && suggestions.length > 0 && (
+        <ul className="absolute z-20 mt-1 max-h-72 w-full overflow-auto rounded-lg border border-zinc-200 bg-white py-1 shadow-lg">
+          {suggestions.map((b, i) => (
+            <li
+              key={`${b.buyerName}|${b.buyerGSTIN ?? ""}`}
+              // onMouseDown fires before the input's blur closes the list.
+              onMouseDown={(e) => {
+                e.preventDefault();
+                selectBuyer(b);
+              }}
+              onMouseEnter={() => setHighlight(i)}
+              className={`cursor-pointer px-3 py-2 ${i === highlight ? "bg-zinc-100" : ""}`}
+            >
+              <div className="text-sm font-medium text-zinc-900">
+                {b.buyerName}
+              </div>
+              {(b.buyerGSTIN || b.buyerAddress) && (
+                <div className="truncate text-xs text-zinc-500">
+                  {[b.buyerGSTIN, b.buyerAddress].filter(Boolean).join(" · ")}
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 export function BuyerSection({ form, updateField }: Props) {
   return (
     <SectionCard title="Buyer Details">
       <Field label="Buyer Name / M/s." required>
-        <input
-          className={inputClass}
-          value={form.buyerName}
-          onChange={(e) => updateField("buyerName", e.target.value)}
-        />
+        <BuyerNameInput form={form} updateField={updateField} />
       </Field>
       <Field label="Buyer Address" required>
         <input
