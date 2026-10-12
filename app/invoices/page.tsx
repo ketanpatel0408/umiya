@@ -18,6 +18,7 @@ import {
   tableHead,
 } from "../components/ui";
 import { FINANCIAL_YEARS } from "./create/formHelpers";
+import InvoiceDownloadButton from "./InvoiceDownloadButton";
 
 type Status = "ALL" | "DRAFT" | "ISSUED" | "CANCELLED";
 
@@ -252,6 +253,7 @@ function InvoiceRow({ invoice }: { invoice: Invoice }) {
           >
             <Eye size={16} />
           </Link>
+          <InvoiceDownloadButton invoice={invoice} className={iconBtn} />
         </div>
       </td>
     </tr>

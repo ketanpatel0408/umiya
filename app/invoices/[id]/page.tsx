@@ -6,6 +6,7 @@ import Skeleton from "@mui/material/Skeleton";
 import { ArrowLeft, Printer, AlertCircle, FileX, Pencil } from "lucide-react";
 import type { Invoice } from "../types";
 import InvoiceDocument from "./InvoiceDocument";
+import InvoiceDownloadButton from "../InvoiceDownloadButton";
 import { StatusBadge, btnPrimary, btnSecondary } from "../../components/ui";
 import { formatCurrency, formatDate } from "../utils";
 
@@ -101,9 +102,10 @@ export default function InvoiceDetailPage({
               <Pencil size={16} />
               Edit
             </Link>
+            <InvoiceDownloadButton invoice={invoice} className={btnSecondary} label="Download PDF" />
             <button onClick={() => window.print()} className={btnPrimary}>
               <Printer size={16} />
-              Print / Save PDF
+              Print
             </button>
           </div>
         </div>
