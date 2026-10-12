@@ -18,6 +18,12 @@ import ItemsSection from "./ItemsSection";
 import TotalsSummary from "./TotalsSummary";
 import InvoiceDocument from "../[id]/InvoiceDocument";
 import type { Invoice } from "../types";
+import {
+  PageContainer,
+  PageHeader,
+  btnPrimary,
+  btnSecondary,
+} from "../../components/ui";
 
 type SellerStatus = "loading" | "ready" | "missing" | "error";
 
@@ -134,26 +140,24 @@ export default function InvoiceForm({
   }
 
   return (
-    <div className="min-h-full flex-1 bg-zinc-50 px-4 py-8 sm:px-8">
-      <div className="mx-auto max-w-6xl">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
-              {title}
-            </h1>
-            <p className="mt-1 text-sm text-zinc-600">{subtitle}</p>
-          </div>
-          <Link
-            href={mode === "edit" ? `/invoices/${invoiceId}` : "/invoices"}
-            className="inline-flex items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
-          >
-            <ArrowLeft size={16} />
-            {mode === "edit" ? "Cancel" : "Back"}
-          </Link>
-        </div>
+    <>
+    <PageContainer>
+        <PageHeader
+          title={title}
+          subtitle={subtitle}
+          actions={
+            <Link
+              href={mode === "edit" ? `/invoices/${invoiceId}` : "/invoices"}
+              className={btnSecondary}
+            >
+              <ArrowLeft size={16} />
+              {mode === "edit" ? "Cancel" : "Back"}
+            </Link>
+          }
+        />
 
         {(errors.length > 0 || saveError) && (
-          <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          <div className="mt-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
             {saveError && <p className="font-medium">{saveError}</p>}
             {errors.length > 0 && (
               <ul className="list-inside list-disc">
@@ -166,7 +170,7 @@ export default function InvoiceForm({
         )}
 
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="flex flex-col gap-6 lg:col-span-2">
+          <div className="flex min-w-0 flex-col gap-6 lg:col-span-2">
             <InvoiceDetailsSection
               form={form}
               updateField={updateField}
@@ -188,53 +192,53 @@ export default function InvoiceForm({
             <NotesSection form={form} updateField={updateField} />
           </div>
 
-          <div className="flex flex-col gap-6 self-start lg:sticky lg:top-8">
+          <div className="flex flex-col gap-4 self-start lg:sticky lg:top-8">
             <TotalsSummary totals={totals} />
 
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={() => setShowPreview(true)}
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-zinc-300 px-4 py-3 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
-              >
-                <Eye size={16} />
-                Preview Invoice
-              </button>
+            <div className="flex flex-col gap-3">
               <button
                 onClick={handleSave}
                 disabled={saving || sellerStatus !== "ready"}
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className={`${btnPrimary} w-full py-3`}
               >
                 <Save size={16} />
                 {saving ? "Saving..." : mode === "edit" ? "Save Changes" : "Save Invoice"}
               </button>
+              <button
+                type="button"
+                onClick={() => setShowPreview(true)}
+                className={`${btnSecondary} w-full py-3`}
+              >
+                <Eye size={16} />
+                Preview Invoice
+              </button>
             </div>
           </div>
         </div>
-      </div>
+    </PageContainer>
 
       {showPreview && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-zinc-900/60">
-          <div className="no-print sticky top-0 z-10 flex items-center justify-between bg-white px-4 py-3 shadow">
-            <h2 className="text-sm font-semibold text-zinc-900">
+        <div className="fixed inset-0 z-50 flex flex-col bg-slate-900/60 backdrop-blur-sm">
+          <div className="no-print sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 shadow-sm">
+            <h2 className="text-sm font-semibold text-slate-900">
               Invoice Preview
             </h2>
             <button
               type="button"
               onClick={() => setShowPreview(false)}
-              className="inline-flex items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
+              className={btnSecondary}
             >
               <X size={16} />
               Close
             </button>
           </div>
-          <div className="flex-1 overflow-auto bg-zinc-100 px-4 py-8">
+          <div className="flex-1 overflow-auto bg-slate-200/60 px-4 py-8">
             <InvoiceDocument
               invoice={buildPreviewInvoice(form) as unknown as Invoice}
             />
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

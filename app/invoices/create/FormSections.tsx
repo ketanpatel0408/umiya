@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import type { LucideIcon } from "lucide-react";
+import { FileText, Store, UserRound, Search } from "lucide-react";
+import { CardHeader, inputBase } from "../../components/ui";
 import type { InvoiceFormState } from "./formHelpers";
 import {
   isoToDisplayDate,
@@ -26,7 +29,7 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1 text-sm">
-      <span className="font-medium text-zinc-700">
+      <span className="font-medium text-slate-700">
         {label}
         {required && <span className="ml-0.5 text-red-500">*</span>}
       </span>
@@ -35,8 +38,7 @@ function Field({
   );
 }
 
-const inputClass =
-  "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-500";
+const inputClass = inputBase;
 
 /**
  * Date input that displays/accepts Indian DD-MM-YYYY format while storing
@@ -69,7 +71,7 @@ function DateInput({
       <input
         type="date"
         aria-label="Pick date"
-        className="rounded-lg border border-zinc-300 bg-white px-2 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-500"
+        className="cursor-pointer rounded-lg border border-slate-300 bg-white px-2 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
         value={value}
         onChange={(e) => {
           onChange(e.target.value);
@@ -82,17 +84,19 @@ function DateInput({
 
 function SectionCard({
   title,
+  description,
+  icon,
   children,
 }: {
   title: string;
+  description?: string;
+  icon?: LucideIcon;
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-5">
-      <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-zinc-500">
-        {title}
-      </h2>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">{children}</div>
+    <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+      <CardHeader title={title} description={description} icon={icon} />
+      <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">{children}</div>
     </div>
   );
 }
@@ -103,10 +107,14 @@ export function InvoiceDetailsSection({
   mode = "create",
 }: Props & { mode?: "create" | "edit" }) {
   return (
-    <SectionCard title="Invoice Details">
+    <SectionCard
+      title="Invoice Details"
+      description="Financial year, date, numbering and tax type"
+      icon={FileText}
+    >
       <Field label="Financial Year" required>
         <select
-          className={`${inputClass} ${mode === "edit" ? "cursor-not-allowed bg-zinc-100 text-zinc-500" : ""}`}
+          className={`${inputClass} ${mode === "edit" ? "cursor-not-allowed bg-slate-100 text-slate-500" : ""}`}
           value={form.financialYear}
           disabled={mode === "edit"}
           onChange={(e) => updateField("financialYear", e.target.value)}
@@ -117,7 +125,7 @@ export function InvoiceDetailsSection({
             </option>
           ))}
         </select>
-        <span className="mt-1 text-xs text-zinc-400">
+        <span className="mt-1 text-xs text-slate-500">
           {mode === "edit"
             ? "Financial Year cannot be changed."
             : `Valid range: ${financialYearRangeLabel(form.financialYear)}`}
@@ -133,14 +141,14 @@ export function InvoiceDetailsSection({
       <label className="col-span-1 flex items-center gap-2 text-sm sm:col-span-2">
         <input
           type="checkbox"
-          className="h-4 w-4 rounded border-zinc-300"
+          className="h-4 w-4 cursor-pointer rounded border-slate-300 accent-indigo-600"
           checked={form.useExistingInvoiceNumber}
           disabled={mode === "edit"}
           onChange={(e) =>
             updateField("useExistingInvoiceNumber", e.target.checked)
           }
         />
-        <span className="font-medium text-zinc-700">
+        <span className="font-medium text-slate-700">
           Use Existing Invoice Number
         </span>
       </label>
@@ -155,13 +163,13 @@ export function InvoiceDetailsSection({
           />
         ) : (
           <input
-            className={`${inputClass} cursor-not-allowed bg-zinc-100 text-zinc-500`}
+            className={`${inputClass} cursor-not-allowed bg-slate-100 text-slate-500`}
             value="Auto-generated on save"
             readOnly
             disabled
           />
         )}
-        <span className="mt-1 text-xs text-zinc-400">
+        <span className="mt-1 text-xs text-slate-500">
           {form.useExistingInvoiceNumber
             ? "Enter the exact historical invoice number, e.g. 25-26/087."
             : "Invoice number will be assigned automatically from the selected Financial Year's sequence."}
@@ -195,8 +203,8 @@ export function SellerSection({
 }: SellerSectionProps) {
   if (sellerStatus === "loading") {
     return (
-      <SectionCard title="Seller Details">
-        <p className="col-span-2 text-sm text-zinc-500">
+      <SectionCard title="Seller Details" description="Your business details from your account" icon={Store}>
+        <p className="col-span-2 text-sm text-slate-500">
           Loading seller details...
         </p>
       </SectionCard>
@@ -205,7 +213,7 @@ export function SellerSection({
 
   if (sellerStatus === "missing") {
     return (
-      <SectionCard title="Seller Details">
+      <SectionCard title="Seller Details" description="Your business details from your account" icon={Store}>
         <p className="col-span-2 text-sm text-red-600">
           Seller Details are not configured for your account. Please contact
           the administrator.
@@ -216,7 +224,7 @@ export function SellerSection({
 
   if (sellerStatus === "error") {
     return (
-      <SectionCard title="Seller Details">
+      <SectionCard title="Seller Details" description="Your business details from your account" icon={Store}>
         <p className="col-span-2 text-sm text-red-600">
           Unable to load your seller details. Please refresh the page.
         </p>
@@ -225,7 +233,7 @@ export function SellerSection({
   }
 
   return (
-    <SectionCard title="Seller Details">
+    <SectionCard title="Seller Details" description="Your business details from your account" icon={Store}>
       <Field label="Seller Name">
         <input
           className={inputClass}
@@ -334,8 +342,12 @@ function BuyerNameInput({ form, updateField }: Props) {
 
   return (
     <div className="relative">
+      <Search
+        size={15}
+        className="pointer-events-none absolute left-3 top-[11px] text-slate-400"
+      />
       <input
-        className={inputClass}
+        className={`${inputClass} pl-9`}
         value={form.buyerName}
         autoComplete="off"
         placeholder="Type to search previous buyers"
@@ -363,7 +375,7 @@ function BuyerNameInput({ form, updateField }: Props) {
         }}
       />
       {open && suggestions.length > 0 && (
-        <ul className="absolute z-20 mt-1 max-h-72 w-full overflow-auto rounded-lg border border-zinc-200 bg-white py-1 shadow-lg">
+        <ul className="absolute z-20 mt-1 max-h-72 w-full overflow-auto rounded-lg border border-slate-200 bg-white py-1 shadow-xl ring-1 ring-slate-900/5">
           {suggestions.map((b, i) => (
             <li
               key={`${b.buyerName}|${b.buyerGSTIN ?? ""}`}
@@ -373,13 +385,13 @@ function BuyerNameInput({ form, updateField }: Props) {
                 selectBuyer(b);
               }}
               onMouseEnter={() => setHighlight(i)}
-              className={`cursor-pointer px-3 py-2 ${i === highlight ? "bg-zinc-100" : ""}`}
+              className={`cursor-pointer px-3 py-2 ${i === highlight ? "bg-indigo-50" : ""}`}
             >
-              <div className="text-sm font-medium text-zinc-900">
+              <div className="text-sm font-medium text-slate-900">
                 {b.buyerName}
               </div>
               {(b.buyerGSTIN || b.buyerAddress) && (
-                <div className="truncate text-xs text-zinc-500">
+                <div className="truncate text-xs text-slate-500">
                   {[b.buyerGSTIN, b.buyerAddress].filter(Boolean).join(" · ")}
                 </div>
               )}
@@ -393,7 +405,11 @@ function BuyerNameInput({ form, updateField }: Props) {
 
 export function BuyerSection({ form, updateField }: Props) {
   return (
-    <SectionCard title="Buyer Details">
+    <SectionCard
+      title="Buyer Details"
+      description="Start typing to pick a buyer from previous invoices"
+      icon={UserRound}
+    >
       <Field label="Buyer Name / M/s." required>
         <BuyerNameInput form={form} updateField={updateField} />
       </Field>

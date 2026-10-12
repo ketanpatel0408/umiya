@@ -3,9 +3,11 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import Skeleton from "@mui/material/Skeleton";
-import { ArrowLeft, Printer, AlertCircle, FileX } from "lucide-react";
+import { ArrowLeft, Printer, AlertCircle, FileX, Pencil } from "lucide-react";
 import type { Invoice } from "../types";
 import InvoiceDocument from "./InvoiceDocument";
+import { StatusBadge, btnPrimary, btnSecondary } from "../../components/ui";
+import { formatCurrency, formatDate } from "../utils";
 
 type LoadState = "loading" | "not-found" | "error" | "ready";
 
@@ -42,7 +44,7 @@ export default function InvoiceDetailPage({
 
   if (state === "loading") {
     return (
-      <div className="min-h-full flex-1 bg-zinc-100 px-4 py-8">
+      <div className="flex-1 px-4 py-8">
         <div className="mx-auto max-w-4xl">
           <Skeleton variant="rounded" width="100%" height={1120} />
         </div>
@@ -53,7 +55,7 @@ export default function InvoiceDetailPage({
   if (state === "not-found") {
     return (
       <CenteredMessage
-        icon={<FileX size={28} className="text-zinc-400" />}
+        icon={<FileX size={28} className="text-slate-400" />}
         title="Invoice not found"
       />
     );
@@ -72,22 +74,39 @@ export default function InvoiceDetailPage({
   if (!invoice) return null;
 
   return (
-    <div className="print-page-wrapper min-h-full flex-1 bg-zinc-100">
-      <div className="no-print sticky top-0 z-10 flex items-center justify-between border-b border-zinc-200 bg-white/90 px-4 py-3 backdrop-blur">
-        <Link
-          href="/invoices"
-          className="inline-flex items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
-        >
-          <ArrowLeft size={16} />
-          Back to Invoices
-        </Link>
-        <button
-          onClick={() => window.print()}
-          className="inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white hover:bg-zinc-800"
-        >
-          <Printer size={16} />
-          Print / Save PDF
-        </button>
+    <div className="print-page-wrapper min-h-full flex-1 bg-slate-100">
+      <div className="no-print sticky top-0 z-20 border-b border-slate-200 bg-white/90 px-4 py-3 backdrop-blur sm:px-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-center gap-3">
+            <Link href="/invoices" className={`${btnSecondary} px-2.5`} title="Back to Invoices">
+              <ArrowLeft size={16} />
+            </Link>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <h1 className="truncate text-base font-semibold text-slate-900">
+                  Invoice {invoice.invoiceNumber}
+                </h1>
+                <StatusBadge status={invoice.status} />
+              </div>
+              <p className="truncate text-xs text-slate-500">
+                {invoice.buyerName} · {formatDate(invoice.invoiceDate)} ·{" "}
+                <span className="font-medium text-slate-700">
+                  {formatCurrency(invoice.grandTotal)}
+                </span>
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Link href={`/invoices/${invoice.id}/edit`} className={btnSecondary}>
+              <Pencil size={16} />
+              Edit
+            </Link>
+            <button onClick={() => window.print()} className={btnPrimary}>
+              <Printer size={16} />
+              Print / Save PDF
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="print-page-wrapper overflow-x-auto px-4 py-8">
@@ -107,20 +126,22 @@ function CenteredMessage({
   onRetry?: () => void;
 }) {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-3 bg-zinc-50 px-4 py-16 text-center">
-      {icon}
-      <h1 className="text-xl font-semibold text-zinc-900">{title}</h1>
+    <div className="flex flex-1 flex-col items-center justify-center gap-3 px-4 py-16 text-center">
+      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-slate-200">
+        {icon}
+      </div>
+      <h1 className="text-xl font-semibold text-slate-900">{title}</h1>
       {onRetry ? (
         <button
           onClick={onRetry}
-          className="mt-2 inline-flex items-center gap-2 rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
+          className={`${btnSecondary} mt-2`}
         >
           Retry
         </button>
       ) : (
         <Link
           href="/invoices"
-          className="mt-2 inline-flex items-center gap-2 rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
+          className={`${btnSecondary} mt-2`}
         >
           Back to Invoices
         </Link>

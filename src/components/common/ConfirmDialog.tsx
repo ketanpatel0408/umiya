@@ -41,11 +41,11 @@ export default function ConfirmDialog({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 px-4 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
     >
-      <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-lg">
+      <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl">
         <div className="flex items-start gap-3">
           {danger && (
             <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-100">
@@ -53,8 +53,8 @@ export default function ConfirmDialog({
             </div>
           )}
           <div>
-            <h2 className="text-base font-semibold text-zinc-900">{title}</h2>
-            <div className="mt-1 text-sm text-zinc-600">{message}</div>
+            <h2 className="text-base font-semibold text-slate-900">{title}</h2>
+            <div className="mt-1 text-sm text-slate-600">{message}</div>
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-3">
@@ -62,7 +62,7 @@ export default function ConfirmDialog({
             type="button"
             onClick={onCancel}
             disabled={busy}
-            className="cursor-pointer rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60"
+            className="cursor-pointer rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {cancelLabel}
           </button>
@@ -70,10 +70,10 @@ export default function ConfirmDialog({
             type="button"
             onClick={onConfirm}
             disabled={busy}
-            className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60 ${
+            className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm disabled:cursor-not-allowed disabled:opacity-60 ${
               danger
                 ? "bg-red-600 hover:bg-red-700"
-                : "bg-zinc-900 hover:bg-zinc-800"
+                : "bg-indigo-600 hover:bg-indigo-700"
             }`}
           >
             {busy ? "Please wait..." : confirmLabel}

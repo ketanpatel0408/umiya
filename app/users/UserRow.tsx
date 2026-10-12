@@ -5,9 +5,9 @@ import { Trash2, KeyRound } from "lucide-react";
 import type { ManagedUser, SellerDetailsForm } from "./types";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import PasswordInput from "@/components/common/PasswordInput";
+import { btnPrimary, btnSecondary, btnSmall, initials, inputBase } from "../components/ui";
 
-const editInputClass =
-  "w-full rounded-md border border-zinc-300 px-2 py-1.5 text-sm text-zinc-900 outline-none focus:border-zinc-500";
+const editInputClass = `${inputBase} mt-1`;
 
 function sellerFromUser(user: ManagedUser): SellerDetailsForm {
   return {
@@ -133,16 +133,32 @@ export default function UserRow({
 
   return (
     <>
-      <tr className="hover:bg-zinc-50">
-        <td className="px-4 py-3 font-medium text-zinc-900">{user.username}</td>
-        <td className="px-4 py-3 text-zinc-700">{user.fullName}</td>
-        <td className="px-4 py-3 text-zinc-700">{user.email}</td>
+      <tr className="transition-colors hover:bg-slate-50/80">
+        <td className="px-4 py-3">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-700">
+              {initials(user.fullName)}
+            </div>
+            <div className="min-w-0">
+              <p className="truncate font-medium text-slate-900">
+                {user.fullName}
+                {isSelf && (
+                  <span className="ml-2 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-500">
+                    You
+                  </span>
+                )}
+              </p>
+              <p className="truncate text-xs text-slate-500">@{user.username}</p>
+            </div>
+          </div>
+        </td>
+        <td className="px-4 py-3 text-slate-600">{user.email}</td>
         <td className="px-4 py-3">
           <select
             value={user.role}
             disabled={busy}
             onChange={(e) => patch({ role: e.target.value })}
-            className="cursor-pointer rounded-md border border-zinc-300 px-2 py-1 text-sm outline-none focus:border-zinc-500 disabled:cursor-not-allowed"
+            className="cursor-pointer rounded-md border border-slate-300 bg-white px-2 py-1 text-sm text-slate-700 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:cursor-not-allowed"
           >
             <option value="USER">User</option>
             <option value="ADMIN">Admin</option>
@@ -150,21 +166,24 @@ export default function UserRow({
         </td>
         <td className="px-4 py-3">
           <span
-            className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${
+            className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${
               user.isActive
-                ? "bg-emerald-100 text-emerald-700"
-                : "bg-zinc-100 text-zinc-500"
+                ? "bg-emerald-50 text-emerald-700 ring-emerald-600/20"
+                : "bg-slate-100 text-slate-500 ring-slate-500/20"
             }`}
           >
+            <span
+              className={`h-1.5 w-1.5 rounded-full ${user.isActive ? "bg-emerald-500" : "bg-slate-400"}`}
+            />
             {user.isActive ? "Active" : "Inactive"}
           </span>
         </td>
-        <td className="px-4 py-3 text-center">
-          <div className="flex flex-wrap items-center justify-center gap-2">
+        <td className="px-4 py-3 text-right">
+          <div className="flex flex-wrap items-center justify-end gap-2">
             <button
               disabled={busy}
               onClick={() => patch({ isActive: !user.isActive })}
-              className="cursor-pointer rounded-md border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60"
+              className={btnSmall}
             >
               {user.isActive ? "Deactivate" : "Activate"}
             </button>
@@ -174,7 +193,7 @@ export default function UserRow({
                 setSeller(sellerFromUser(user));
                 setEditing((v) => !v);
               }}
-              className="cursor-pointer rounded-md border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60"
+              className={btnSmall}
             >
               {editing ? "Close" : "Seller Details"}
             </button>
@@ -187,7 +206,7 @@ export default function UserRow({
                 setChangingPassword(true);
               }}
               title="Change Password"
-              className="cursor-pointer inline-flex items-center gap-1 rounded-md border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60"
+              className={btnSmall}
             >
               <KeyRound size={14} />
             </button>
@@ -195,7 +214,7 @@ export default function UserRow({
               disabled={busy || isSelf}
               onClick={() => setConfirmDelete(true)}
               title={isSelf ? "You cannot delete your own account" : "Delete User"}
-              className="cursor-pointer inline-flex items-center gap-1 rounded-md border border-red-300 px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-md border border-red-200 bg-white px-2.5 py-1.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Trash2 size={14} />
             </button>
@@ -204,10 +223,10 @@ export default function UserRow({
         </td>
       </tr>
       {editing && (
-        <tr className="bg-zinc-50">
-          <td colSpan={6} className="px-4 py-4">
+        <tr className="bg-slate-50/70">
+          <td colSpan={5} className="px-4 py-4">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <label className="text-xs font-medium text-zinc-600">
+              <label className="text-xs font-medium text-slate-600">
                 Seller Name
                 <input
                   className={editInputClass}
@@ -215,7 +234,7 @@ export default function UserRow({
                   onChange={(e) => updateSeller("sellerName", e.target.value)}
                 />
               </label>
-              <label className="text-xs font-medium text-zinc-600">
+              <label className="text-xs font-medium text-slate-600">
                 Seller Phone
                 <input
                   className={editInputClass}
@@ -223,7 +242,7 @@ export default function UserRow({
                   onChange={(e) => updateSeller("sellerPhone", e.target.value)}
                 />
               </label>
-              <label className="text-xs font-medium text-zinc-600">
+              <label className="text-xs font-medium text-slate-600">
                 Seller Address
                 <input
                   className={editInputClass}
@@ -231,7 +250,7 @@ export default function UserRow({
                   onChange={(e) => updateSeller("sellerAddress", e.target.value)}
                 />
               </label>
-              <label className="text-xs font-medium text-zinc-600">
+              <label className="text-xs font-medium text-slate-600">
                 Seller GSTIN
                 <input
                   className={editInputClass}
@@ -239,7 +258,7 @@ export default function UserRow({
                   onChange={(e) => updateSeller("sellerGSTIN", e.target.value)}
                 />
               </label>
-              <label className="text-xs font-medium text-zinc-600">
+              <label className="text-xs font-medium text-slate-600">
                 Seller PAN
                 <input
                   className={editInputClass}
@@ -247,7 +266,7 @@ export default function UserRow({
                   onChange={(e) => updateSeller("sellerPAN", e.target.value)}
                 />
               </label>
-              <label className="text-xs font-medium text-zinc-600">
+              <label className="text-xs font-medium text-slate-600">
                 Seller State
                 <input
                   className={editInputClass}
@@ -255,7 +274,7 @@ export default function UserRow({
                   onChange={(e) => updateSeller("sellerState", e.target.value)}
                 />
               </label>
-              <label className="text-xs font-medium text-zinc-600">
+              <label className="text-xs font-medium text-slate-600">
                 Seller State Code
                 <input
                   className={editInputClass}
@@ -268,13 +287,13 @@ export default function UserRow({
               <button
                 disabled={busy}
                 onClick={handleSaveSeller}
-                className="cursor-pointer rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className={`${btnPrimary} px-3 py-1.5 text-xs`}
               >
                 {busy ? "Saving..." : "Save Seller Details"}
               </button>
               <button
                 onClick={() => setEditing(false)}
-                className="cursor-pointer rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100"
+                className={`${btnSecondary} px-3 py-1.5 text-xs`}
               >
                 Cancel
               </button>
@@ -301,8 +320,8 @@ export default function UserRow({
       />
 
       {changingPassword && (
-        <tr className="bg-zinc-50">
-          <td colSpan={6} className="px-4 py-4">
+        <tr className="bg-slate-50/70">
+          <td colSpan={5} className="px-4 py-4">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <PasswordInput
                 label="New Password"
@@ -324,13 +343,13 @@ export default function UserRow({
               <button
                 disabled={busy}
                 onClick={handleChangePassword}
-                className="cursor-pointer rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className={`${btnPrimary} px-3 py-1.5 text-xs`}
               >
                 {busy ? "Saving..." : "Set Password"}
               </button>
               <button
                 onClick={() => setChangingPassword(false)}
-                className="cursor-pointer rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100"
+                className={`${btnSecondary} px-3 py-1.5 text-xs`}
               >
                 Cancel
               </button>

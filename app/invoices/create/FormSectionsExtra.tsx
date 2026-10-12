@@ -1,3 +1,4 @@
+import { Truck, StickyNote } from "lucide-react";
 import type { InvoiceFormState } from "./formHelpers";
 import { Field, inputClass, SectionCard, DateInput } from "./FormSections";
 
@@ -11,7 +12,11 @@ type Props = {
 
 export function MetadataSection({ form, updateField }: Props) {
   return (
-    <SectionCard title="Additional Invoice Details">
+    <SectionCard
+      title="Dispatch & Order Details"
+      description="Optional delivery and order references"
+      icon={Truck}
+    >
       <Field label="Delivery Note">
         <input
           className={inputClass}
@@ -65,17 +70,17 @@ export function MetadataSection({ form, updateField }: Props) {
 
 export function NotesSection({ form, updateField }: Props) {
   return (
-    <SectionCard title="Notes / Terms">
-      <label className="col-span-2 flex flex-col gap-1 text-sm">
-        <span className="font-medium text-zinc-700">Notes</span>
+    <SectionCard title="Notes & Terms" description="Printed at the bottom of the invoice" icon={StickyNote}>
+      <label className="col-span-1 flex flex-col gap-1 text-sm sm:col-span-2">
+        <span className="font-medium text-slate-700">Notes</span>
         <textarea
           className={`${inputClass} min-h-[60px]`}
           value={form.notes}
           onChange={(e) => updateField("notes", e.target.value)}
         />
       </label>
-      <label className="col-span-2 flex flex-col gap-1 text-sm">
-        <span className="font-medium text-zinc-700">Terms &amp; Conditions</span>
+      <label className="col-span-1 flex flex-col gap-1 text-sm sm:col-span-2">
+        <span className="font-medium text-slate-700">Terms &amp; Conditions</span>
         <textarea
           className={`${inputClass} min-h-[100px]`}
           value={form.termsAndConditions}

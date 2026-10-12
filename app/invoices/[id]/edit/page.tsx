@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { toFormState, type InvoiceFormState } from "../../create/formHelpers";
 import InvoiceForm from "../../create/InvoiceForm";
 import type { Invoice } from "../../types";
+import { PageContainer, PageHeader, btnSecondary } from "../../../components/ui";
 
 type LoadStatus = "loading" | "ready" | "not-found" | "error";
 
@@ -50,9 +51,10 @@ export default function EditInvoicePage({
 
   if (status === "loading") {
     return (
-      <div className="min-h-full flex-1 bg-zinc-50 px-4 py-8 sm:px-8">
-        <div className="mx-auto max-w-6xl">
-          <p className="text-sm text-zinc-500">Loading...</p>
+      <div className="flex flex-1 items-center justify-center px-4 py-24">
+        <div className="flex items-center gap-3 text-sm text-slate-500">
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-indigo-600" />
+          Loading...
         </div>
       </div>
     );
@@ -60,22 +62,17 @@ export default function EditInvoicePage({
 
   if (status === "not-found" || status === "error") {
     return (
-      <div className="min-h-full flex-1 bg-zinc-50 px-4 py-8 sm:px-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
-              {status === "not-found" ? "Invoice not found" : "Something went wrong"}
-            </h1>
-            <Link
-              href="/invoices"
-              className="inline-flex items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
-            >
+      <PageContainer>
+        <PageHeader
+          title={status === "not-found" ? "Invoice not found" : "Something went wrong"}
+          actions={
+            <Link href="/invoices" className={btnSecondary}>
               <ArrowLeft size={16} />
               Back
             </Link>
-          </div>
-        </div>
-      </div>
+          }
+        />
+      </PageContainer>
     );
   }
 

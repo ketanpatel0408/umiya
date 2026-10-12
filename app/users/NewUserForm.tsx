@@ -4,6 +4,8 @@ import { useState } from "react";
 import type { UserRole, SellerDetailsForm } from "./types";
 import { emptySellerDetails } from "./types";
 import PasswordInput from "@/components/common/PasswordInput";
+import { UserPlus, Store } from "lucide-react";
+import { Alert, CardHeader, btnPrimary, btnSecondary, inputBase, labelBase } from "../components/ui";
 
 export default function NewUserForm({
   onCreated,
@@ -61,17 +63,17 @@ export default function NewUserForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-6 rounded-xl border border-zinc-200 bg-white p-5"
+      className="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
     >
-      <h2 className="text-sm font-semibold text-zinc-900">Create New User</h2>
+      <CardHeader title="Create New User" description="Account and login details" icon={UserPlus} />
 
       {error && (
-        <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          {error}
+        <div className="px-5 pt-4">
+          <Alert>{error}</Alert>
         </div>
       )}
 
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">
         <Field label="Username" value={username} onChange={setUsername} required />
         <Field label="Full Name" value={fullName} onChange={setFullName} required />
         <Field label="Email" type="email" value={email} onChange={setEmail} required />
@@ -90,13 +92,11 @@ export default function NewUserForm({
           required
         />
         <div>
-          <label className="mb-1 block text-sm font-medium text-zinc-700">
-            Role
-          </label>
+          <label className={labelBase}>Role</label>
           <select
             value={role}
             onChange={(e) => setRole(e.target.value as UserRole)}
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-500"
+            className={inputBase}
           >
             <option value="USER">User</option>
             <option value="ADMIN">Admin</option>
@@ -104,10 +104,14 @@ export default function NewUserForm({
         </div>
       </div>
 
-      <h2 className="mt-6 text-sm font-semibold text-zinc-900">
-        Seller Details
-      </h2>
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="border-t border-slate-100">
+        <CardHeader
+          title="Seller Details"
+          description="Used to prefill invoices created by this user"
+          icon={Store}
+        />
+      </div>
+      <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">
         <Field
           label="Seller Name"
           value={seller.sellerName}
@@ -145,19 +149,11 @@ export default function NewUserForm({
         />
       </div>
 
-      <div className="mt-4 flex gap-3">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="cursor-pointer rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
-        >
+      <div className="flex justify-end gap-3 border-t border-slate-100 bg-slate-50/60 px-5 py-4">
+        <button type="button" onClick={onCancel} className={btnSecondary}>
           Cancel
         </button>
-        <button
-          type="submit"
-          disabled={saving}
-          className="cursor-pointer rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
-        >
+        <button type="submit" disabled={saving} className={btnPrimary}>
           {saving ? "Creating..." : "Create User"}
         </button>
       </div>
@@ -180,15 +176,16 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1 block text-sm font-medium text-zinc-700">
+      <label className={labelBase}>
         {label}
+        {required && <span className="ml-0.5 text-red-500">*</span>}
       </label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         required={required}
-        className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-500"
+        className={inputBase}
       />
     </div>
   );

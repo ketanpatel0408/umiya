@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Tinos, Poppins } from "next/font/google";
-import Navbar from "./components/Navbar";
+import AppShell from "./components/AppShell";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -26,8 +26,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Invoice Generator",
-  description: "Invoice Generator App",
+  title: "Umiya GST Portal",
+  description: "GST invoice management portal",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -37,8 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${tinos.variable} ${poppins.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Navbar />
-        {children}
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

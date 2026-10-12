@@ -91,9 +91,10 @@ export default function CreateInvoicePage() {
 
   if (sellerStatus === "loading") {
     return (
-      <div className="min-h-full flex-1 bg-zinc-50 px-4 py-8 sm:px-8">
-        <div className="mx-auto max-w-6xl">
-          <p className="text-sm text-zinc-500">Loading...</p>
+      <div className="flex flex-1 items-center justify-center px-4 py-24">
+        <div className="flex items-center gap-3 text-sm text-slate-500">
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-indigo-600" />
+          Loading...
         </div>
       </div>
     );
