@@ -2,8 +2,12 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/auth/session";
 
-const PUBLIC_PAGE_PATHS = ["/login"];
-const PUBLIC_API_PATHS = ["/api/auth/login"];
+const PUBLIC_PAGE_PATHS = ["/login", "/forgot-password", "/reset-password"];
+const PUBLIC_API_PATHS = [
+  "/api/auth/login",
+  "/api/auth/forgot-password",
+  "/api/auth/reset-password",
+];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -17,7 +21,7 @@ export function proxy(request: NextRequest) {
 
   if (session) {
     // Already logged in; keep them off the login page.
-    if (isPublicPage) {
+    if (pathname.startsWith("/login")) {
       return NextResponse.redirect(new URL("/", request.url));
     }
     if (pathname.startsWith("/users") && session.role !== "ADMIN") {

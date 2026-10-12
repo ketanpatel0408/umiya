@@ -62,6 +62,8 @@ const NAV_ITEMS: NavItem[] = [
   },
 ];
 
+const AUTH_PAGES = ["/login", "/forgot-password", "/reset-password"];
+
 /**
  * Application chrome: a fixed sidebar on desktop and a top bar with a
  * slide-in drawer on mobile. The login page renders without it.
@@ -79,7 +81,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [pwdSuccess, setPwdSuccess] = useState(false);
   const [pwdBusy, setPwdBusy] = useState(false);
 
-  const isLogin = pathname === "/login";
+  // Signed-out screens render without the sidebar.
+  const isLogin = AUTH_PAGES.includes(pathname);
 
   useEffect(() => {
     if (isLogin) return;
