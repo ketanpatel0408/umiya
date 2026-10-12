@@ -3,21 +3,15 @@ import { prisma } from "@/lib/prisma";
 import {
   RESET_REQUEST_COOLDOWN_SECONDS,
   RESET_TOKEN_TTL_MINUTES,
-  adminResetWhatsAppNumber,
   generateResetToken,
 } from "@/lib/auth/reset-token";
-import { isWhatsAppConfigured, sendWhatsAppResetLink } from "@/lib/whatsapp";
-
-/** Last 4 digits only, so the response confirms the channel without exposing the number. */
-function maskedNumber(): string {
-  return `******${adminResetWhatsAppNumber().replace(/\D/g, "").slice(-4)}`;
-}
+import { isMailerConfigured, sendResetEmail } from "@/lib/mailer";
 
 /**
- * Public endpoint: sends a one-time password reset link to the admin
- * WhatsApp number. Only active ADMIN accounts can be reset this way. The
- * response is identical whether or not the username matched, so it can't be
- * used to discover admin usernames.
+ * Public endpoint: emails a one-time password reset link for an admin
+ * account. Only active ADMIN accounts can be reset this way. The response is
+ * identical whether or not the username matched (and doesn't reveal the
+ * address), so it can't be used to discover admin usernames or emails.
  */
 export async function POST(request: NextRequest) {
   let body: { username?: unknown };
@@ -33,9 +27,9 @@ export async function POST(request: NextRequest) {
   }
 
   const isDev = process.env.NODE_ENV !== "production";
-  if (!isWhatsAppConfigured() && !isDev) {
+  if (!isMailerConfigured() && !isDev) {
     return NextResponse.json(
-      { error: "Password reset via WhatsApp is not configured. Please contact support." },
+      { error: "Password reset by email is not configured. Please contact support." },
       { status: 503 }
     );
   }
@@ -43,7 +37,8 @@ export async function POST(request: NextRequest) {
   const genericResponse = NextResponse.json(
     {
       ok: true,
-      message: `If this is an admin account, a reset link has been sent on WhatsApp to ${maskedNumber()}.`,
+      message:
+        "If this is an admin account, a reset link has been sent to its registered email address.",
     },
     { status: 200 }
   );
@@ -51,8 +46,8 @@ export async function POST(request: NextRequest) {
   const user = await prisma.user.findUnique({ where: { username } });
   if (!user || !user.isActive || user.role !== "ADMIN") return genericResponse;
 
-  // Throttle repeated requests so the WhatsApp number can't be spammed. The
-  // reply stays generic so the cooldown doesn't reveal an admin username.
+  // Throttle repeated requests so the inbox can't be spammed. The reply
+  // stays generic so the cooldown doesn't reveal an admin username.
   const recent = await prisma.passwordResetToken.findFirst({
     where: {
       userId: user.id,
@@ -74,21 +69,22 @@ export async function POST(request: NextRequest) {
   // Prefer the configured public URL; the request origin is a dev fallback.
   const baseUrl = (process.env.APP_BASE_URL || request.nextUrl.origin).replace(/\/+$/, "");
   const link = `${baseUrl}/reset-password?token=${encodeURIComponent(token)}`;
+  const recipient = process.env.ADMIN_RESET_EMAIL || user.email;
 
-  if (!isWhatsAppConfigured()) {
-    // Local development without WhatsApp credentials: print the link instead.
-    console.log(`[forgot-password] WhatsApp not configured. Reset link for ${user.username}: ${link}`);
+  if (!isMailerConfigured()) {
+    // Local development without SMTP credentials: print the link instead.
+    console.log(`[forgot-password] Email not configured. Reset link for ${user.username}: ${link}`);
     return genericResponse;
   }
 
   try {
-    await sendWhatsAppResetLink(adminResetWhatsAppNumber(), link);
+    await sendResetEmail(recipient, link);
   } catch (error) {
-    console.error("Failed to send WhatsApp reset link:", error);
+    console.error("Failed to send reset email:", error);
     // Don't leave a usable token behind for a link nobody received.
     await prisma.passwordResetToken.delete({ where: { id: created.id } });
     return NextResponse.json(
-      { error: "Could not send the WhatsApp message. Please try again later." },
+      { error: "Could not send the reset email. Please try again later." },
       { status: 502 }
     );
   }

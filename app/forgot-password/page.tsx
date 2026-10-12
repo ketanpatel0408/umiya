@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { AlertCircle, ArrowLeft, CheckCircle2, MessageCircle } from "lucide-react";
+import { AlertCircle, ArrowLeft, CheckCircle2, Mail } from "lucide-react";
 import AuthLayout from "../components/AuthLayout";
 import { btnPrimary, inputBase, labelBase } from "../components/ui";
 
@@ -24,7 +24,7 @@ export default function ForgotPasswordPage() {
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
-        setSentMessage(data.message || "If this is an admin account, a reset link has been sent on WhatsApp.");
+        setSentMessage(data.message || "If this is an admin account, a reset link has been sent to its registered email address.");
         return;
       }
       setError(data.error || "Something went wrong. Please try again.");
@@ -41,8 +41,8 @@ export default function ForgotPasswordPage() {
         Forgot password?
       </h1>
       <p className="mt-1 text-sm text-slate-500">
-        Admin accounts only. Enter your username and we&apos;ll send a reset
-        link on the registered WhatsApp number.
+        Admin accounts only. Enter your username and we&apos;ll email a reset
+        link to the account&apos;s registered address.
       </p>
 
       {sentMessage ? (
@@ -50,10 +50,11 @@ export default function ForgotPasswordPage() {
           <div className="flex items-start gap-3">
             <CheckCircle2 size={20} className="mt-0.5 shrink-0 text-emerald-600" />
             <div className="text-sm text-emerald-800">
-              <p className="font-medium">Check WhatsApp</p>
+              <p className="font-medium">Check your email</p>
               <p className="mt-1">{sentMessage}</p>
               <p className="mt-2 text-xs text-emerald-700">
-                The link is valid for 15 minutes and can be used once.
+                The link is valid for 15 minutes and can be used once. Check
+                the spam folder if you don&apos;t see it.
               </p>
             </div>
           </div>
@@ -82,8 +83,8 @@ export default function ForgotPasswordPage() {
             </div>
 
             <button type="submit" disabled={loading} className={`${btnPrimary} mt-2 w-full py-3`}>
-              <MessageCircle size={16} />
-              {loading ? "Sending..." : "Send reset link on WhatsApp"}
+              <Mail size={16} />
+              {loading ? "Sending..." : "Email me a reset link"}
             </button>
           </form>
         </>
