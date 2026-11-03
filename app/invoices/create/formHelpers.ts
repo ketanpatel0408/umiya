@@ -162,8 +162,14 @@ export function computeTotals(
     }
   }
 
-  const roundOff = 0;
-  const grandTotal = subtotal + totalCGST + totalSGST + totalIGST + roundOff;
+  // Grand Total is rounded to the nearest rupee; Round Off is the difference
+  // from the paise-level total (mirrors the backend calculation).
+  const round2 = (n: number) => Math.round(n * 100) / 100;
+  const payable = round2(
+    round2(subtotal) + round2(totalCGST) + round2(totalSGST) + round2(totalIGST)
+  );
+  const grandTotal = Math.round(payable);
+  const roundOff = round2(grandTotal - payable);
 
   return { subtotal, totalCGST, totalSGST, totalIGST, roundOff, grandTotal };
 }

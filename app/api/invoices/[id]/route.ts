@@ -258,8 +258,15 @@ export async function PUT(
   const totalCGST = items.reduce((sum, i) => sum.plus(i.cgstAmount), zero);
   const totalSGST = items.reduce((sum, i) => sum.plus(i.sgstAmount), zero);
   const totalIGST = items.reduce((sum, i) => sum.plus(i.igstAmount), zero);
-  const roundOff = zero;
-  const grandTotal = subtotal.plus(totalCGST).plus(totalSGST).plus(totalIGST).plus(roundOff);
+  // Grand Total is rounded to the nearest rupee. Round Off is the difference
+  // from the paise-level total, built from the same 2-decimal values the DB
+  // stores so the printed amounts always add up.
+  const payable = [subtotal, totalCGST, totalSGST, totalIGST].reduce(
+    (sum, v) => sum.plus(v.toDecimalPlaces(2, Prisma.Decimal.ROUND_HALF_UP)),
+    zero
+  );
+  const grandTotal = payable.toDecimalPlaces(0, Prisma.Decimal.ROUND_HALF_UP);
+  const roundOff = grandTotal.minus(payable);
 
   const invoiceDate = new Date(body.invoiceDate as string);
   // invoiceNumber, financialYear, ownerId and InvoiceSequence are never
