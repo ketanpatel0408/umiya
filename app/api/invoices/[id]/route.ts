@@ -161,7 +161,11 @@ function validateInvoiceBody(body: IncomingInvoice): string[] {
 function calculateItem(item: IncomingItem, taxType: InvoiceTaxType) {
   const quantity = new Prisma.Decimal(item.quantity as number);
   const rate = new Prisma.Decimal(item.rate as number);
-  const gstRate = new Prisma.Decimal(item.gstRate as number);
+  // Composition (lumpsum) dealers cannot charge GST on the invoice.
+  const gstRate =
+    taxType === InvoiceTaxType.LUMPSUM
+      ? new Prisma.Decimal(0)
+      : new Prisma.Decimal(item.gstRate as number);
 
   const taxableAmount = quantity.times(rate);
 

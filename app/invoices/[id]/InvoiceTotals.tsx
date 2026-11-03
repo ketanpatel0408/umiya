@@ -7,6 +7,7 @@ import type { Invoice } from "../types";
  */
 export default function InvoiceTotals({ invoice }: { invoice: Invoice }) {
   const isIGST = invoice.taxType === "IGST";
+  const isCGST = invoice.taxType === "CGST_SGST";
   const cgstRate = Number(invoice.items[0]?.gstRate ?? 0) / 2;
   const igstRate = Number(invoice.items[0]?.gstRate ?? 0);
 
@@ -16,13 +17,13 @@ export default function InvoiceTotals({ invoice }: { invoice: Invoice }) {
         <tbody>
           <tr>
             <td colSpan={2} className="font-bold">
-              Taxable Amount
+              {invoice.taxType === "LUMPSUM" ? "Amount" : "Taxable Amount"}
             </td>
             <td className="text-right font-bold">
               {Number(invoice.subtotal).toFixed(2)}
             </td>
           </tr>
-          {!isIGST && (
+          {isCGST && (
             <tr>
               <td>CGST</td>
               <td className="text-right">{cgstRate.toFixed(2)}%</td>
@@ -31,7 +32,7 @@ export default function InvoiceTotals({ invoice }: { invoice: Invoice }) {
               </td>
             </tr>
           )}
-          {!isIGST && (
+          {isCGST && (
             <tr>
               <td>SGST</td>
               <td className="text-right">{cgstRate.toFixed(2)}%</td>

@@ -26,9 +26,17 @@ export default function InvoiceHeader({ invoice }: { invoice: Invoice }) {
 
       <div className="flex border-b border-current text-sm font-bold">
         <div className="flex-1 p-1 text-left">Cash Memo</div>
-        <div className="flex-1 p-1 text-center">TAX INVOICE</div>
+        <div className="flex-1 p-1 text-center">
+          {invoice.taxType === "LUMPSUM" ? "BILL OF SUPPLY" : "TAX INVOICE"}
+        </div>
         <div className="flex-1 p-1 text-right">Original</div>
       </div>
+
+      {invoice.taxType === "LUMPSUM" && (
+        <div className="border-b border-current p-1 text-center text-xs font-semibold">
+          Composition taxable person, not eligible to collect tax on supplies
+        </div>
+      )}
     </>
   );
 }

@@ -186,7 +186,14 @@ export function InvoiceDetailsSection({
         >
           <option value="CGST_SGST">CGST + SGST</option>
           <option value="IGST">IGST</option>
+          <option value="LUMPSUM">Lumpsum (Composition)</option>
         </select>
+        {form.taxType === "LUMPSUM" && (
+          <span className="mt-1 text-xs text-slate-500">
+            Composition dealer: a Bill of Supply is issued and no GST is
+            charged on the invoice.
+          </span>
+        )}
       </Field>
     </SectionCard>
   );

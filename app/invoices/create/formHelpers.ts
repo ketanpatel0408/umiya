@@ -157,7 +157,7 @@ export function computeTotals(
       const half = (taxable * gstRate) / 2 / 100;
       totalCGST += half;
       totalSGST += half;
-    } else {
+    } else if (taxType === "IGST") {
       totalIGST += (taxable * gstRate) / 100;
     }
   }
@@ -177,7 +177,8 @@ export function buildPreviewInvoice(form: InvoiceFormState) {
   const items = form.items.map((item, index) => {
     const quantity = Number(item.quantity) || 0;
     const rate = Number(item.rate) || 0;
-    const gstRate = Number(item.gstRate) || 0;
+    const gstRate =
+      form.taxType === "LUMPSUM" ? 0 : Number(item.gstRate) || 0;
     const taxableAmount = quantity * rate;
 
     let cgstAmount = 0;
@@ -187,7 +188,7 @@ export function buildPreviewInvoice(form: InvoiceFormState) {
       const half = (taxableAmount * gstRate) / 2 / 100;
       cgstAmount = half;
       sgstAmount = half;
-    } else {
+    } else if (form.taxType === "IGST") {
       igstAmount = (taxableAmount * gstRate) / 100;
     }
     const totalAmount = taxableAmount + cgstAmount + sgstAmount + igstAmount;
@@ -370,7 +371,7 @@ export function validateForm(form: InvoiceFormState): string[] {
       if (!(Number(item.rate) >= 0)) {
         errors.push(`Item ${i + 1}: Rate must be >= 0.`);
       }
-      if (!(Number(item.gstRate) >= 0)) {
+      if (form.taxType !== "LUMPSUM" && !(Number(item.gstRate) >= 0)) {
         errors.push(`Item ${i + 1}: GST % must be >= 0.`);
       }
     });

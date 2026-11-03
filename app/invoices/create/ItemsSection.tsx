@@ -5,6 +5,8 @@ import type { ItemForm } from "./formHelpers";
 
 type Props = {
   items: ItemForm[];
+  /** Composition (lumpsum) invoices carry no GST, so the GST % column is hidden. */
+  isLumpsum: boolean;
   updateItem: (index: number, patch: Partial<ItemForm>) => void;
   addItem: () => void;
   removeItem: (index: number) => void;
@@ -27,6 +29,7 @@ const QUANTITY_PATTERN = /^\d*(\.\d{0,3})?$/;
 
 export default function ItemsSection({
   items,
+  isLumpsum,
   updateItem,
   addItem,
   removeItem,
@@ -83,7 +86,11 @@ export default function ItemsSection({
               </button>
             </div>
 
-            <div className="mt-3 grid grid-cols-2 gap-3 sm:ml-9 sm:grid-cols-5">
+            <div
+              className={`mt-3 grid grid-cols-2 gap-3 sm:ml-9 ${
+                isLumpsum ? "sm:grid-cols-4" : "sm:grid-cols-5"
+              }`}
+            >
               <label>
                 <span className={cellLabel}>HSN</span>
                 <input
@@ -125,6 +132,7 @@ export default function ItemsSection({
                   onChange={(e) => updateItem(index, { rate: e.target.value })}
                 />
               </label>
+              {!isLumpsum && (
               <label>
                 <span className={cellLabel}>GST %</span>
                 <input
@@ -136,6 +144,7 @@ export default function ItemsSection({
                   }
                 />
               </label>
+              )}
             </div>
 
             <div className="mt-2 flex justify-between text-sm sm:hidden">

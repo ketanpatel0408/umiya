@@ -25,13 +25,18 @@ export default function InvoiceDocument({ invoice }: { invoice: Invoice }) {
         <InvoiceHeader invoice={invoice} />
         <InvoiceMeta invoice={invoice} />
 
-        <InvoiceItemsTable items={invoice.items} />
+        <InvoiceItemsTable
+          items={invoice.items}
+          isLumpsum={invoice.taxType === "LUMPSUM"}
+        />
 
         <div className="flex">
           <div className="w-[67%] border-r border-current">
             <InvoiceQtyBand items={invoice.items} />
             <InvoiceBankDetails
-              totalGSTWords={numberToWords(totalGST)}
+              totalGSTWords={
+                invoice.taxType === "LUMPSUM" ? undefined : numberToWords(totalGST)
+              }
               billAmountWords={numberToWords(invoice.grandTotal)}
             />
             <InvoiceNote notes={invoice.notes} />

@@ -1,17 +1,31 @@
 import { Calculator } from "lucide-react";
 import type { ComputedTotals } from "./formHelpers";
+import type { InvoiceTaxType } from "../types";
 import { formatCurrency } from "../utils";
 import { CardHeader } from "../../components/ui";
 
-export default function TotalsSummary({ totals }: { totals: ComputedTotals }) {
+export default function TotalsSummary({
+  totals,
+  taxType,
+}: {
+  totals: ComputedTotals;
+  taxType: InvoiceTaxType;
+}) {
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       <CardHeader title="Invoice Summary" description="Live estimate" icon={Calculator} />
       <dl className="flex flex-col gap-2.5 px-5 py-4 text-sm">
-        <Row label="Taxable Amount" value={totals.subtotal} />
-        <Row label="CGST" value={totals.totalCGST} />
-        <Row label="SGST" value={totals.totalSGST} />
-        <Row label="IGST" value={totals.totalIGST} />
+        <Row
+          label={taxType === "LUMPSUM" ? "Amount" : "Taxable Amount"}
+          value={totals.subtotal}
+        />
+        {taxType === "CGST_SGST" && (
+          <>
+            <Row label="CGST" value={totals.totalCGST} />
+            <Row label="SGST" value={totals.totalSGST} />
+          </>
+        )}
+        {taxType === "IGST" && <Row label="IGST" value={totals.totalIGST} />}
         <Row label="Round Off" value={totals.roundOff} />
       </dl>
       <div className="flex items-center justify-between bg-indigo-600 px-5 py-4 text-white">

@@ -23,7 +23,13 @@ const HEADERS = [
   { label: "Amount", align: "text-right" },
 ];
 
-export default function InvoiceItemsTable({ items }: { items: InvoiceItem[] }) {
+export default function InvoiceItemsTable({
+  items,
+  isLumpsum = false,
+}: {
+  items: InvoiceItem[];
+  isLumpsum?: boolean;
+}) {
   return (
     <div className="table-auto w-full border-collapse border-b border-current text-sm">
       <div className="header flex">
@@ -48,7 +54,9 @@ export default function InvoiceItemsTable({ items }: { items: InvoiceItem[] }) {
             <Cell col={3}>{Number(item.quantity).toFixed(3)}</Cell>
             <Cell col={4}>{item.unit ?? ""}</Cell>
             <Cell col={5}>{Number(item.rate).toFixed(2)}</Cell>
-            <Cell col={6}>{Number(item.gstRate).toFixed(2)}</Cell>
+            <Cell col={6}>
+              {isLumpsum ? "-" : Number(item.gstRate).toFixed(2)}
+            </Cell>
             <Cell col={7} last>
               {Number(item.taxableAmount).toFixed(2)}
             </Cell>

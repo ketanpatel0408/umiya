@@ -1,5 +1,5 @@
 export type InvoiceStatus = "DRAFT" | "ISSUED" | "CANCELLED";
-export type InvoiceTaxType = "CGST_SGST" | "IGST";
+export type InvoiceTaxType = "CGST_SGST" | "IGST" | "LUMPSUM";
 
 export type InvoiceItem = {
   id: number;

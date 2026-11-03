@@ -185,6 +185,7 @@ export default function InvoiceForm({
             <MetadataSection form={form} updateField={updateField} />
             <ItemsSection
               items={form.items}
+              isLumpsum={form.taxType === "LUMPSUM"}
               updateItem={updateItem}
               addItem={addItem}
               removeItem={removeItem}
@@ -193,7 +194,7 @@ export default function InvoiceForm({
           </div>
 
           <div className="flex flex-col gap-4 self-start lg:sticky lg:top-8">
-            <TotalsSummary totals={totals} />
+            <TotalsSummary totals={totals} taxType={form.taxType} />
 
             <div className="flex flex-col gap-3">
               <button

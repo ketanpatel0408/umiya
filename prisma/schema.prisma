@@ -13,9 +13,12 @@ enum InvoiceStatus {
   CANCELLED
 }
 
+// LUMPSUM = Composition scheme (lumpsum) dealer: issues a Bill of Supply
+// and cannot collect GST, so no tax is added to the invoice.
 enum InvoiceTaxType {
   CGST_SGST
   IGST
+  LUMPSUM
 }
 
 enum UserRole {

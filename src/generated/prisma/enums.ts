@@ -20,7 +20,8 @@ export type InvoiceStatus = (typeof InvoiceStatus)[keyof typeof InvoiceStatus]
 
 export const InvoiceTaxType = {
   CGST_SGST: 'CGST_SGST',
-  IGST: 'IGST'
+  IGST: 'IGST',
+  LUMPSUM: 'LUMPSUM'
 } as const
 
 export type InvoiceTaxType = (typeof InvoiceTaxType)[keyof typeof InvoiceTaxType]
