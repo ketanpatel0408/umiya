@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { Prisma, UserRole } from "@/generated/prisma/client";
 import { requireAdmin } from "@/lib/auth/guards";
 import { hashPassword, isStrongPassword } from "@/lib/auth/password";
+import { isValidSignatureImage } from "@/lib/signature";
+import { validateInvoiceNumberFormat } from "@/lib/invoiceNumber";
 
 const VALID_ROLES = Object.values(UserRole);
 
@@ -28,6 +30,12 @@ export async function GET() {
       sellerPAN: true,
       sellerState: true,
       sellerStateCode: true,
+      bankName: true,
+      bankBranchName: true,
+      bankAccountNumber: true,
+      bankIfscCode: true,
+      signatureImage: true,
+      invoiceNumberFormat: true,
     },
   });
 
@@ -47,6 +55,12 @@ type IncomingUser = {
   sellerPAN?: unknown;
   sellerState?: unknown;
   sellerStateCode?: unknown;
+  bankName?: unknown;
+  bankBranchName?: unknown;
+  bankAccountNumber?: unknown;
+  bankIfscCode?: unknown;
+  signatureImage?: unknown;
+  invoiceNumberFormat?: unknown;
 };
 
 function isNonEmptyString(value: unknown): value is string {
@@ -79,6 +93,15 @@ export async function POST(request: NextRequest) {
       "password must be at least 8 characters and include a letter and a number"
     );
   }
+  const signatureImage = optionalString(body.signatureImage);
+  if (signatureImage !== null && !isValidSignatureImage(signatureImage)) {
+    errors.push("signatureImage must be a PNG, JPEG or WebP image under 300 KB");
+  }
+  const invoiceNumberFormat = optionalString(body.invoiceNumberFormat);
+  if (invoiceNumberFormat !== null) {
+    const formatError = validateInvoiceNumberFormat(invoiceNumberFormat);
+    if (formatError) errors.push(`invoiceNumberFormat: ${formatError}`);
+  }
   const role = isNonEmptyString(body.role) ? body.role : "USER";
   if (!VALID_ROLES.includes(role as UserRole)) {
     errors.push(`role must be one of: ${VALID_ROLES.join(", ")}`);
@@ -107,6 +130,12 @@ export async function POST(request: NextRequest) {
         sellerPAN: optionalString(body.sellerPAN),
         sellerState: optionalString(body.sellerState),
         sellerStateCode: optionalString(body.sellerStateCode),
+        bankName: optionalString(body.bankName),
+        bankBranchName: optionalString(body.bankBranchName),
+        bankAccountNumber: optionalString(body.bankAccountNumber),
+        bankIfscCode: optionalString(body.bankIfscCode),
+        signatureImage,
+        invoiceNumberFormat,
       },
       select: {
         id: true,
@@ -123,6 +152,12 @@ export async function POST(request: NextRequest) {
         sellerPAN: true,
         sellerState: true,
         sellerStateCode: true,
+        bankName: true,
+        bankBranchName: true,
+        bankAccountNumber: true,
+        bankIfscCode: true,
+        signatureImage: true,
+        invoiceNumberFormat: true,
       },
     });
 

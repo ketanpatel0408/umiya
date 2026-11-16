@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { Prisma, UserRole } from "@/generated/prisma/client";
 import { requireAdmin } from "@/lib/auth/guards";
 import { hashPassword, isStrongPassword } from "@/lib/auth/password";
+import { isValidSignatureImage } from "@/lib/signature";
+import { validateInvoiceNumberFormat } from "@/lib/invoiceNumber";
 
 const USER_SELECT = {
   id: true,
@@ -20,6 +22,12 @@ const USER_SELECT = {
   sellerPAN: true,
   sellerState: true,
   sellerStateCode: true,
+  bankName: true,
+  bankBranchName: true,
+  bankAccountNumber: true,
+  bankIfscCode: true,
+  signatureImage: true,
+  invoiceNumberFormat: true,
 } as const;
 
 const VALID_ROLES = Object.values(UserRole);
@@ -37,6 +45,12 @@ type IncomingPatch = {
   sellerPAN?: unknown;
   sellerState?: unknown;
   sellerStateCode?: unknown;
+  bankName?: unknown;
+  bankBranchName?: unknown;
+  bankAccountNumber?: unknown;
+  bankIfscCode?: unknown;
+  signatureImage?: unknown;
+  invoiceNumberFormat?: unknown;
 };
 
 const SELLER_FIELDS = [
@@ -47,6 +61,10 @@ const SELLER_FIELDS = [
   "sellerPAN",
   "sellerState",
   "sellerStateCode",
+  "bankName",
+  "bankBranchName",
+  "bankAccountNumber",
+  "bankIfscCode",
 ] as const;
 
 export async function PATCH(
@@ -129,6 +147,31 @@ export async function PATCH(
     }
     const trimmed = typeof value === "string" ? value.trim() : "";
     (data as Record<string, string | null>)[field] = trimmed === "" ? null : trimmed;
+  }
+
+  if (body.invoiceNumberFormat !== undefined) {
+    const value = body.invoiceNumberFormat;
+    const trimmed = typeof value === "string" ? value.trim() : "";
+    if (value !== null && typeof value !== "string") {
+      errors.push("invoiceNumberFormat must be a string");
+    } else if (trimmed === "") {
+      data.invoiceNumberFormat = null;
+    } else {
+      const formatError = validateInvoiceNumberFormat(trimmed);
+      if (formatError) errors.push(`invoiceNumberFormat: ${formatError}`);
+      else data.invoiceNumberFormat = trimmed;
+    }
+  }
+
+  if (body.signatureImage !== undefined) {
+    const value = body.signatureImage;
+    if (value === null || value === "") {
+      data.signatureImage = null;
+    } else if (typeof value !== "string" || !isValidSignatureImage(value)) {
+      errors.push("signatureImage must be a PNG, JPEG or WebP image under 300 KB");
+    } else {
+      data.signatureImage = value;
+    }
   }
 
   if (errors.length > 0) {

@@ -16,6 +16,12 @@ export type ManagedUser = {
   sellerPAN: string | null;
   sellerState: string | null;
   sellerStateCode: string | null;
+  bankName: string | null;
+  bankBranchName: string | null;
+  bankAccountNumber: string | null;
+  bankIfscCode: string | null;
+  signatureImage: string | null;
+  invoiceNumberFormat: string | null;
 };
 
 export type SellerDetailsForm = {
@@ -26,6 +32,14 @@ export type SellerDetailsForm = {
   sellerPAN: string;
   sellerState: string;
   sellerStateCode: string;
+  bankName: string;
+  bankBranchName: string;
+  bankAccountNumber: string;
+  bankIfscCode: string;
+  /** data: URL, or "" for no signature. */
+  signatureImage: string;
+  /** "" = default format. */
+  invoiceNumberFormat: string;
 };
 
 export function emptySellerDetails(): SellerDetailsForm {
@@ -37,5 +51,11 @@ export function emptySellerDetails(): SellerDetailsForm {
     sellerPAN: "",
     sellerState: "",
     sellerStateCode: "",
+    bankName: "",
+    bankBranchName: "",
+    bankAccountNumber: "",
+    bankIfscCode: "",
+    signatureImage: "",
+    invoiceNumberFormat: "",
   };
 }

@@ -24,6 +24,8 @@ export async function GET(
       where: { id: Number(id) },
       include: {
         items: true,
+        // Signature is read live from the owner, so it reflects their profile.
+        owner: { select: { signatureImage: true } },
       },
     });
 
@@ -269,6 +271,18 @@ export async function PUT(
   const roundOff = grandTotal.minus(payable);
 
   const invoiceDate = new Date(body.invoiceDate as string);
+
+  // Re-snapshot bank details from the invoice owner (not the editor, who may
+  // be an Admin editing another user's invoice).
+  const owner = await prisma.user.findUnique({
+    where: { id: existing.ownerId },
+    select: {
+      bankName: true,
+      bankBranchName: true,
+      bankAccountNumber: true,
+      bankIfscCode: true,
+    },
+  });
   // invoiceNumber, financialYear, ownerId and InvoiceSequence are never
   // touched during edit — only the snapshot/content fields and totals are
   // recalculated and persisted.
@@ -296,6 +310,11 @@ export async function PUT(
             (body.sellerStateCode as string | null | undefined) ?? null,
           sellerEmail: (body.sellerEmail as string | null | undefined) ?? null,
           sellerPhone: (body.sellerPhone as string | null | undefined) ?? null,
+
+          bankName: owner?.bankName ?? null,
+          bankBranchName: owner?.bankBranchName ?? null,
+          bankAccountNumber: owner?.bankAccountNumber ?? null,
+          bankIfscCode: owner?.bankIfscCode ?? null,
 
           buyerName: (body.buyerName as string).trim(),
           buyerGSTIN: (body.buyerGSTIN as string | null | undefined) ?? null,

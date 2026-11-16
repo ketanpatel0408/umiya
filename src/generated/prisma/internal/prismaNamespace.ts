@@ -845,6 +845,12 @@ export const UserScalarFieldEnum = {
   sellerPAN: 'sellerPAN',
   sellerState: 'sellerState',
   sellerStateCode: 'sellerStateCode',
+  bankName: 'bankName',
+  bankBranchName: 'bankBranchName',
+  bankAccountNumber: 'bankAccountNumber',
+  bankIfscCode: 'bankIfscCode',
+  signatureImage: 'signatureImage',
+  invoiceNumberFormat: 'invoiceNumberFormat',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   lastLoginAt: 'lastLoginAt'
@@ -881,6 +887,10 @@ export const InvoiceScalarFieldEnum = {
   sellerStateCode: 'sellerStateCode',
   sellerEmail: 'sellerEmail',
   sellerPhone: 'sellerPhone',
+  bankName: 'bankName',
+  bankBranchName: 'bankBranchName',
+  bankAccountNumber: 'bankAccountNumber',
+  bankIfscCode: 'bankIfscCode',
   buyerName: 'buyerName',
   buyerGSTIN: 'buyerGSTIN',
   buyerPAN: 'buyerPAN',
@@ -914,6 +924,7 @@ export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeo
 
 export const InvoiceSequenceScalarFieldEnum = {
   id: 'id',
+  ownerId: 'ownerId',
   financialYear: 'financialYear',
   lastNumber: 'lastNumber',
   createdAt: 'createdAt',

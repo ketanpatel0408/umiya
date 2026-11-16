@@ -1,22 +1,25 @@
-import { invoiceConfig } from "../invoiceConfig";
+import type { Invoice } from "../types";
 
 export default function InvoiceBankDetails({
+  invoice,
   totalGSTWords,
   billAmountWords,
 }: {
+  invoice: Pick<
+    Invoice,
+    "bankName" | "bankBranchName" | "bankAccountNumber" | "bankIfscCode"
+  >;
   /** Omitted for lumpsum (composition) invoices, which carry no GST. */
   totalGSTWords?: string;
   billAmountWords: string;
 }) {
-  const { bank } = invoiceConfig;
-
   return (
     <>
       <div className="border-b border-current">
-        <Row label="Bank Name" value={bank.bankName} />
-        <Row label="Branch Name" value={bank.branchName} />
-        <Row label="Bank A/c. No." value={bank.accountNumber} />
-        <Row label="RTGS/IFSC Code" value={bank.ifscCode} />
+        <Row label="Bank Name" value={invoice.bankName} />
+        <Row label="Branch Name" value={invoice.bankBranchName} />
+        <Row label="Bank A/c. No." value={invoice.bankAccountNumber} />
+        <Row label="RTGS/IFSC Code" value={invoice.bankIfscCode} />
       </div>
       <div className="h-[100px] border-b border-current">
         {totalGSTWords !== undefined && (
@@ -36,12 +39,12 @@ export default function InvoiceBankDetails({
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({ label, value }: { label: string; value: string | null }) {
   return (
     <div className="flex p-1 pb-0">
       <span className="w-36 font-semibold">{label}</span>
       <span className="font-semibold">:</span>
-      <span className="ml-3 uppercase">{value}</span>
+      <span className="ml-3 uppercase">{value ?? ""}</span>
     </div>
   );
 }

@@ -172,7 +172,7 @@ export function InvoiceDetailsSection({
         <span className="mt-1 text-xs text-slate-500">
           {form.useExistingInvoiceNumber
             ? "Enter the exact historical invoice number, e.g. 25-26/087."
-            : "Invoice number will be assigned automatically from the selected Financial Year's sequence."}
+            : "Invoice number will be assigned automatically from your own series for the selected Financial Year (format is set by the Admin under Users)."}
         </span>
       </Field>
 

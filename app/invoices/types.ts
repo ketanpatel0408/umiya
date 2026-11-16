@@ -39,6 +39,14 @@ export type Invoice = {
   sellerEmail: string | null;
   sellerPhone: string | null;
 
+  bankName: string | null;
+  bankBranchName: string | null;
+  bankAccountNumber: string | null;
+  bankIfscCode: string | null;
+
+  /** Live signature of the invoice owner (not snapshotted). */
+  owner?: { signatureImage: string | null } | null;
+
   buyerName: string;
   buyerGSTIN: string | null;
   buyerPAN: string | null;

@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Prisma, InvoiceTaxType } from "@/generated/prisma/client";
 import { requireUser } from "@/lib/auth/guards";
+import {
+  formatInvoiceNumber,
+  isValidManualInvoiceNumber,
+} from "@/lib/invoiceNumber";
 
 export async function GET() {
   const auth = await requireUser();
@@ -13,6 +17,8 @@ export async function GET() {
       where: auth.user.role === "ADMIN" ? undefined : { ownerId: auth.user.id },
       include: {
         items: true,
+        // Signature is read live from the owner, so it reflects their profile.
+        owner: { select: { signatureImage: true } },
       },
       orderBy: {
         createdAt: "desc",
@@ -45,20 +51,6 @@ function isDateInFinancialYear(date: Date, financialYear: string): boolean {
   const iso = date.toISOString().slice(0, 10);
   return iso >= range.start && iso <= range.end;
 }
-
-/** "2026-27" -> "26-27" prefix used in the invoice number. */
-function financialYearPrefix(financialYear: string): string {
-  const [start, end] = financialYear.split("-");
-  return `${start.slice(-2)}-${end}`;
-}
-
-/** Formats a sequence number, zero-padded to at least 2 digits (no reset after 99). */
-function formatSequence(n: number): string {
-  return n < 10 ? `0${n}` : `${n}`;
-}
-
-/** Expected shape: "24-25/001", "26-27/16", etc. (YY-YY/N...). */
-const INVOICE_NUMBER_PATTERN = /^\d{2}-\d{2}\/\d+$/;
 
 /** Thrown when a manually-entered invoice number already exists. */
 class ManualInvoiceNumberConflictError extends Error {
@@ -168,9 +160,11 @@ function validateInvoiceBody(body: IncomingInvoice): string[] {
     if (!isNonEmptyString(body.invoiceNumber)) {
       errors.push("invoiceNumber is required when useExistingInvoiceNumber is true");
     } else if (
-      !INVOICE_NUMBER_PATTERN.test((body.invoiceNumber as string).trim())
+      !isValidManualInvoiceNumber((body.invoiceNumber as string).trim())
     ) {
-      errors.push("invoiceNumber must be in the format YY-YY/NNN, e.g. 25-26/087");
+      errors.push(
+        "invoiceNumber may only contain letters, numbers, spaces and / - _ . (max 40 characters)"
+      );
     }
   }
 
@@ -296,7 +290,7 @@ export async function POST(request: NextRequest) {
 
   const invoiceDate = new Date(body.invoiceDate as string);
   const financialYear = body.financialYear as string;
-  const prefix = financialYearPrefix(financialYear);
+  const ownerId = auth.user.id;
   const useExistingInvoiceNumber = Boolean(body.useExistingInvoiceNumber);
   const manualInvoiceNumber = useExistingInvoiceNumber
     ? (body.invoiceNumber as string).trim()
@@ -311,7 +305,9 @@ export async function POST(request: NextRequest) {
         // (the DB unique constraint on invoiceNumber is the final guard),
         // and do NOT touch the FY sequence counter.
         const existing = await tx.invoice.findUnique({
-          where: { invoiceNumber: manualInvoiceNumber },
+          where: {
+            ownerId_invoiceNumber: { ownerId, invoiceNumber: manualInvoiceNumber },
+          },
           select: { id: true },
         });
         if (existing) {
@@ -319,21 +315,33 @@ export async function POST(request: NextRequest) {
         }
         invoiceNumber = manualInvoiceNumber;
       } else {
-        // Atomic, database-safe sequence allocation: upsert-then-increment in
-        // a single statement via raw SQL avoids the read-modify-write race
-        // condition of SELECT + JS increment + INSERT. Postgres row-level
-        // locking (implicit in UPDATE ... RETURNING) serializes concurrent
-        // requests for the same financialYear.
-        const rows = await tx.$queryRaw<{ lastNumber: number }[]>`
-          INSERT INTO "InvoiceSequence" ("financialYear", "lastNumber", "createdAt", "updatedAt")
-          VALUES (${financialYear}, 1, NOW(), NOW())
-          ON CONFLICT ("financialYear")
-          DO UPDATE SET "lastNumber" = "InvoiceSequence"."lastNumber" + 1, "updatedAt" = NOW()
-          RETURNING "lastNumber"
-        `;
-
-        const sequenceNumber = rows[0].lastNumber;
-        invoiceNumber = `${prefix}/${formatSequence(sequenceNumber)}`;
+        // Atomic, per-user sequence allocation: upsert-then-increment in a
+        // single statement avoids the read-modify-write race of SELECT + JS
+        // increment + INSERT; Postgres row locking (implicit in UPDATE ...
+        // RETURNING) serializes concurrent requests for the same user + FY.
+        // A number already taken (e.g. entered manually) is skipped.
+        for (;;) {
+          const rows = await tx.$queryRaw<{ lastNumber: number }[]>`
+            INSERT INTO "InvoiceSequence" ("ownerId", "financialYear", "lastNumber", "createdAt", "updatedAt")
+            VALUES (${ownerId}, ${financialYear}, 1, NOW(), NOW())
+            ON CONFLICT ("ownerId", "financialYear")
+            DO UPDATE SET "lastNumber" = "InvoiceSequence"."lastNumber" + 1, "updatedAt" = NOW()
+            RETURNING "lastNumber"
+          `;
+          const candidate = formatInvoiceNumber(
+            auth.user.invoiceNumberFormat,
+            financialYear,
+            rows[0].lastNumber
+          );
+          const taken = await tx.invoice.findUnique({
+            where: { ownerId_invoiceNumber: { ownerId, invoiceNumber: candidate } },
+            select: { id: true },
+          });
+          if (!taken) {
+            invoiceNumber = candidate;
+            break;
+          }
+        }
       }
 
       return tx.invoice.create({
@@ -342,7 +350,7 @@ export async function POST(request: NextRequest) {
           invoiceDate,
           financialYear,
           taxType,
-          ownerId: auth.user.id,
+          ownerId,
 
           sellerName: (body.sellerName as string).trim(),
           sellerGSTIN: (body.sellerGSTIN as string | null | undefined) ?? null,
@@ -354,6 +362,12 @@ export async function POST(request: NextRequest) {
             (body.sellerStateCode as string | null | undefined) ?? null,
           sellerEmail: (body.sellerEmail as string | null | undefined) ?? null,
           sellerPhone: (body.sellerPhone as string | null | undefined) ?? null,
+
+          // Bank details always come from the owner's profile, not the form.
+          bankName: auth.user.bankName,
+          bankBranchName: auth.user.bankBranchName,
+          bankAccountNumber: auth.user.bankAccountNumber,
+          bankIfscCode: auth.user.bankIfscCode,
 
           buyerName: (body.buyerName as string).trim(),
           buyerGSTIN: (body.buyerGSTIN as string | null | undefined) ?? null,

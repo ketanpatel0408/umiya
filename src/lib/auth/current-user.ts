@@ -16,6 +16,11 @@ export type CurrentUser = {
   sellerPAN: string | null;
   sellerState: string | null;
   sellerStateCode: string | null;
+  bankName: string | null;
+  bankBranchName: string | null;
+  bankAccountNumber: string | null;
+  bankIfscCode: string | null;
+  invoiceNumberFormat: string | null;
 };
 
 /**
@@ -48,6 +53,11 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     sellerPAN: user.sellerPAN,
     sellerState: user.sellerState,
     sellerStateCode: user.sellerStateCode,
+    bankName: user.bankName,
+    bankBranchName: user.bankBranchName,
+    bankAccountNumber: user.bankAccountNumber,
+    bankIfscCode: user.bankIfscCode,
+    invoiceNumberFormat: user.invoiceNumberFormat,
   };
 }
 

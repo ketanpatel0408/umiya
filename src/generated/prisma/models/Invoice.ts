@@ -64,6 +64,10 @@ export type InvoiceMinAggregateOutputType = {
   sellerStateCode: string | null
   sellerEmail: string | null
   sellerPhone: string | null
+  bankName: string | null
+  bankBranchName: string | null
+  bankAccountNumber: string | null
+  bankIfscCode: string | null
   buyerName: string | null
   buyerGSTIN: string | null
   buyerPAN: string | null
@@ -108,6 +112,10 @@ export type InvoiceMaxAggregateOutputType = {
   sellerStateCode: string | null
   sellerEmail: string | null
   sellerPhone: string | null
+  bankName: string | null
+  bankBranchName: string | null
+  bankAccountNumber: string | null
+  bankIfscCode: string | null
   buyerName: string | null
   buyerGSTIN: string | null
   buyerPAN: string | null
@@ -152,6 +160,10 @@ export type InvoiceCountAggregateOutputType = {
   sellerStateCode: number
   sellerEmail: number
   sellerPhone: number
+  bankName: number
+  bankBranchName: number
+  bankAccountNumber: number
+  bankIfscCode: number
   buyerName: number
   buyerGSTIN: number
   buyerPAN: number
@@ -220,6 +232,10 @@ export type InvoiceMinAggregateInputType = {
   sellerStateCode?: true
   sellerEmail?: true
   sellerPhone?: true
+  bankName?: true
+  bankBranchName?: true
+  bankAccountNumber?: true
+  bankIfscCode?: true
   buyerName?: true
   buyerGSTIN?: true
   buyerPAN?: true
@@ -264,6 +280,10 @@ export type InvoiceMaxAggregateInputType = {
   sellerStateCode?: true
   sellerEmail?: true
   sellerPhone?: true
+  bankName?: true
+  bankBranchName?: true
+  bankAccountNumber?: true
+  bankIfscCode?: true
   buyerName?: true
   buyerGSTIN?: true
   buyerPAN?: true
@@ -308,6 +328,10 @@ export type InvoiceCountAggregateInputType = {
   sellerStateCode?: true
   sellerEmail?: true
   sellerPhone?: true
+  bankName?: true
+  bankBranchName?: true
+  bankAccountNumber?: true
+  bankIfscCode?: true
   buyerName?: true
   buyerGSTIN?: true
   buyerPAN?: true
@@ -439,6 +463,10 @@ export type InvoiceGroupByOutputType = {
   sellerStateCode: string | null
   sellerEmail: string | null
   sellerPhone: string | null
+  bankName: string | null
+  bankBranchName: string | null
+  bankAccountNumber: string | null
+  bankIfscCode: string | null
   buyerName: string
   buyerGSTIN: string | null
   buyerPAN: string | null
@@ -506,6 +534,10 @@ export type InvoiceWhereInput = {
   sellerStateCode?: Prisma.StringNullableFilter<"Invoice"> | string | null
   sellerEmail?: Prisma.StringNullableFilter<"Invoice"> | string | null
   sellerPhone?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  bankName?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  bankBranchName?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  bankIfscCode?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerName?: Prisma.StringFilter<"Invoice"> | string
   buyerGSTIN?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerPAN?: Prisma.StringNullableFilter<"Invoice"> | string | null
@@ -552,6 +584,10 @@ export type InvoiceOrderByWithRelationInput = {
   sellerStateCode?: Prisma.SortOrderInput | Prisma.SortOrder
   sellerEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   sellerPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankBranchName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankIfscCode?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerName?: Prisma.SortOrder
   buyerGSTIN?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerPAN?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -584,10 +620,11 @@ export type InvoiceOrderByWithRelationInput = {
 
 export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
   id?: number
-  invoiceNumber?: string
+  ownerId_invoiceNumber?: Prisma.InvoiceOwnerIdInvoiceNumberCompoundUniqueInput
   AND?: Prisma.InvoiceWhereInput | Prisma.InvoiceWhereInput[]
   OR?: Prisma.InvoiceWhereInput[]
   NOT?: Prisma.InvoiceWhereInput | Prisma.InvoiceWhereInput[]
+  invoiceNumber?: Prisma.StringFilter<"Invoice"> | string
   invoiceDate?: Prisma.DateTimeFilter<"Invoice"> | Date | string
   financialYear?: Prisma.StringFilter<"Invoice"> | string
   ownerId?: Prisma.IntFilter<"Invoice"> | number
@@ -601,6 +638,10 @@ export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
   sellerStateCode?: Prisma.StringNullableFilter<"Invoice"> | string | null
   sellerEmail?: Prisma.StringNullableFilter<"Invoice"> | string | null
   sellerPhone?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  bankName?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  bankBranchName?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  bankIfscCode?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerName?: Prisma.StringFilter<"Invoice"> | string
   buyerGSTIN?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerPAN?: Prisma.StringNullableFilter<"Invoice"> | string | null
@@ -629,7 +670,7 @@ export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Invoice"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   items?: Prisma.InvoiceItemListRelationFilter
-}, "id" | "invoiceNumber">
+}, "id" | "ownerId_invoiceNumber">
 
 export type InvoiceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -647,6 +688,10 @@ export type InvoiceOrderByWithAggregationInput = {
   sellerStateCode?: Prisma.SortOrderInput | Prisma.SortOrder
   sellerEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   sellerPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankBranchName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankIfscCode?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerName?: Prisma.SortOrder
   buyerGSTIN?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerPAN?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -699,6 +744,10 @@ export type InvoiceScalarWhereWithAggregatesInput = {
   sellerStateCode?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
   sellerEmail?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
   sellerPhone?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
+  bankName?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
+  bankBranchName?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
+  bankAccountNumber?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
+  bankIfscCode?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
   buyerName?: Prisma.StringWithAggregatesFilter<"Invoice"> | string
   buyerGSTIN?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
   buyerPAN?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
@@ -741,6 +790,10 @@ export type InvoiceCreateInput = {
   sellerStateCode?: string | null
   sellerEmail?: string | null
   sellerPhone?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
   buyerName: string
   buyerGSTIN?: string | null
   buyerPAN?: string | null
@@ -787,6 +840,10 @@ export type InvoiceUncheckedCreateInput = {
   sellerStateCode?: string | null
   sellerEmail?: string | null
   sellerPhone?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
   buyerName: string
   buyerGSTIN?: string | null
   buyerPAN?: string | null
@@ -830,6 +887,10 @@ export type InvoiceUpdateInput = {
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerName?: Prisma.StringFieldUpdateOperationsInput | string
   buyerGSTIN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -876,6 +937,10 @@ export type InvoiceUncheckedUpdateInput = {
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerName?: Prisma.StringFieldUpdateOperationsInput | string
   buyerGSTIN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -921,6 +986,10 @@ export type InvoiceCreateManyInput = {
   sellerStateCode?: string | null
   sellerEmail?: string | null
   sellerPhone?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
   buyerName: string
   buyerGSTIN?: string | null
   buyerPAN?: string | null
@@ -963,6 +1032,10 @@ export type InvoiceUpdateManyMutationInput = {
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerName?: Prisma.StringFieldUpdateOperationsInput | string
   buyerGSTIN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1007,6 +1080,10 @@ export type InvoiceUncheckedUpdateManyInput = {
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerName?: Prisma.StringFieldUpdateOperationsInput | string
   buyerGSTIN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1045,6 +1122,11 @@ export type InvoiceOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type InvoiceOwnerIdInvoiceNumberCompoundUniqueInput = {
+  ownerId: number
+  invoiceNumber: string
+}
+
 export type InvoiceCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   invoiceNumber?: Prisma.SortOrder
@@ -1061,6 +1143,10 @@ export type InvoiceCountOrderByAggregateInput = {
   sellerStateCode?: Prisma.SortOrder
   sellerEmail?: Prisma.SortOrder
   sellerPhone?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankBranchName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
+  bankIfscCode?: Prisma.SortOrder
   buyerName?: Prisma.SortOrder
   buyerGSTIN?: Prisma.SortOrder
   buyerPAN?: Prisma.SortOrder
@@ -1116,6 +1202,10 @@ export type InvoiceMaxOrderByAggregateInput = {
   sellerStateCode?: Prisma.SortOrder
   sellerEmail?: Prisma.SortOrder
   sellerPhone?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankBranchName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
+  bankIfscCode?: Prisma.SortOrder
   buyerName?: Prisma.SortOrder
   buyerGSTIN?: Prisma.SortOrder
   buyerPAN?: Prisma.SortOrder
@@ -1160,6 +1250,10 @@ export type InvoiceMinOrderByAggregateInput = {
   sellerStateCode?: Prisma.SortOrder
   sellerEmail?: Prisma.SortOrder
   sellerPhone?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankBranchName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
+  bankIfscCode?: Prisma.SortOrder
   buyerName?: Prisma.SortOrder
   buyerGSTIN?: Prisma.SortOrder
   buyerPAN?: Prisma.SortOrder
@@ -1290,6 +1384,10 @@ export type InvoiceCreateWithoutOwnerInput = {
   sellerStateCode?: string | null
   sellerEmail?: string | null
   sellerPhone?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
   buyerName: string
   buyerGSTIN?: string | null
   buyerPAN?: string | null
@@ -1334,6 +1432,10 @@ export type InvoiceUncheckedCreateWithoutOwnerInput = {
   sellerStateCode?: string | null
   sellerEmail?: string | null
   sellerPhone?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
   buyerName: string
   buyerGSTIN?: string | null
   buyerPAN?: string | null
@@ -1408,6 +1510,10 @@ export type InvoiceScalarWhereInput = {
   sellerStateCode?: Prisma.StringNullableFilter<"Invoice"> | string | null
   sellerEmail?: Prisma.StringNullableFilter<"Invoice"> | string | null
   sellerPhone?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  bankName?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  bankBranchName?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  bankIfscCode?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerName?: Prisma.StringFilter<"Invoice"> | string
   buyerGSTIN?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerPAN?: Prisma.StringNullableFilter<"Invoice"> | string | null
@@ -1450,6 +1556,10 @@ export type InvoiceCreateWithoutItemsInput = {
   sellerStateCode?: string | null
   sellerEmail?: string | null
   sellerPhone?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
   buyerName: string
   buyerGSTIN?: string | null
   buyerPAN?: string | null
@@ -1495,6 +1605,10 @@ export type InvoiceUncheckedCreateWithoutItemsInput = {
   sellerStateCode?: string | null
   sellerEmail?: string | null
   sellerPhone?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
   buyerName: string
   buyerGSTIN?: string | null
   buyerPAN?: string | null
@@ -1553,6 +1667,10 @@ export type InvoiceUpdateWithoutItemsInput = {
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerName?: Prisma.StringFieldUpdateOperationsInput | string
   buyerGSTIN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1598,6 +1716,10 @@ export type InvoiceUncheckedUpdateWithoutItemsInput = {
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerName?: Prisma.StringFieldUpdateOperationsInput | string
   buyerGSTIN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1641,6 +1763,10 @@ export type InvoiceCreateManyOwnerInput = {
   sellerStateCode?: string | null
   sellerEmail?: string | null
   sellerPhone?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
   buyerName: string
   buyerGSTIN?: string | null
   buyerPAN?: string | null
@@ -1683,6 +1809,10 @@ export type InvoiceUpdateWithoutOwnerInput = {
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerName?: Prisma.StringFieldUpdateOperationsInput | string
   buyerGSTIN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1727,6 +1857,10 @@ export type InvoiceUncheckedUpdateWithoutOwnerInput = {
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerName?: Prisma.StringFieldUpdateOperationsInput | string
   buyerGSTIN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1771,6 +1905,10 @@ export type InvoiceUncheckedUpdateManyWithoutOwnerInput = {
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerName?: Prisma.StringFieldUpdateOperationsInput | string
   buyerGSTIN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1846,6 +1984,10 @@ export type InvoiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   sellerStateCode?: boolean
   sellerEmail?: boolean
   sellerPhone?: boolean
+  bankName?: boolean
+  bankBranchName?: boolean
+  bankAccountNumber?: boolean
+  bankIfscCode?: boolean
   buyerName?: boolean
   buyerGSTIN?: boolean
   buyerPAN?: boolean
@@ -1893,6 +2035,10 @@ export type InvoiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   sellerStateCode?: boolean
   sellerEmail?: boolean
   sellerPhone?: boolean
+  bankName?: boolean
+  bankBranchName?: boolean
+  bankAccountNumber?: boolean
+  bankIfscCode?: boolean
   buyerName?: boolean
   buyerGSTIN?: boolean
   buyerPAN?: boolean
@@ -1938,6 +2084,10 @@ export type InvoiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   sellerStateCode?: boolean
   sellerEmail?: boolean
   sellerPhone?: boolean
+  bankName?: boolean
+  bankBranchName?: boolean
+  bankAccountNumber?: boolean
+  bankIfscCode?: boolean
   buyerName?: boolean
   buyerGSTIN?: boolean
   buyerPAN?: boolean
@@ -1983,6 +2133,10 @@ export type InvoiceSelectScalar = {
   sellerStateCode?: boolean
   sellerEmail?: boolean
   sellerPhone?: boolean
+  bankName?: boolean
+  bankBranchName?: boolean
+  bankAccountNumber?: boolean
+  bankIfscCode?: boolean
   buyerName?: boolean
   buyerGSTIN?: boolean
   buyerPAN?: boolean
@@ -2011,7 +2165,7 @@ export type InvoiceSelectScalar = {
   updatedAt?: boolean
 }
 
-export type InvoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "invoiceNumber" | "invoiceDate" | "financialYear" | "ownerId" | "status" | "taxType" | "sellerName" | "sellerGSTIN" | "sellerPAN" | "sellerAddress" | "sellerState" | "sellerStateCode" | "sellerEmail" | "sellerPhone" | "buyerName" | "buyerGSTIN" | "buyerPAN" | "buyerAddress" | "buyerState" | "buyerStateCode" | "buyerEmail" | "buyerPhone" | "buyerAadhaar" | "deliveryNote" | "buyerOrderNo" | "buyerOrderDate" | "dispatchDocNo" | "deliveryNoteDate" | "dispatchedThrough" | "destination" | "subtotal" | "totalCGST" | "totalSGST" | "totalIGST" | "roundOff" | "grandTotal" | "notes" | "termsAndConditions" | "createdAt" | "updatedAt", ExtArgs["result"]["invoice"]>
+export type InvoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "invoiceNumber" | "invoiceDate" | "financialYear" | "ownerId" | "status" | "taxType" | "sellerName" | "sellerGSTIN" | "sellerPAN" | "sellerAddress" | "sellerState" | "sellerStateCode" | "sellerEmail" | "sellerPhone" | "bankName" | "bankBranchName" | "bankAccountNumber" | "bankIfscCode" | "buyerName" | "buyerGSTIN" | "buyerPAN" | "buyerAddress" | "buyerState" | "buyerStateCode" | "buyerEmail" | "buyerPhone" | "buyerAadhaar" | "deliveryNote" | "buyerOrderNo" | "buyerOrderDate" | "dispatchDocNo" | "deliveryNoteDate" | "dispatchedThrough" | "destination" | "subtotal" | "totalCGST" | "totalSGST" | "totalIGST" | "roundOff" | "grandTotal" | "notes" | "termsAndConditions" | "createdAt" | "updatedAt", ExtArgs["result"]["invoice"]>
 export type InvoiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   items?: boolean | Prisma.Invoice$itemsArgs<ExtArgs>
@@ -2046,6 +2200,10 @@ export type $InvoicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     sellerStateCode: string | null
     sellerEmail: string | null
     sellerPhone: string | null
+    bankName: string | null
+    bankBranchName: string | null
+    bankAccountNumber: string | null
+    bankIfscCode: string | null
     buyerName: string
     buyerGSTIN: string | null
     buyerPAN: string | null
@@ -2512,6 +2670,10 @@ export interface InvoiceFieldRefs {
   readonly sellerStateCode: Prisma.FieldRef<"Invoice", 'String'>
   readonly sellerEmail: Prisma.FieldRef<"Invoice", 'String'>
   readonly sellerPhone: Prisma.FieldRef<"Invoice", 'String'>
+  readonly bankName: Prisma.FieldRef<"Invoice", 'String'>
+  readonly bankBranchName: Prisma.FieldRef<"Invoice", 'String'>
+  readonly bankAccountNumber: Prisma.FieldRef<"Invoice", 'String'>
+  readonly bankIfscCode: Prisma.FieldRef<"Invoice", 'String'>
   readonly buyerName: Prisma.FieldRef<"Invoice", 'String'>
   readonly buyerGSTIN: Prisma.FieldRef<"Invoice", 'String'>
   readonly buyerPAN: Prisma.FieldRef<"Invoice", 'String'>

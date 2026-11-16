@@ -34,6 +34,7 @@ export default function InvoiceDocument({ invoice }: { invoice: Invoice }) {
           <div className="w-[67%] border-r border-current">
             <InvoiceQtyBand items={invoice.items} />
             <InvoiceBankDetails
+              invoice={invoice}
               totalGSTWords={
                 invoice.taxType === "LUMPSUM" ? undefined : numberToWords(totalGST)
               }
@@ -53,7 +54,10 @@ export default function InvoiceDocument({ invoice }: { invoice: Invoice }) {
           <div className="w-[67%] text-xs">
             <InvoiceTerms termsAndConditions={invoice.termsAndConditions} />
           </div>
-          <InvoiceSignature sellerName={invoice.sellerName} />
+          <InvoiceSignature
+            sellerName={invoice.sellerName}
+            signatureImage={invoice.owner?.signatureImage ?? null}
+          />
         </div>
         <p className="pr-1 pb-2 text-right text-xs">(Authorised Signatory)</p>
       </div>
