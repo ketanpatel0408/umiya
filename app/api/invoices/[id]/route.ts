@@ -395,9 +395,9 @@ export async function PUT(
 
 /**
  * Deletes an invoice. Only the newest invoice in the owner's series for its
- * financial year may be deleted, so the series never gets a gap. If it was
- * auto-numbered, the owner's counter is rolled back so the next invoice
- * reuses its number.
+ * financial year may be deleted, so the series never gets a gap. The owner's
+ * counter is then reset to the highest remaining number, so the next invoice
+ * reuses the deleted number (or starts at 01 when none are left).
  */
 export async function DELETE(
   _request: NextRequest,
@@ -439,16 +439,18 @@ export async function DELETE(
       // Items are removed by the ON DELETE CASCADE foreign key.
       await tx.invoice.delete({ where: { id: invoice.id } });
 
-      if (invoice.sequenceNumber !== null) {
-        await tx.invoiceSequence.updateMany({
-          where: {
-            ownerId: invoice.ownerId,
-            financialYear: invoice.financialYear,
-            lastNumber: invoice.sequenceNumber,
-          },
-          data: { lastNumber: invoice.sequenceNumber - 1 },
-        });
-      }
+      // Reset the counter to the highest number still in use (0 if none), so
+      // the next invoice continues straight after it. This also closes gaps
+      // left over from when all users shared one counter. Numbers taken by
+      // manually entered invoices are skipped at create time.
+      const remaining = await tx.invoice.aggregate({
+        where: { ownerId: invoice.ownerId, financialYear: invoice.financialYear },
+        _max: { sequenceNumber: true },
+      });
+      await tx.invoiceSequence.updateMany({
+        where: { ownerId: invoice.ownerId, financialYear: invoice.financialYear },
+        data: { lastNumber: remaining._max.sequenceNumber ?? 0 },
+      });
     });
 
     return NextResponse.json({ deleted: true }, { status: 200 });
