@@ -8,6 +8,7 @@ import { UserPlus, Store, Landmark } from "lucide-react";
 import SignatureInput from "./SignatureInput";
 import InvoiceNumberFormatInput from "./InvoiceNumberFormatInput";
 import { Alert, CardHeader, btnPrimary, btnSecondary, inputBase, labelBase } from "../components/ui";
+import Select from "../components/Select";
 
 export default function NewUserForm({
   onCreated,
@@ -95,14 +96,15 @@ export default function NewUserForm({
         />
         <div>
           <label className={labelBase}>Role</label>
-          <select
+          <Select<UserRole>
             value={role}
-            onChange={(e) => setRole(e.target.value as UserRole)}
-            className={inputBase}
-          >
-            <option value="USER">User</option>
-            <option value="ADMIN">Admin</option>
-          </select>
+            onChange={setRole}
+            ariaLabel="Role"
+            options={[
+              { value: "USER", label: "User" },
+              { value: "ADMIN", label: "Admin" },
+            ]}
+          />
         </div>
       </div>
 

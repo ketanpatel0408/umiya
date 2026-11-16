@@ -20,6 +20,7 @@ import {
 import { FINANCIAL_YEARS } from "./create/formHelpers";
 import InvoiceDownloadButton from "./InvoiceDownloadButton";
 import DeleteInvoiceButton from "./DeleteInvoiceButton";
+import Select from "../components/Select";
 
 type Status = "ALL" | "DRAFT" | "ISSUED" | "CANCELLED";
 
@@ -109,30 +110,27 @@ export default function InvoicesPage() {
           </div>
 
           <div className="flex gap-3 sm:ml-auto">
-            <select
+            <Select<Status>
               value={status}
-              onChange={(e) => setStatus(e.target.value as Status)}
-              className={`${inputBase} sm:w-40`}
-            >
-              {STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.value === "ALL" ? "All Statuses" : option.label}
-                </option>
-              ))}
-            </select>
+              onChange={setStatus}
+              className="w-full sm:w-40"
+              ariaLabel="Status"
+              options={STATUS_OPTIONS.map((option) => ({
+                value: option.value,
+                label: option.value === "ALL" ? "All Statuses" : option.label,
+              }))}
+            />
 
-            <select
+            <Select<FyFilter>
               value={financialYear}
-              onChange={(e) => setFinancialYear(e.target.value as FyFilter)}
-              className={`${inputBase} sm:w-48`}
-            >
-              <option value="ALL">All Financial Years</option>
-              {FINANCIAL_YEARS.map((fy) => (
-                <option key={fy} value={fy}>
-                  FY {fy}
-                </option>
-              ))}
-            </select>
+              onChange={setFinancialYear}
+              className="w-full sm:w-48"
+              ariaLabel="Financial Year"
+              options={[
+                { value: "ALL", label: "All Financial Years" },
+                ...FINANCIAL_YEARS.map((fy) => ({ value: fy as FyFilter, label: `FY ${fy}` })),
+              ]}
+            />
           </div>
         </div>
 

@@ -7,6 +7,7 @@ import {
   validateInvoiceNumberFormat,
 } from "@/lib/invoiceNumber";
 import { inputBase, labelBase } from "../components/ui";
+import Select from "../components/Select";
 
 /**
  * Ready-made formats. The first one is the default (stored as null/""), so
@@ -54,19 +55,25 @@ export default function InvoiceNumberFormatInput({
   return (
     <div className="sm:col-span-2">
       <label className={labelBase}>Invoice Number Format</label>
-      <select
-        className={inputBase}
+      <Select
         value={custom ? CUSTOM : format}
-        onChange={(e) => handleSelect(e.target.value)}
-      >
-        {PRESETS.map((preset) => (
-          <option key={preset} value={preset}>
-            {formatInvoiceNumber(preset, fy, 1)}
-            {preset === DEFAULT_INVOICE_NUMBER_FORMAT ? " (Default)" : ""}
-          </option>
-        ))}
-        <option value={CUSTOM}>Custom...</option>
-      </select>
+        onChange={handleSelect}
+        ariaLabel="Invoice Number Format"
+        options={[
+          ...PRESETS.map((preset) => ({
+            value: preset,
+            label: (
+              <>
+                {formatInvoiceNumber(preset, fy, 1)}
+                {preset === DEFAULT_INVOICE_NUMBER_FORMAT && (
+                  <span className="ml-1.5 text-xs text-slate-400">(Default)</span>
+                )}
+              </>
+            ),
+          })),
+          { value: CUSTOM, label: "Custom..." },
+        ]}
+      />
 
       {custom && (
         <>

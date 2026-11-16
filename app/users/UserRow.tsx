@@ -8,6 +8,7 @@ import PasswordInput from "@/components/common/PasswordInput";
 import SignatureInput from "./SignatureInput";
 import InvoiceNumberFormatInput from "./InvoiceNumberFormatInput";
 import { btnPrimary, btnSecondary, btnSmall, initials, inputBase } from "../components/ui";
+import Select from "../components/Select";
 
 const editInputClass = `${inputBase} mt-1`;
 
@@ -162,15 +163,18 @@ export default function UserRow({
         </td>
         <td className="px-4 py-3 text-slate-600">{user.email}</td>
         <td className="px-4 py-3">
-          <select
+          <Select<ManagedUser["role"]>
             value={user.role}
             disabled={busy}
-            onChange={(e) => patch({ role: e.target.value })}
-            className="cursor-pointer rounded-md border border-slate-300 bg-white px-2 py-1 text-sm text-slate-700 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:cursor-not-allowed"
-          >
-            <option value="USER">User</option>
-            <option value="ADMIN">Admin</option>
-          </select>
+            onChange={(role) => patch({ role })}
+            size="sm"
+            className="w-28"
+            ariaLabel="Role"
+            options={[
+              { value: "USER", label: "User" },
+              { value: "ADMIN", label: "Admin" },
+            ]}
+          />
         </td>
         <td className="px-4 py-3">
           <span
