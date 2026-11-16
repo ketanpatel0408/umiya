@@ -19,6 +19,7 @@ import {
 } from "../components/ui";
 import { FINANCIAL_YEARS } from "./create/formHelpers";
 import InvoiceDownloadButton from "./InvoiceDownloadButton";
+import DeleteInvoiceButton from "./DeleteInvoiceButton";
 
 type Status = "ALL" | "DRAFT" | "ISSUED" | "CANCELLED";
 
@@ -171,7 +172,7 @@ export default function InvoicesPage() {
               {!loading &&
                 !error &&
                 filteredInvoices.map((invoice) => (
-                  <InvoiceRow key={invoice.id} invoice={invoice} />
+                  <InvoiceRow key={invoice.id} invoice={invoice} onDeleted={fetchInvoices} />
                 ))}
             </tbody>
           </table>
@@ -199,7 +200,13 @@ export default function InvoicesPage() {
 
 const COLUMN_COUNT = 8;
 
-function InvoiceRow({ invoice }: { invoice: Invoice }) {
+function InvoiceRow({
+  invoice,
+  onDeleted,
+}: {
+  invoice: Invoice;
+  onDeleted: () => void;
+}) {
   const gst =
     Number(invoice.totalCGST) +
     Number(invoice.totalSGST) +
@@ -254,6 +261,9 @@ function InvoiceRow({ invoice }: { invoice: Invoice }) {
             <Eye size={16} />
           </Link>
           <InvoiceDownloadButton invoice={invoice} className={iconBtn} />
+          {invoice.isLatest && (
+            <DeleteInvoiceButton invoice={invoice} className={iconBtn} onDeleted={onDeleted} />
+          )}
         </div>
       </td>
     </tr>

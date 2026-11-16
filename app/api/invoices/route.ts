@@ -12,9 +12,10 @@ export async function GET() {
   if (!auth.ok) return auth.response;
 
   try {
+    // Admins see every invoice; normal users only see invoices they own.
+    const where = auth.user.role === "ADMIN" ? undefined : { ownerId: auth.user.id };
     const invoices = await prisma.invoice.findMany({
-      // Admins see every invoice; normal users only see invoices they own.
-      where: auth.user.role === "ADMIN" ? undefined : { ownerId: auth.user.id },
+      where,
       include: {
         items: true,
         // Signature is read live from the owner, so it reflects their profile.
@@ -25,7 +26,18 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(invoices, { status: 200 });
+    // Only the newest invoice in each owner's series (per FY) can be deleted.
+    const latest = await prisma.invoice.groupBy({
+      by: ["ownerId", "financialYear"],
+      where,
+      _max: { id: true },
+    });
+    const latestIds = new Set(latest.map((l) => l._max.id));
+
+    return NextResponse.json(
+      invoices.map((invoice) => ({ ...invoice, isLatest: latestIds.has(invoice.id) })),
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Failed to fetch invoices:", error);
     return NextResponse.json(
@@ -299,6 +311,7 @@ export async function POST(request: NextRequest) {
   try {
     const invoice = await prisma.$transaction(async (tx) => {
       let invoiceNumber: string;
+      let sequenceNumber: number | null = null;
 
       if (manualInvoiceNumber) {
         // Manual/historical invoice number: verify uniqueness explicitly
@@ -339,6 +352,7 @@ export async function POST(request: NextRequest) {
           });
           if (!taken) {
             invoiceNumber = candidate;
+            sequenceNumber = rows[0].lastNumber;
             break;
           }
         }
@@ -347,6 +361,7 @@ export async function POST(request: NextRequest) {
       return tx.invoice.create({
         data: {
           invoiceNumber,
+          sequenceNumber,
           invoiceDate,
           financialYear,
           taxType,

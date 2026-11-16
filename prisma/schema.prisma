@@ -99,6 +99,10 @@ model Invoice {
 
   // Unique per owner: each user is a separate business with its own series.
   invoiceNumber String
+  // Counter value used for an auto-numbered invoice (null when the number
+  // was entered manually). Lets deleting the latest invoice roll the
+  // owner's counter back so the next invoice reuses the number.
+  sequenceNumber Int?
   invoiceDate   DateTime
   financialYear String
 

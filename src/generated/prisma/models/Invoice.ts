@@ -28,6 +28,7 @@ export type AggregateInvoice = {
 
 export type InvoiceAvgAggregateOutputType = {
   id: number | null
+  sequenceNumber: number | null
   ownerId: number | null
   subtotal: runtime.Decimal | null
   totalCGST: runtime.Decimal | null
@@ -39,6 +40,7 @@ export type InvoiceAvgAggregateOutputType = {
 
 export type InvoiceSumAggregateOutputType = {
   id: number | null
+  sequenceNumber: number | null
   ownerId: number | null
   subtotal: runtime.Decimal | null
   totalCGST: runtime.Decimal | null
@@ -51,6 +53,7 @@ export type InvoiceSumAggregateOutputType = {
 export type InvoiceMinAggregateOutputType = {
   id: number | null
   invoiceNumber: string | null
+  sequenceNumber: number | null
   invoiceDate: Date | null
   financialYear: string | null
   ownerId: number | null
@@ -99,6 +102,7 @@ export type InvoiceMinAggregateOutputType = {
 export type InvoiceMaxAggregateOutputType = {
   id: number | null
   invoiceNumber: string | null
+  sequenceNumber: number | null
   invoiceDate: Date | null
   financialYear: string | null
   ownerId: number | null
@@ -147,6 +151,7 @@ export type InvoiceMaxAggregateOutputType = {
 export type InvoiceCountAggregateOutputType = {
   id: number
   invoiceNumber: number
+  sequenceNumber: number
   invoiceDate: number
   financialYear: number
   ownerId: number
@@ -196,6 +201,7 @@ export type InvoiceCountAggregateOutputType = {
 
 export type InvoiceAvgAggregateInputType = {
   id?: true
+  sequenceNumber?: true
   ownerId?: true
   subtotal?: true
   totalCGST?: true
@@ -207,6 +213,7 @@ export type InvoiceAvgAggregateInputType = {
 
 export type InvoiceSumAggregateInputType = {
   id?: true
+  sequenceNumber?: true
   ownerId?: true
   subtotal?: true
   totalCGST?: true
@@ -219,6 +226,7 @@ export type InvoiceSumAggregateInputType = {
 export type InvoiceMinAggregateInputType = {
   id?: true
   invoiceNumber?: true
+  sequenceNumber?: true
   invoiceDate?: true
   financialYear?: true
   ownerId?: true
@@ -267,6 +275,7 @@ export type InvoiceMinAggregateInputType = {
 export type InvoiceMaxAggregateInputType = {
   id?: true
   invoiceNumber?: true
+  sequenceNumber?: true
   invoiceDate?: true
   financialYear?: true
   ownerId?: true
@@ -315,6 +324,7 @@ export type InvoiceMaxAggregateInputType = {
 export type InvoiceCountAggregateInputType = {
   id?: true
   invoiceNumber?: true
+  sequenceNumber?: true
   invoiceDate?: true
   financialYear?: true
   ownerId?: true
@@ -450,6 +460,7 @@ export type InvoiceGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type InvoiceGroupByOutputType = {
   id: number
   invoiceNumber: string
+  sequenceNumber: number | null
   invoiceDate: Date
   financialYear: string
   ownerId: number
@@ -521,6 +532,7 @@ export type InvoiceWhereInput = {
   NOT?: Prisma.InvoiceWhereInput | Prisma.InvoiceWhereInput[]
   id?: Prisma.IntFilter<"Invoice"> | number
   invoiceNumber?: Prisma.StringFilter<"Invoice"> | string
+  sequenceNumber?: Prisma.IntNullableFilter<"Invoice"> | number | null
   invoiceDate?: Prisma.DateTimeFilter<"Invoice"> | Date | string
   financialYear?: Prisma.StringFilter<"Invoice"> | string
   ownerId?: Prisma.IntFilter<"Invoice"> | number
@@ -571,6 +583,7 @@ export type InvoiceWhereInput = {
 export type InvoiceOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   invoiceNumber?: Prisma.SortOrder
+  sequenceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   invoiceDate?: Prisma.SortOrder
   financialYear?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
@@ -625,6 +638,7 @@ export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.InvoiceWhereInput[]
   NOT?: Prisma.InvoiceWhereInput | Prisma.InvoiceWhereInput[]
   invoiceNumber?: Prisma.StringFilter<"Invoice"> | string
+  sequenceNumber?: Prisma.IntNullableFilter<"Invoice"> | number | null
   invoiceDate?: Prisma.DateTimeFilter<"Invoice"> | Date | string
   financialYear?: Prisma.StringFilter<"Invoice"> | string
   ownerId?: Prisma.IntFilter<"Invoice"> | number
@@ -675,6 +689,7 @@ export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
 export type InvoiceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   invoiceNumber?: Prisma.SortOrder
+  sequenceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   invoiceDate?: Prisma.SortOrder
   financialYear?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
@@ -731,6 +746,7 @@ export type InvoiceScalarWhereWithAggregatesInput = {
   NOT?: Prisma.InvoiceScalarWhereWithAggregatesInput | Prisma.InvoiceScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Invoice"> | number
   invoiceNumber?: Prisma.StringWithAggregatesFilter<"Invoice"> | string
+  sequenceNumber?: Prisma.IntNullableWithAggregatesFilter<"Invoice"> | number | null
   invoiceDate?: Prisma.DateTimeWithAggregatesFilter<"Invoice"> | Date | string
   financialYear?: Prisma.StringWithAggregatesFilter<"Invoice"> | string
   ownerId?: Prisma.IntWithAggregatesFilter<"Invoice"> | number
@@ -778,6 +794,7 @@ export type InvoiceScalarWhereWithAggregatesInput = {
 
 export type InvoiceCreateInput = {
   invoiceNumber: string
+  sequenceNumber?: number | null
   invoiceDate: Date | string
   financialYear: string
   status?: $Enums.InvoiceStatus
@@ -827,6 +844,7 @@ export type InvoiceCreateInput = {
 export type InvoiceUncheckedCreateInput = {
   id?: number
   invoiceNumber: string
+  sequenceNumber?: number | null
   invoiceDate: Date | string
   financialYear: string
   ownerId: number
@@ -875,6 +893,7 @@ export type InvoiceUncheckedCreateInput = {
 
 export type InvoiceUpdateInput = {
   invoiceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  sequenceNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   financialYear?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -924,6 +943,7 @@ export type InvoiceUpdateInput = {
 export type InvoiceUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  sequenceNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   financialYear?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.IntFieldUpdateOperationsInput | number
@@ -973,6 +993,7 @@ export type InvoiceUncheckedUpdateInput = {
 export type InvoiceCreateManyInput = {
   id?: number
   invoiceNumber: string
+  sequenceNumber?: number | null
   invoiceDate: Date | string
   financialYear: string
   ownerId: number
@@ -1020,6 +1041,7 @@ export type InvoiceCreateManyInput = {
 
 export type InvoiceUpdateManyMutationInput = {
   invoiceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  sequenceNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   financialYear?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -1067,6 +1089,7 @@ export type InvoiceUpdateManyMutationInput = {
 export type InvoiceUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  sequenceNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   financialYear?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1130,6 +1153,7 @@ export type InvoiceOwnerIdInvoiceNumberCompoundUniqueInput = {
 export type InvoiceCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   invoiceNumber?: Prisma.SortOrder
+  sequenceNumber?: Prisma.SortOrder
   invoiceDate?: Prisma.SortOrder
   financialYear?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
@@ -1177,6 +1201,7 @@ export type InvoiceCountOrderByAggregateInput = {
 
 export type InvoiceAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  sequenceNumber?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   totalCGST?: Prisma.SortOrder
@@ -1189,6 +1214,7 @@ export type InvoiceAvgOrderByAggregateInput = {
 export type InvoiceMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   invoiceNumber?: Prisma.SortOrder
+  sequenceNumber?: Prisma.SortOrder
   invoiceDate?: Prisma.SortOrder
   financialYear?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
@@ -1237,6 +1263,7 @@ export type InvoiceMaxOrderByAggregateInput = {
 export type InvoiceMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   invoiceNumber?: Prisma.SortOrder
+  sequenceNumber?: Prisma.SortOrder
   invoiceDate?: Prisma.SortOrder
   financialYear?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
@@ -1284,6 +1311,7 @@ export type InvoiceMinOrderByAggregateInput = {
 
 export type InvoiceSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  sequenceNumber?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   totalCGST?: Prisma.SortOrder
@@ -1340,6 +1368,14 @@ export type InvoiceUncheckedUpdateManyWithoutOwnerNestedInput = {
   deleteMany?: Prisma.InvoiceScalarWhereInput | Prisma.InvoiceScalarWhereInput[]
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type EnumInvoiceStatusFieldUpdateOperationsInput = {
   set?: $Enums.InvoiceStatus
 }
@@ -1372,6 +1408,7 @@ export type InvoiceUpdateOneRequiredWithoutItemsNestedInput = {
 
 export type InvoiceCreateWithoutOwnerInput = {
   invoiceNumber: string
+  sequenceNumber?: number | null
   invoiceDate: Date | string
   financialYear: string
   status?: $Enums.InvoiceStatus
@@ -1420,6 +1457,7 @@ export type InvoiceCreateWithoutOwnerInput = {
 export type InvoiceUncheckedCreateWithoutOwnerInput = {
   id?: number
   invoiceNumber: string
+  sequenceNumber?: number | null
   invoiceDate: Date | string
   financialYear: string
   status?: $Enums.InvoiceStatus
@@ -1497,6 +1535,7 @@ export type InvoiceScalarWhereInput = {
   NOT?: Prisma.InvoiceScalarWhereInput | Prisma.InvoiceScalarWhereInput[]
   id?: Prisma.IntFilter<"Invoice"> | number
   invoiceNumber?: Prisma.StringFilter<"Invoice"> | string
+  sequenceNumber?: Prisma.IntNullableFilter<"Invoice"> | number | null
   invoiceDate?: Prisma.DateTimeFilter<"Invoice"> | Date | string
   financialYear?: Prisma.StringFilter<"Invoice"> | string
   ownerId?: Prisma.IntFilter<"Invoice"> | number
@@ -1544,6 +1583,7 @@ export type InvoiceScalarWhereInput = {
 
 export type InvoiceCreateWithoutItemsInput = {
   invoiceNumber: string
+  sequenceNumber?: number | null
   invoiceDate: Date | string
   financialYear: string
   status?: $Enums.InvoiceStatus
@@ -1592,6 +1632,7 @@ export type InvoiceCreateWithoutItemsInput = {
 export type InvoiceUncheckedCreateWithoutItemsInput = {
   id?: number
   invoiceNumber: string
+  sequenceNumber?: number | null
   invoiceDate: Date | string
   financialYear: string
   ownerId: number
@@ -1655,6 +1696,7 @@ export type InvoiceUpdateToOneWithWhereWithoutItemsInput = {
 
 export type InvoiceUpdateWithoutItemsInput = {
   invoiceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  sequenceNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   financialYear?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -1703,6 +1745,7 @@ export type InvoiceUpdateWithoutItemsInput = {
 export type InvoiceUncheckedUpdateWithoutItemsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  sequenceNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   financialYear?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1751,6 +1794,7 @@ export type InvoiceUncheckedUpdateWithoutItemsInput = {
 export type InvoiceCreateManyOwnerInput = {
   id?: number
   invoiceNumber: string
+  sequenceNumber?: number | null
   invoiceDate: Date | string
   financialYear: string
   status?: $Enums.InvoiceStatus
@@ -1797,6 +1841,7 @@ export type InvoiceCreateManyOwnerInput = {
 
 export type InvoiceUpdateWithoutOwnerInput = {
   invoiceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  sequenceNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   financialYear?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -1845,6 +1890,7 @@ export type InvoiceUpdateWithoutOwnerInput = {
 export type InvoiceUncheckedUpdateWithoutOwnerInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  sequenceNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   financialYear?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -1893,6 +1939,7 @@ export type InvoiceUncheckedUpdateWithoutOwnerInput = {
 export type InvoiceUncheckedUpdateManyWithoutOwnerInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  sequenceNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   financialYear?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -1971,6 +2018,7 @@ export type InvoiceCountOutputTypeCountItemsArgs<ExtArgs extends runtime.Types.E
 export type InvoiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   invoiceNumber?: boolean
+  sequenceNumber?: boolean
   invoiceDate?: boolean
   financialYear?: boolean
   ownerId?: boolean
@@ -2022,6 +2070,7 @@ export type InvoiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type InvoiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   invoiceNumber?: boolean
+  sequenceNumber?: boolean
   invoiceDate?: boolean
   financialYear?: boolean
   ownerId?: boolean
@@ -2071,6 +2120,7 @@ export type InvoiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type InvoiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   invoiceNumber?: boolean
+  sequenceNumber?: boolean
   invoiceDate?: boolean
   financialYear?: boolean
   ownerId?: boolean
@@ -2120,6 +2170,7 @@ export type InvoiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type InvoiceSelectScalar = {
   id?: boolean
   invoiceNumber?: boolean
+  sequenceNumber?: boolean
   invoiceDate?: boolean
   financialYear?: boolean
   ownerId?: boolean
@@ -2165,7 +2216,7 @@ export type InvoiceSelectScalar = {
   updatedAt?: boolean
 }
 
-export type InvoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "invoiceNumber" | "invoiceDate" | "financialYear" | "ownerId" | "status" | "taxType" | "sellerName" | "sellerGSTIN" | "sellerPAN" | "sellerAddress" | "sellerState" | "sellerStateCode" | "sellerEmail" | "sellerPhone" | "bankName" | "bankBranchName" | "bankAccountNumber" | "bankIfscCode" | "buyerName" | "buyerGSTIN" | "buyerPAN" | "buyerAddress" | "buyerState" | "buyerStateCode" | "buyerEmail" | "buyerPhone" | "buyerAadhaar" | "deliveryNote" | "buyerOrderNo" | "buyerOrderDate" | "dispatchDocNo" | "deliveryNoteDate" | "dispatchedThrough" | "destination" | "subtotal" | "totalCGST" | "totalSGST" | "totalIGST" | "roundOff" | "grandTotal" | "notes" | "termsAndConditions" | "createdAt" | "updatedAt", ExtArgs["result"]["invoice"]>
+export type InvoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "invoiceNumber" | "sequenceNumber" | "invoiceDate" | "financialYear" | "ownerId" | "status" | "taxType" | "sellerName" | "sellerGSTIN" | "sellerPAN" | "sellerAddress" | "sellerState" | "sellerStateCode" | "sellerEmail" | "sellerPhone" | "bankName" | "bankBranchName" | "bankAccountNumber" | "bankIfscCode" | "buyerName" | "buyerGSTIN" | "buyerPAN" | "buyerAddress" | "buyerState" | "buyerStateCode" | "buyerEmail" | "buyerPhone" | "buyerAadhaar" | "deliveryNote" | "buyerOrderNo" | "buyerOrderDate" | "dispatchDocNo" | "deliveryNoteDate" | "dispatchedThrough" | "destination" | "subtotal" | "totalCGST" | "totalSGST" | "totalIGST" | "roundOff" | "grandTotal" | "notes" | "termsAndConditions" | "createdAt" | "updatedAt", ExtArgs["result"]["invoice"]>
 export type InvoiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   items?: boolean | Prisma.Invoice$itemsArgs<ExtArgs>
@@ -2187,6 +2238,7 @@ export type $InvoicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     invoiceNumber: string
+    sequenceNumber: number | null
     invoiceDate: Date
     financialYear: string
     ownerId: number
@@ -2657,6 +2709,7 @@ export interface Prisma__InvoiceClient<T, Null = never, ExtArgs extends runtime.
 export interface InvoiceFieldRefs {
   readonly id: Prisma.FieldRef<"Invoice", 'Int'>
   readonly invoiceNumber: Prisma.FieldRef<"Invoice", 'String'>
+  readonly sequenceNumber: Prisma.FieldRef<"Invoice", 'Int'>
   readonly invoiceDate: Prisma.FieldRef<"Invoice", 'DateTime'>
   readonly financialYear: Prisma.FieldRef<"Invoice", 'String'>
   readonly ownerId: Prisma.FieldRef<"Invoice", 'Int'>

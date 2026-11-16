@@ -874,6 +874,7 @@ export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalar
 export const InvoiceScalarFieldEnum = {
   id: 'id',
   invoiceNumber: 'invoiceNumber',
+  sequenceNumber: 'sequenceNumber',
   invoiceDate: 'invoiceDate',
   financialYear: 'financialYear',
   ownerId: 'ownerId',
