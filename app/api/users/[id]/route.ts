@@ -188,6 +188,27 @@ export async function PATCH(
       select: USER_SELECT,
     });
 
+    // Invoices created before this user had bank details carry an empty bank
+    // snapshot; fill those in. Invoices that already have bank details keep
+    // their snapshot, so changing banks never rewrites old invoices.
+    if (user.bankName || user.bankBranchName || user.bankAccountNumber || user.bankIfscCode) {
+      await prisma.invoice.updateMany({
+        where: {
+          ownerId: userId,
+          bankName: null,
+          bankBranchName: null,
+          bankAccountNumber: null,
+          bankIfscCode: null,
+        },
+        data: {
+          bankName: user.bankName,
+          bankBranchName: user.bankBranchName,
+          bankAccountNumber: user.bankAccountNumber,
+          bankIfscCode: user.bankIfscCode,
+        },
+      });
+    }
+
     return NextResponse.json(user, { status: 200 });
   } catch (error) {
     if (
