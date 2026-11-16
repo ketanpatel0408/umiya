@@ -4,8 +4,11 @@ import { useState } from "react";
 import type { UserRole, SellerDetailsForm } from "./types";
 import { emptySellerDetails } from "./types";
 import PasswordInput from "@/components/common/PasswordInput";
-import { UserPlus, Store } from "lucide-react";
+import { UserPlus, Store, Landmark } from "lucide-react";
+import SignatureInput from "./SignatureInput";
+import InvoiceNumberFormatInput from "./InvoiceNumberFormatInput";
 import { Alert, CardHeader, btnPrimary, btnSecondary, inputBase, labelBase } from "../components/ui";
+import Select from "../components/Select";
 
 export default function NewUserForm({
   onCreated,
@@ -93,14 +96,15 @@ export default function NewUserForm({
         />
         <div>
           <label className={labelBase}>Role</label>
-          <select
+          <Select<UserRole>
             value={role}
-            onChange={(e) => setRole(e.target.value as UserRole)}
-            className={inputBase}
-          >
-            <option value="USER">User</option>
-            <option value="ADMIN">Admin</option>
-          </select>
+            onChange={setRole}
+            ariaLabel="Role"
+            options={[
+              { value: "USER", label: "User" },
+              { value: "ADMIN", label: "Admin" },
+            ]}
+          />
         </div>
       </div>
 
@@ -146,6 +150,45 @@ export default function NewUserForm({
           label="Seller State Code"
           value={seller.sellerStateCode}
           onChange={(v) => updateSeller("sellerStateCode", v)}
+        />
+      </div>
+
+      <div className="border-t border-slate-100">
+        <CardHeader
+          title="Bank, Signature & Invoice Number"
+          description="Printed on invoices created by this user"
+          icon={Landmark}
+        />
+      </div>
+      <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">
+        <Field
+          label="Bank Name"
+          value={seller.bankName}
+          onChange={(v) => updateSeller("bankName", v)}
+        />
+        <Field
+          label="Branch Name"
+          value={seller.bankBranchName}
+          onChange={(v) => updateSeller("bankBranchName", v)}
+        />
+        <Field
+          label="Bank A/c. No."
+          value={seller.bankAccountNumber}
+          onChange={(v) => updateSeller("bankAccountNumber", v)}
+        />
+        <Field
+          label="RTGS/IFSC Code"
+          value={seller.bankIfscCode}
+          onChange={(v) => updateSeller("bankIfscCode", v)}
+        />
+        <SignatureInput
+          value={seller.signatureImage}
+          onChange={(v) => updateSeller("signatureImage", v)}
+          disabled={saving}
+        />
+        <InvoiceNumberFormatInput
+          value={seller.invoiceNumberFormat}
+          onChange={(v) => updateSeller("invoiceNumberFormat", v)}
         />
       </div>
 

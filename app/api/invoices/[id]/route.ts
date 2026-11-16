@@ -3,6 +3,25 @@ import { prisma } from "@/lib/prisma";
 import { Prisma, InvoiceTaxType } from "@/generated/prisma/client";
 import { requireUser } from "@/lib/auth/guards";
 
+type Db = Pick<Prisma.TransactionClient, "invoice">;
+
+/** Id of the newest invoice in an owner's series for a financial year. */
+async function findLatestInvoiceId(
+  db: Db,
+  ownerId: number,
+  financialYear: string
+): Promise<number | null> {
+  const latest = await db.invoice.findFirst({
+    where: { ownerId, financialYear },
+    orderBy: { id: "desc" },
+    select: { id: true },
+  });
+  return latest?.id ?? null;
+}
+
+/** Thrown when someone tries to delete an invoice that isn't the latest. */
+class NotLatestInvoiceError extends Error {}
+
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -24,6 +43,8 @@ export async function GET(
       where: { id: Number(id) },
       include: {
         items: true,
+        // Signature is read live from the owner, so it reflects their profile.
+        owner: { select: { signatureImage: true } },
       },
     });
 
@@ -37,7 +58,12 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(invoice, { status: 200 });
+    const latest = await findLatestInvoiceId(prisma, invoice.ownerId, invoice.financialYear);
+
+    return NextResponse.json(
+      { ...invoice, isLatest: latest === invoice.id },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Failed to fetch invoice:", error);
     return NextResponse.json(
@@ -269,6 +295,18 @@ export async function PUT(
   const roundOff = grandTotal.minus(payable);
 
   const invoiceDate = new Date(body.invoiceDate as string);
+
+  // Re-snapshot bank details from the invoice owner (not the editor, who may
+  // be an Admin editing another user's invoice).
+  const owner = await prisma.user.findUnique({
+    where: { id: existing.ownerId },
+    select: {
+      bankName: true,
+      bankBranchName: true,
+      bankAccountNumber: true,
+      bankIfscCode: true,
+    },
+  });
   // invoiceNumber, financialYear, ownerId and InvoiceSequence are never
   // touched during edit — only the snapshot/content fields and totals are
   // recalculated and persisted.
@@ -296,6 +334,11 @@ export async function PUT(
             (body.sellerStateCode as string | null | undefined) ?? null,
           sellerEmail: (body.sellerEmail as string | null | undefined) ?? null,
           sellerPhone: (body.sellerPhone as string | null | undefined) ?? null,
+
+          bankName: owner?.bankName ?? null,
+          bankBranchName: owner?.bankBranchName ?? null,
+          bankAccountNumber: owner?.bankAccountNumber ?? null,
+          bankIfscCode: owner?.bankIfscCode ?? null,
 
           buyerName: (body.buyerName as string).trim(),
           buyerGSTIN: (body.buyerGSTIN as string | null | undefined) ?? null,
@@ -347,5 +390,76 @@ export async function PUT(
       { error: "Failed to update invoice" },
       { status: 500 }
     );
+  }
+}
+
+/**
+ * Deletes an invoice. Only the newest invoice in the owner's series for its
+ * financial year may be deleted, so the series never gets a gap. If it was
+ * auto-numbered, the owner's counter is rolled back so the next invoice
+ * reuses its number.
+ */
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const auth = await requireUser();
+  if (!auth.ok) return auth.response;
+
+  const { id } = await params;
+  if (!/^\d+$/.test(id) || Number(id) <= 0) {
+    return NextResponse.json({ error: "Invalid invoice ID" }, { status: 400 });
+  }
+  const invoiceId = Number(id);
+
+  const invoice = await prisma.invoice.findUnique({
+    where: { id: invoiceId },
+    select: { id: true, ownerId: true, financialYear: true, sequenceNumber: true },
+  });
+  if (
+    !invoice ||
+    (auth.user.role !== "ADMIN" && invoice.ownerId !== auth.user.id)
+  ) {
+    return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
+  }
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      // Lock the owner's counter row so a concurrent create can't slip in
+      // between the "is latest" check and the rollback.
+      await tx.$executeRaw`
+        SELECT 1 FROM "InvoiceSequence"
+        WHERE "ownerId" = ${invoice.ownerId} AND "financialYear" = ${invoice.financialYear}
+        FOR UPDATE
+      `;
+
+      const latestId = await findLatestInvoiceId(tx, invoice.ownerId, invoice.financialYear);
+      if (latestId !== invoice.id) throw new NotLatestInvoiceError();
+
+      // Items are removed by the ON DELETE CASCADE foreign key.
+      await tx.invoice.delete({ where: { id: invoice.id } });
+
+      if (invoice.sequenceNumber !== null) {
+        await tx.invoiceSequence.updateMany({
+          where: {
+            ownerId: invoice.ownerId,
+            financialYear: invoice.financialYear,
+            lastNumber: invoice.sequenceNumber,
+          },
+          data: { lastNumber: invoice.sequenceNumber - 1 },
+        });
+      }
+    });
+
+    return NextResponse.json({ deleted: true }, { status: 200 });
+  } catch (error) {
+    if (error instanceof NotLatestInvoiceError) {
+      return NextResponse.json(
+        { error: "Only the latest invoice of a financial year can be deleted" },
+        { status: 409 }
+      );
+    }
+    console.error("Failed to delete invoice:", error);
+    return NextResponse.json({ error: "Failed to delete invoice" }, { status: 500 });
   }
 }

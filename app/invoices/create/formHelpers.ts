@@ -1,4 +1,5 @@
 import type { Invoice, InvoiceTaxType } from "../types";
+import { isValidManualInvoiceNumber } from "@/lib/invoiceNumber";
 
 export type ItemForm = {
   description: string;
@@ -328,9 +329,6 @@ export function toFormState(invoice: Invoice): InvoiceFormState {
   };
 }
 
-/** Expected shape: "24-25/001", "26-27/16", etc. (YY-YY/N...). */
-const INVOICE_NUMBER_PATTERN = /^\d{2}-\d{2}\/\d+$/;
-
 export function validateForm(form: InvoiceFormState): string[] {
   const errors: string[] = [];
 
@@ -357,8 +355,10 @@ export function validateForm(form: InvoiceFormState): string[] {
   if (form.useExistingInvoiceNumber) {
     if (!form.invoiceNumber.trim()) {
       errors.push("Invoice Number is required when using an existing invoice number.");
-    } else if (!INVOICE_NUMBER_PATTERN.test(form.invoiceNumber.trim())) {
-      errors.push("Invoice Number must be in the format YY-YY/NNN, e.g. 25-26/087.");
+    } else if (!isValidManualInvoiceNumber(form.invoiceNumber.trim())) {
+      errors.push(
+        "Invoice Number may only contain letters, numbers, spaces and / - _ . (max 40 characters)."
+      );
     }
   }
   if (!form.buyerName.trim()) errors.push("Buyer Name is required.");

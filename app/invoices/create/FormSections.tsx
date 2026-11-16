@@ -9,6 +9,7 @@ import {
   FINANCIAL_YEARS,
   financialYearRangeLabel,
 } from "./formHelpers";
+import Select, { type SelectOption } from "../../components/Select";
 
 type Props = {
   form: InvoiceFormState;
@@ -39,6 +40,12 @@ function Field({
 }
 
 const inputClass = inputBase;
+
+const TAX_TYPE_OPTIONS: SelectOption<InvoiceFormState["taxType"]>[] = [
+  { value: "CGST_SGST", label: "CGST + SGST" },
+  { value: "IGST", label: "IGST" },
+  { value: "LUMPSUM", label: "Lumpsum (Composition)" },
+];
 
 /**
  * Date input that displays/accepts Indian DD-MM-YYYY format while storing
@@ -113,18 +120,13 @@ export function InvoiceDetailsSection({
       icon={FileText}
     >
       <Field label="Financial Year" required>
-        <select
-          className={`${inputClass} ${mode === "edit" ? "cursor-not-allowed bg-slate-100 text-slate-500" : ""}`}
+        <Select
           value={form.financialYear}
           disabled={mode === "edit"}
-          onChange={(e) => updateField("financialYear", e.target.value)}
-        >
-          {FINANCIAL_YEARS.map((fy) => (
-            <option key={fy} value={fy}>
-              {fy}
-            </option>
-          ))}
-        </select>
+          onChange={(v) => updateField("financialYear", v)}
+          options={FINANCIAL_YEARS.map((fy) => ({ value: fy as string, label: fy }))}
+          ariaLabel="Financial Year"
+        />
         <span className="mt-1 text-xs text-slate-500">
           {mode === "edit"
             ? "Financial Year cannot be changed."
@@ -172,22 +174,17 @@ export function InvoiceDetailsSection({
         <span className="mt-1 text-xs text-slate-500">
           {form.useExistingInvoiceNumber
             ? "Enter the exact historical invoice number, e.g. 25-26/087."
-            : "Invoice number will be assigned automatically from the selected Financial Year's sequence."}
+            : "Invoice number will be assigned automatically from your own series for the selected Financial Year (format is set by the Admin under Users)."}
         </span>
       </Field>
 
       <Field label="Tax Type" required>
-        <select
-          className={inputClass}
+        <Select<InvoiceFormState["taxType"]>
           value={form.taxType}
-          onChange={(e) =>
-            updateField("taxType", e.target.value as InvoiceFormState["taxType"])
-          }
-        >
-          <option value="CGST_SGST">CGST + SGST</option>
-          <option value="IGST">IGST</option>
-          <option value="LUMPSUM">Lumpsum (Composition)</option>
-        </select>
+          onChange={(v) => updateField("taxType", v)}
+          options={TAX_TYPE_OPTIONS}
+          ariaLabel="Tax Type"
+        />
         {form.taxType === "LUMPSUM" && (
           <span className="mt-1 text-xs text-slate-500">
             Composition dealer: a Bill of Supply is issued and no GST is

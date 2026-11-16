@@ -28,16 +28,19 @@ export type AggregateInvoiceSequence = {
 
 export type InvoiceSequenceAvgAggregateOutputType = {
   id: number | null
+  ownerId: number | null
   lastNumber: number | null
 }
 
 export type InvoiceSequenceSumAggregateOutputType = {
   id: number | null
+  ownerId: number | null
   lastNumber: number | null
 }
 
 export type InvoiceSequenceMinAggregateOutputType = {
   id: number | null
+  ownerId: number | null
   financialYear: string | null
   lastNumber: number | null
   createdAt: Date | null
@@ -46,6 +49,7 @@ export type InvoiceSequenceMinAggregateOutputType = {
 
 export type InvoiceSequenceMaxAggregateOutputType = {
   id: number | null
+  ownerId: number | null
   financialYear: string | null
   lastNumber: number | null
   createdAt: Date | null
@@ -54,6 +58,7 @@ export type InvoiceSequenceMaxAggregateOutputType = {
 
 export type InvoiceSequenceCountAggregateOutputType = {
   id: number
+  ownerId: number
   financialYear: number
   lastNumber: number
   createdAt: number
@@ -64,16 +69,19 @@ export type InvoiceSequenceCountAggregateOutputType = {
 
 export type InvoiceSequenceAvgAggregateInputType = {
   id?: true
+  ownerId?: true
   lastNumber?: true
 }
 
 export type InvoiceSequenceSumAggregateInputType = {
   id?: true
+  ownerId?: true
   lastNumber?: true
 }
 
 export type InvoiceSequenceMinAggregateInputType = {
   id?: true
+  ownerId?: true
   financialYear?: true
   lastNumber?: true
   createdAt?: true
@@ -82,6 +90,7 @@ export type InvoiceSequenceMinAggregateInputType = {
 
 export type InvoiceSequenceMaxAggregateInputType = {
   id?: true
+  ownerId?: true
   financialYear?: true
   lastNumber?: true
   createdAt?: true
@@ -90,6 +99,7 @@ export type InvoiceSequenceMaxAggregateInputType = {
 
 export type InvoiceSequenceCountAggregateInputType = {
   id?: true
+  ownerId?: true
   financialYear?: true
   lastNumber?: true
   createdAt?: true
@@ -185,6 +195,7 @@ export type InvoiceSequenceGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 
 export type InvoiceSequenceGroupByOutputType = {
   id: number
+  ownerId: number
   financialYear: string
   lastNumber: number
   createdAt: Date
@@ -216,33 +227,41 @@ export type InvoiceSequenceWhereInput = {
   OR?: Prisma.InvoiceSequenceWhereInput[]
   NOT?: Prisma.InvoiceSequenceWhereInput | Prisma.InvoiceSequenceWhereInput[]
   id?: Prisma.IntFilter<"InvoiceSequence"> | number
+  ownerId?: Prisma.IntFilter<"InvoiceSequence"> | number
   financialYear?: Prisma.StringFilter<"InvoiceSequence"> | string
   lastNumber?: Prisma.IntFilter<"InvoiceSequence"> | number
   createdAt?: Prisma.DateTimeFilter<"InvoiceSequence"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"InvoiceSequence"> | Date | string
+  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type InvoiceSequenceOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
   financialYear?: Prisma.SortOrder
   lastNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  owner?: Prisma.UserOrderByWithRelationInput
 }
 
 export type InvoiceSequenceWhereUniqueInput = Prisma.AtLeast<{
   id?: number
-  financialYear?: string
+  ownerId_financialYear?: Prisma.InvoiceSequenceOwnerIdFinancialYearCompoundUniqueInput
   AND?: Prisma.InvoiceSequenceWhereInput | Prisma.InvoiceSequenceWhereInput[]
   OR?: Prisma.InvoiceSequenceWhereInput[]
   NOT?: Prisma.InvoiceSequenceWhereInput | Prisma.InvoiceSequenceWhereInput[]
+  ownerId?: Prisma.IntFilter<"InvoiceSequence"> | number
+  financialYear?: Prisma.StringFilter<"InvoiceSequence"> | string
   lastNumber?: Prisma.IntFilter<"InvoiceSequence"> | number
   createdAt?: Prisma.DateTimeFilter<"InvoiceSequence"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"InvoiceSequence"> | Date | string
-}, "id" | "financialYear">
+  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+}, "id" | "ownerId_financialYear">
 
 export type InvoiceSequenceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
   financialYear?: Prisma.SortOrder
   lastNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -259,6 +278,7 @@ export type InvoiceSequenceScalarWhereWithAggregatesInput = {
   OR?: Prisma.InvoiceSequenceScalarWhereWithAggregatesInput[]
   NOT?: Prisma.InvoiceSequenceScalarWhereWithAggregatesInput | Prisma.InvoiceSequenceScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"InvoiceSequence"> | number
+  ownerId?: Prisma.IntWithAggregatesFilter<"InvoiceSequence"> | number
   financialYear?: Prisma.StringWithAggregatesFilter<"InvoiceSequence"> | string
   lastNumber?: Prisma.IntWithAggregatesFilter<"InvoiceSequence"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"InvoiceSequence"> | Date | string
@@ -270,10 +290,12 @@ export type InvoiceSequenceCreateInput = {
   lastNumber?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutInvoiceSequencesInput
 }
 
 export type InvoiceSequenceUncheckedCreateInput = {
   id?: number
+  ownerId: number
   financialYear: string
   lastNumber?: number
   createdAt?: Date | string
@@ -285,10 +307,12 @@ export type InvoiceSequenceUpdateInput = {
   lastNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutInvoiceSequencesNestedInput
 }
 
 export type InvoiceSequenceUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  ownerId?: Prisma.IntFieldUpdateOperationsInput | number
   financialYear?: Prisma.StringFieldUpdateOperationsInput | string
   lastNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -297,6 +321,7 @@ export type InvoiceSequenceUncheckedUpdateInput = {
 
 export type InvoiceSequenceCreateManyInput = {
   id?: number
+  ownerId: number
   financialYear: string
   lastNumber?: number
   createdAt?: Date | string
@@ -312,14 +337,31 @@ export type InvoiceSequenceUpdateManyMutationInput = {
 
 export type InvoiceSequenceUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  ownerId?: Prisma.IntFieldUpdateOperationsInput | number
   financialYear?: Prisma.StringFieldUpdateOperationsInput | string
   lastNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type InvoiceSequenceListRelationFilter = {
+  every?: Prisma.InvoiceSequenceWhereInput
+  some?: Prisma.InvoiceSequenceWhereInput
+  none?: Prisma.InvoiceSequenceWhereInput
+}
+
+export type InvoiceSequenceOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type InvoiceSequenceOwnerIdFinancialYearCompoundUniqueInput = {
+  ownerId: number
+  financialYear: string
+}
+
 export type InvoiceSequenceCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
   financialYear?: Prisma.SortOrder
   lastNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -328,11 +370,13 @@ export type InvoiceSequenceCountOrderByAggregateInput = {
 
 export type InvoiceSequenceAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
   lastNumber?: Prisma.SortOrder
 }
 
 export type InvoiceSequenceMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
   financialYear?: Prisma.SortOrder
   lastNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -341,6 +385,7 @@ export type InvoiceSequenceMaxOrderByAggregateInput = {
 
 export type InvoiceSequenceMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
   financialYear?: Prisma.SortOrder
   lastNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -349,50 +394,196 @@ export type InvoiceSequenceMinOrderByAggregateInput = {
 
 export type InvoiceSequenceSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
   lastNumber?: Prisma.SortOrder
+}
+
+export type InvoiceSequenceCreateNestedManyWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.InvoiceSequenceCreateWithoutOwnerInput, Prisma.InvoiceSequenceUncheckedCreateWithoutOwnerInput> | Prisma.InvoiceSequenceCreateWithoutOwnerInput[] | Prisma.InvoiceSequenceUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.InvoiceSequenceCreateOrConnectWithoutOwnerInput | Prisma.InvoiceSequenceCreateOrConnectWithoutOwnerInput[]
+  createMany?: Prisma.InvoiceSequenceCreateManyOwnerInputEnvelope
+  connect?: Prisma.InvoiceSequenceWhereUniqueInput | Prisma.InvoiceSequenceWhereUniqueInput[]
+}
+
+export type InvoiceSequenceUncheckedCreateNestedManyWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.InvoiceSequenceCreateWithoutOwnerInput, Prisma.InvoiceSequenceUncheckedCreateWithoutOwnerInput> | Prisma.InvoiceSequenceCreateWithoutOwnerInput[] | Prisma.InvoiceSequenceUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.InvoiceSequenceCreateOrConnectWithoutOwnerInput | Prisma.InvoiceSequenceCreateOrConnectWithoutOwnerInput[]
+  createMany?: Prisma.InvoiceSequenceCreateManyOwnerInputEnvelope
+  connect?: Prisma.InvoiceSequenceWhereUniqueInput | Prisma.InvoiceSequenceWhereUniqueInput[]
+}
+
+export type InvoiceSequenceUpdateManyWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.InvoiceSequenceCreateWithoutOwnerInput, Prisma.InvoiceSequenceUncheckedCreateWithoutOwnerInput> | Prisma.InvoiceSequenceCreateWithoutOwnerInput[] | Prisma.InvoiceSequenceUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.InvoiceSequenceCreateOrConnectWithoutOwnerInput | Prisma.InvoiceSequenceCreateOrConnectWithoutOwnerInput[]
+  upsert?: Prisma.InvoiceSequenceUpsertWithWhereUniqueWithoutOwnerInput | Prisma.InvoiceSequenceUpsertWithWhereUniqueWithoutOwnerInput[]
+  createMany?: Prisma.InvoiceSequenceCreateManyOwnerInputEnvelope
+  set?: Prisma.InvoiceSequenceWhereUniqueInput | Prisma.InvoiceSequenceWhereUniqueInput[]
+  disconnect?: Prisma.InvoiceSequenceWhereUniqueInput | Prisma.InvoiceSequenceWhereUniqueInput[]
+  delete?: Prisma.InvoiceSequenceWhereUniqueInput | Prisma.InvoiceSequenceWhereUniqueInput[]
+  connect?: Prisma.InvoiceSequenceWhereUniqueInput | Prisma.InvoiceSequenceWhereUniqueInput[]
+  update?: Prisma.InvoiceSequenceUpdateWithWhereUniqueWithoutOwnerInput | Prisma.InvoiceSequenceUpdateWithWhereUniqueWithoutOwnerInput[]
+  updateMany?: Prisma.InvoiceSequenceUpdateManyWithWhereWithoutOwnerInput | Prisma.InvoiceSequenceUpdateManyWithWhereWithoutOwnerInput[]
+  deleteMany?: Prisma.InvoiceSequenceScalarWhereInput | Prisma.InvoiceSequenceScalarWhereInput[]
+}
+
+export type InvoiceSequenceUncheckedUpdateManyWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.InvoiceSequenceCreateWithoutOwnerInput, Prisma.InvoiceSequenceUncheckedCreateWithoutOwnerInput> | Prisma.InvoiceSequenceCreateWithoutOwnerInput[] | Prisma.InvoiceSequenceUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.InvoiceSequenceCreateOrConnectWithoutOwnerInput | Prisma.InvoiceSequenceCreateOrConnectWithoutOwnerInput[]
+  upsert?: Prisma.InvoiceSequenceUpsertWithWhereUniqueWithoutOwnerInput | Prisma.InvoiceSequenceUpsertWithWhereUniqueWithoutOwnerInput[]
+  createMany?: Prisma.InvoiceSequenceCreateManyOwnerInputEnvelope
+  set?: Prisma.InvoiceSequenceWhereUniqueInput | Prisma.InvoiceSequenceWhereUniqueInput[]
+  disconnect?: Prisma.InvoiceSequenceWhereUniqueInput | Prisma.InvoiceSequenceWhereUniqueInput[]
+  delete?: Prisma.InvoiceSequenceWhereUniqueInput | Prisma.InvoiceSequenceWhereUniqueInput[]
+  connect?: Prisma.InvoiceSequenceWhereUniqueInput | Prisma.InvoiceSequenceWhereUniqueInput[]
+  update?: Prisma.InvoiceSequenceUpdateWithWhereUniqueWithoutOwnerInput | Prisma.InvoiceSequenceUpdateWithWhereUniqueWithoutOwnerInput[]
+  updateMany?: Prisma.InvoiceSequenceUpdateManyWithWhereWithoutOwnerInput | Prisma.InvoiceSequenceUpdateManyWithWhereWithoutOwnerInput[]
+  deleteMany?: Prisma.InvoiceSequenceScalarWhereInput | Prisma.InvoiceSequenceScalarWhereInput[]
+}
+
+export type InvoiceSequenceCreateWithoutOwnerInput = {
+  financialYear: string
+  lastNumber?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type InvoiceSequenceUncheckedCreateWithoutOwnerInput = {
+  id?: number
+  financialYear: string
+  lastNumber?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type InvoiceSequenceCreateOrConnectWithoutOwnerInput = {
+  where: Prisma.InvoiceSequenceWhereUniqueInput
+  create: Prisma.XOR<Prisma.InvoiceSequenceCreateWithoutOwnerInput, Prisma.InvoiceSequenceUncheckedCreateWithoutOwnerInput>
+}
+
+export type InvoiceSequenceCreateManyOwnerInputEnvelope = {
+  data: Prisma.InvoiceSequenceCreateManyOwnerInput | Prisma.InvoiceSequenceCreateManyOwnerInput[]
+  skipDuplicates?: boolean
+}
+
+export type InvoiceSequenceUpsertWithWhereUniqueWithoutOwnerInput = {
+  where: Prisma.InvoiceSequenceWhereUniqueInput
+  update: Prisma.XOR<Prisma.InvoiceSequenceUpdateWithoutOwnerInput, Prisma.InvoiceSequenceUncheckedUpdateWithoutOwnerInput>
+  create: Prisma.XOR<Prisma.InvoiceSequenceCreateWithoutOwnerInput, Prisma.InvoiceSequenceUncheckedCreateWithoutOwnerInput>
+}
+
+export type InvoiceSequenceUpdateWithWhereUniqueWithoutOwnerInput = {
+  where: Prisma.InvoiceSequenceWhereUniqueInput
+  data: Prisma.XOR<Prisma.InvoiceSequenceUpdateWithoutOwnerInput, Prisma.InvoiceSequenceUncheckedUpdateWithoutOwnerInput>
+}
+
+export type InvoiceSequenceUpdateManyWithWhereWithoutOwnerInput = {
+  where: Prisma.InvoiceSequenceScalarWhereInput
+  data: Prisma.XOR<Prisma.InvoiceSequenceUpdateManyMutationInput, Prisma.InvoiceSequenceUncheckedUpdateManyWithoutOwnerInput>
+}
+
+export type InvoiceSequenceScalarWhereInput = {
+  AND?: Prisma.InvoiceSequenceScalarWhereInput | Prisma.InvoiceSequenceScalarWhereInput[]
+  OR?: Prisma.InvoiceSequenceScalarWhereInput[]
+  NOT?: Prisma.InvoiceSequenceScalarWhereInput | Prisma.InvoiceSequenceScalarWhereInput[]
+  id?: Prisma.IntFilter<"InvoiceSequence"> | number
+  ownerId?: Prisma.IntFilter<"InvoiceSequence"> | number
+  financialYear?: Prisma.StringFilter<"InvoiceSequence"> | string
+  lastNumber?: Prisma.IntFilter<"InvoiceSequence"> | number
+  createdAt?: Prisma.DateTimeFilter<"InvoiceSequence"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"InvoiceSequence"> | Date | string
+}
+
+export type InvoiceSequenceCreateManyOwnerInput = {
+  id?: number
+  financialYear: string
+  lastNumber?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type InvoiceSequenceUpdateWithoutOwnerInput = {
+  financialYear?: Prisma.StringFieldUpdateOperationsInput | string
+  lastNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type InvoiceSequenceUncheckedUpdateWithoutOwnerInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  financialYear?: Prisma.StringFieldUpdateOperationsInput | string
+  lastNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type InvoiceSequenceUncheckedUpdateManyWithoutOwnerInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  financialYear?: Prisma.StringFieldUpdateOperationsInput | string
+  lastNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
 
 export type InvoiceSequenceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  ownerId?: boolean
   financialYear?: boolean
   lastNumber?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["invoiceSequence"]>
 
 export type InvoiceSequenceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  ownerId?: boolean
   financialYear?: boolean
   lastNumber?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["invoiceSequence"]>
 
 export type InvoiceSequenceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  ownerId?: boolean
   financialYear?: boolean
   lastNumber?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["invoiceSequence"]>
 
 export type InvoiceSequenceSelectScalar = {
   id?: boolean
+  ownerId?: boolean
   financialYear?: boolean
   lastNumber?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type InvoiceSequenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "financialYear" | "lastNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["invoiceSequence"]>
+export type InvoiceSequenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "financialYear" | "lastNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["invoiceSequence"]>
+export type InvoiceSequenceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type InvoiceSequenceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type InvoiceSequenceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
 
 export type $InvoiceSequencePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "InvoiceSequence"
-  objects: {}
+  objects: {
+    owner: Prisma.$UserPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
+    ownerId: number
     financialYear: string
     lastNumber: number
     createdAt: Date
@@ -791,6 +982,7 @@ readonly fields: InvoiceSequenceFieldRefs;
  */
 export interface Prisma__InvoiceSequenceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -821,6 +1013,7 @@ export interface Prisma__InvoiceSequenceClient<T, Null = never, ExtArgs extends 
  */
 export interface InvoiceSequenceFieldRefs {
   readonly id: Prisma.FieldRef<"InvoiceSequence", 'Int'>
+  readonly ownerId: Prisma.FieldRef<"InvoiceSequence", 'Int'>
   readonly financialYear: Prisma.FieldRef<"InvoiceSequence", 'String'>
   readonly lastNumber: Prisma.FieldRef<"InvoiceSequence", 'Int'>
   readonly createdAt: Prisma.FieldRef<"InvoiceSequence", 'DateTime'>
@@ -842,6 +1035,10 @@ export type InvoiceSequenceFindUniqueArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.InvoiceSequenceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceSequenceInclude<ExtArgs> | null
+  /**
    * Filter, which InvoiceSequence to fetch.
    */
   where: Prisma.InvoiceSequenceWhereUniqueInput
@@ -860,6 +1057,10 @@ export type InvoiceSequenceFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.E
    */
   omit?: Prisma.InvoiceSequenceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceSequenceInclude<ExtArgs> | null
+  /**
    * Filter, which InvoiceSequence to fetch.
    */
   where: Prisma.InvoiceSequenceWhereUniqueInput
@@ -877,6 +1078,10 @@ export type InvoiceSequenceFindFirstArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the InvoiceSequence
    */
   omit?: Prisma.InvoiceSequenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceSequenceInclude<ExtArgs> | null
   /**
    * Filter, which InvoiceSequence to fetch.
    */
@@ -926,6 +1131,10 @@ export type InvoiceSequenceFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ex
    */
   omit?: Prisma.InvoiceSequenceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceSequenceInclude<ExtArgs> | null
+  /**
    * Filter, which InvoiceSequence to fetch.
    */
   where?: Prisma.InvoiceSequenceWhereInput
@@ -973,6 +1182,10 @@ export type InvoiceSequenceFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Omit specific fields from the InvoiceSequence
    */
   omit?: Prisma.InvoiceSequenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceSequenceInclude<ExtArgs> | null
   /**
    * Filter, which InvoiceSequences to fetch.
    */
@@ -1022,6 +1235,10 @@ export type InvoiceSequenceCreateArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.InvoiceSequenceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceSequenceInclude<ExtArgs> | null
+  /**
    * The data needed to create a InvoiceSequence.
    */
   data: Prisma.XOR<Prisma.InvoiceSequenceCreateInput, Prisma.InvoiceSequenceUncheckedCreateInput>
@@ -1055,6 +1272,10 @@ export type InvoiceSequenceCreateManyAndReturnArgs<ExtArgs extends runtime.Types
    */
   data: Prisma.InvoiceSequenceCreateManyInput | Prisma.InvoiceSequenceCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceSequenceIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1069,6 +1290,10 @@ export type InvoiceSequenceUpdateArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the InvoiceSequence
    */
   omit?: Prisma.InvoiceSequenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceSequenceInclude<ExtArgs> | null
   /**
    * The data needed to update a InvoiceSequence.
    */
@@ -1121,6 +1346,10 @@ export type InvoiceSequenceUpdateManyAndReturnArgs<ExtArgs extends runtime.Types
    * Limit how many InvoiceSequences to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceSequenceIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1135,6 +1364,10 @@ export type InvoiceSequenceUpsertArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the InvoiceSequence
    */
   omit?: Prisma.InvoiceSequenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceSequenceInclude<ExtArgs> | null
   /**
    * The filter to search for the InvoiceSequence to update in case it exists.
    */
@@ -1161,6 +1394,10 @@ export type InvoiceSequenceDeleteArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the InvoiceSequence
    */
   omit?: Prisma.InvoiceSequenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceSequenceInclude<ExtArgs> | null
   /**
    * Filter which InvoiceSequence to delete.
    */
@@ -1193,4 +1430,8 @@ export type InvoiceSequenceDefaultArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the InvoiceSequence
    */
   omit?: Prisma.InvoiceSequenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceSequenceInclude<ExtArgs> | null
 }

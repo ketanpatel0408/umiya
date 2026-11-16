@@ -2,11 +2,13 @@
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Skeleton from "@mui/material/Skeleton";
 import { ArrowLeft, Printer, AlertCircle, FileX, Pencil } from "lucide-react";
 import type { Invoice } from "../types";
 import InvoiceDocument from "./InvoiceDocument";
 import InvoiceDownloadButton from "../InvoiceDownloadButton";
+import DeleteInvoiceButton from "../DeleteInvoiceButton";
 import { StatusBadge, btnPrimary, btnSecondary } from "../../components/ui";
 import { formatCurrency, formatDate } from "../utils";
 
@@ -18,6 +20,7 @@ export default function InvoiceDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const router = useRouter();
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [state, setState] = useState<LoadState>("loading");
 
@@ -98,6 +101,14 @@ export default function InvoiceDetailPage({
             </div>
           </div>
           <div className="flex gap-2">
+            {invoice.isLatest && (
+              <DeleteInvoiceButton
+                invoice={invoice}
+                className={btnSecondary}
+                label="Delete"
+                onDeleted={() => router.push("/invoices")}
+              />
+            )}
             <Link href={`/invoices/${invoice.id}/edit`} className={btnSecondary}>
               <Pencil size={16} />
               Edit

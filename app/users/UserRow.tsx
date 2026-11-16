@@ -5,7 +5,10 @@ import { Trash2, KeyRound } from "lucide-react";
 import type { ManagedUser, SellerDetailsForm } from "./types";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import PasswordInput from "@/components/common/PasswordInput";
+import SignatureInput from "./SignatureInput";
+import InvoiceNumberFormatInput from "./InvoiceNumberFormatInput";
 import { btnPrimary, btnSecondary, btnSmall, initials, inputBase } from "../components/ui";
+import Select from "../components/Select";
 
 const editInputClass = `${inputBase} mt-1`;
 
@@ -18,6 +21,12 @@ function sellerFromUser(user: ManagedUser): SellerDetailsForm {
     sellerPAN: user.sellerPAN ?? "",
     sellerState: user.sellerState ?? "",
     sellerStateCode: user.sellerStateCode ?? "",
+    bankName: user.bankName ?? "",
+    bankBranchName: user.bankBranchName ?? "",
+    bankAccountNumber: user.bankAccountNumber ?? "",
+    bankIfscCode: user.bankIfscCode ?? "",
+    signatureImage: user.signatureImage ?? "",
+    invoiceNumberFormat: user.invoiceNumberFormat ?? "",
   };
 }
 
@@ -154,15 +163,18 @@ export default function UserRow({
         </td>
         <td className="px-4 py-3 text-slate-600">{user.email}</td>
         <td className="px-4 py-3">
-          <select
+          <Select<ManagedUser["role"]>
             value={user.role}
             disabled={busy}
-            onChange={(e) => patch({ role: e.target.value })}
-            className="cursor-pointer rounded-md border border-slate-300 bg-white px-2 py-1 text-sm text-slate-700 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:cursor-not-allowed"
-          >
-            <option value="USER">User</option>
-            <option value="ADMIN">Admin</option>
-          </select>
+            onChange={(role) => patch({ role })}
+            size="sm"
+            className="w-28"
+            ariaLabel="Role"
+            options={[
+              { value: "USER", label: "User" },
+              { value: "ADMIN", label: "Admin" },
+            ]}
+          />
         </td>
         <td className="px-4 py-3">
           <span
@@ -195,7 +207,7 @@ export default function UserRow({
               }}
               className={btnSmall}
             >
-              {editing ? "Close" : "Seller Details"}
+              {editing ? "Close" : "Business Details"}
             </button>
             <button
               disabled={busy}
@@ -282,6 +294,47 @@ export default function UserRow({
                   onChange={(e) => updateSeller("sellerStateCode", e.target.value)}
                 />
               </label>
+              <label className="text-xs font-medium text-slate-600">
+                Bank Name
+                <input
+                  className={editInputClass}
+                  value={seller.bankName}
+                  onChange={(e) => updateSeller("bankName", e.target.value)}
+                />
+              </label>
+              <label className="text-xs font-medium text-slate-600">
+                Branch Name
+                <input
+                  className={editInputClass}
+                  value={seller.bankBranchName}
+                  onChange={(e) => updateSeller("bankBranchName", e.target.value)}
+                />
+              </label>
+              <label className="text-xs font-medium text-slate-600">
+                Bank A/c. No.
+                <input
+                  className={editInputClass}
+                  value={seller.bankAccountNumber}
+                  onChange={(e) => updateSeller("bankAccountNumber", e.target.value)}
+                />
+              </label>
+              <label className="text-xs font-medium text-slate-600">
+                RTGS/IFSC Code
+                <input
+                  className={editInputClass}
+                  value={seller.bankIfscCode}
+                  onChange={(e) => updateSeller("bankIfscCode", e.target.value)}
+                />
+              </label>
+              <SignatureInput
+                value={seller.signatureImage}
+                onChange={(v) => updateSeller("signatureImage", v)}
+                disabled={busy}
+              />
+              <InvoiceNumberFormatInput
+                value={seller.invoiceNumberFormat}
+                onChange={(v) => updateSeller("invoiceNumberFormat", v)}
+              />
             </div>
             <div className="mt-3 flex gap-2">
               <button
@@ -289,7 +342,7 @@ export default function UserRow({
                 onClick={handleSaveSeller}
                 className={`${btnPrimary} px-3 py-1.5 text-xs`}
               >
-                {busy ? "Saving..." : "Save Seller Details"}
+                {busy ? "Saving..." : "Save Details"}
               </button>
               <button
                 onClick={() => setEditing(false)}

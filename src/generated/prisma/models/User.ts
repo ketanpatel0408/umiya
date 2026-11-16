@@ -49,6 +49,12 @@ export type UserMinAggregateOutputType = {
   sellerPAN: string | null
   sellerState: string | null
   sellerStateCode: string | null
+  bankName: string | null
+  bankBranchName: string | null
+  bankAccountNumber: string | null
+  bankIfscCode: string | null
+  signatureImage: string | null
+  invoiceNumberFormat: string | null
   createdAt: Date | null
   updatedAt: Date | null
   lastLoginAt: Date | null
@@ -69,6 +75,12 @@ export type UserMaxAggregateOutputType = {
   sellerPAN: string | null
   sellerState: string | null
   sellerStateCode: string | null
+  bankName: string | null
+  bankBranchName: string | null
+  bankAccountNumber: string | null
+  bankIfscCode: string | null
+  signatureImage: string | null
+  invoiceNumberFormat: string | null
   createdAt: Date | null
   updatedAt: Date | null
   lastLoginAt: Date | null
@@ -89,6 +101,12 @@ export type UserCountAggregateOutputType = {
   sellerPAN: number
   sellerState: number
   sellerStateCode: number
+  bankName: number
+  bankBranchName: number
+  bankAccountNumber: number
+  bankIfscCode: number
+  signatureImage: number
+  invoiceNumberFormat: number
   createdAt: number
   updatedAt: number
   lastLoginAt: number
@@ -119,6 +137,12 @@ export type UserMinAggregateInputType = {
   sellerPAN?: true
   sellerState?: true
   sellerStateCode?: true
+  bankName?: true
+  bankBranchName?: true
+  bankAccountNumber?: true
+  bankIfscCode?: true
+  signatureImage?: true
+  invoiceNumberFormat?: true
   createdAt?: true
   updatedAt?: true
   lastLoginAt?: true
@@ -139,6 +163,12 @@ export type UserMaxAggregateInputType = {
   sellerPAN?: true
   sellerState?: true
   sellerStateCode?: true
+  bankName?: true
+  bankBranchName?: true
+  bankAccountNumber?: true
+  bankIfscCode?: true
+  signatureImage?: true
+  invoiceNumberFormat?: true
   createdAt?: true
   updatedAt?: true
   lastLoginAt?: true
@@ -159,6 +189,12 @@ export type UserCountAggregateInputType = {
   sellerPAN?: true
   sellerState?: true
   sellerStateCode?: true
+  bankName?: true
+  bankBranchName?: true
+  bankAccountNumber?: true
+  bankIfscCode?: true
+  signatureImage?: true
+  invoiceNumberFormat?: true
   createdAt?: true
   updatedAt?: true
   lastLoginAt?: true
@@ -266,6 +302,12 @@ export type UserGroupByOutputType = {
   sellerPAN: string | null
   sellerState: string | null
   sellerStateCode: string | null
+  bankName: string | null
+  bankBranchName: string | null
+  bankAccountNumber: string | null
+  bankIfscCode: string | null
+  signatureImage: string | null
+  invoiceNumberFormat: string | null
   createdAt: Date
   updatedAt: Date
   lastLoginAt: Date | null
@@ -309,11 +351,18 @@ export type UserWhereInput = {
   sellerPAN?: Prisma.StringNullableFilter<"User"> | string | null
   sellerState?: Prisma.StringNullableFilter<"User"> | string | null
   sellerStateCode?: Prisma.StringNullableFilter<"User"> | string | null
+  bankName?: Prisma.StringNullableFilter<"User"> | string | null
+  bankBranchName?: Prisma.StringNullableFilter<"User"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"User"> | string | null
+  bankIfscCode?: Prisma.StringNullableFilter<"User"> | string | null
+  signatureImage?: Prisma.StringNullableFilter<"User"> | string | null
+  invoiceNumberFormat?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   invoices?: Prisma.InvoiceListRelationFilter
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
+  invoiceSequences?: Prisma.InvoiceSequenceListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -331,11 +380,18 @@ export type UserOrderByWithRelationInput = {
   sellerPAN?: Prisma.SortOrderInput | Prisma.SortOrder
   sellerState?: Prisma.SortOrderInput | Prisma.SortOrder
   sellerStateCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankBranchName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankIfscCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  signatureImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  invoiceNumberFormat?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   invoices?: Prisma.InvoiceOrderByRelationAggregateInput
   passwordResetTokens?: Prisma.PasswordResetTokenOrderByRelationAggregateInput
+  invoiceSequences?: Prisma.InvoiceSequenceOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -356,11 +412,18 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   sellerPAN?: Prisma.StringNullableFilter<"User"> | string | null
   sellerState?: Prisma.StringNullableFilter<"User"> | string | null
   sellerStateCode?: Prisma.StringNullableFilter<"User"> | string | null
+  bankName?: Prisma.StringNullableFilter<"User"> | string | null
+  bankBranchName?: Prisma.StringNullableFilter<"User"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"User"> | string | null
+  bankIfscCode?: Prisma.StringNullableFilter<"User"> | string | null
+  signatureImage?: Prisma.StringNullableFilter<"User"> | string | null
+  invoiceNumberFormat?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   invoices?: Prisma.InvoiceListRelationFilter
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
+  invoiceSequences?: Prisma.InvoiceSequenceListRelationFilter
 }, "id" | "username" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -378,6 +441,12 @@ export type UserOrderByWithAggregationInput = {
   sellerPAN?: Prisma.SortOrderInput | Prisma.SortOrder
   sellerState?: Prisma.SortOrderInput | Prisma.SortOrder
   sellerStateCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankBranchName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankIfscCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  signatureImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  invoiceNumberFormat?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -406,6 +475,12 @@ export type UserScalarWhereWithAggregatesInput = {
   sellerPAN?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   sellerState?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   sellerStateCode?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  bankName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  bankBranchName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  bankAccountNumber?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  bankIfscCode?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  signatureImage?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  invoiceNumberFormat?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -425,11 +500,18 @@ export type UserCreateInput = {
   sellerPAN?: string | null
   sellerState?: string | null
   sellerStateCode?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
+  signatureImage?: string | null
+  invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLoginAt?: Date | string | null
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOwnerInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  invoiceSequences?: Prisma.InvoiceSequenceCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -447,11 +529,18 @@ export type UserUncheckedCreateInput = {
   sellerPAN?: string | null
   sellerState?: string | null
   sellerStateCode?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
+  signatureImage?: string | null
+  invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLoginAt?: Date | string | null
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOwnerInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  invoiceSequences?: Prisma.InvoiceSequenceUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUpdateInput = {
@@ -468,11 +557,18 @@ export type UserUpdateInput = {
   sellerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   invoices?: Prisma.InvoiceUpdateManyWithoutOwnerNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  invoiceSequences?: Prisma.InvoiceSequenceUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -490,11 +586,18 @@ export type UserUncheckedUpdateInput = {
   sellerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOwnerNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  invoiceSequences?: Prisma.InvoiceSequenceUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -512,6 +615,12 @@ export type UserCreateManyInput = {
   sellerPAN?: string | null
   sellerState?: string | null
   sellerStateCode?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
+  signatureImage?: string | null
+  invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLoginAt?: Date | string | null
@@ -531,6 +640,12 @@ export type UserUpdateManyMutationInput = {
   sellerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -551,6 +666,12 @@ export type UserUncheckedUpdateManyInput = {
   sellerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -571,6 +692,12 @@ export type UserCountOrderByAggregateInput = {
   sellerPAN?: Prisma.SortOrder
   sellerState?: Prisma.SortOrder
   sellerStateCode?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankBranchName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
+  bankIfscCode?: Prisma.SortOrder
+  signatureImage?: Prisma.SortOrder
+  invoiceNumberFormat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
@@ -595,6 +722,12 @@ export type UserMaxOrderByAggregateInput = {
   sellerPAN?: Prisma.SortOrder
   sellerState?: Prisma.SortOrder
   sellerStateCode?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankBranchName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
+  bankIfscCode?: Prisma.SortOrder
+  signatureImage?: Prisma.SortOrder
+  invoiceNumberFormat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
@@ -615,6 +748,12 @@ export type UserMinOrderByAggregateInput = {
   sellerPAN?: Prisma.SortOrder
   sellerState?: Prisma.SortOrder
   sellerStateCode?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankBranchName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
+  bankIfscCode?: Prisma.SortOrder
+  signatureImage?: Prisma.SortOrder
+  invoiceNumberFormat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
@@ -689,6 +828,20 @@ export type UserUpdateOneRequiredWithoutInvoicesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvoicesInput, Prisma.UserUpdateWithoutInvoicesInput>, Prisma.UserUncheckedUpdateWithoutInvoicesInput>
 }
 
+export type UserCreateNestedOneWithoutInvoiceSequencesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoiceSequencesInput, Prisma.UserUncheckedCreateWithoutInvoiceSequencesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoiceSequencesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInvoiceSequencesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoiceSequencesInput, Prisma.UserUncheckedCreateWithoutInvoiceSequencesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoiceSequencesInput
+  upsert?: Prisma.UserUpsertWithoutInvoiceSequencesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvoiceSequencesInput, Prisma.UserUpdateWithoutInvoiceSequencesInput>, Prisma.UserUncheckedUpdateWithoutInvoiceSequencesInput>
+}
+
 export type UserCreateWithoutPasswordResetTokensInput = {
   username: string
   passwordHash: string
@@ -703,10 +856,17 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   sellerPAN?: string | null
   sellerState?: string | null
   sellerStateCode?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
+  signatureImage?: string | null
+  invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLoginAt?: Date | string | null
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOwnerInput
+  invoiceSequences?: Prisma.InvoiceSequenceCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
@@ -724,10 +884,17 @@ export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   sellerPAN?: string | null
   sellerState?: string | null
   sellerStateCode?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
+  signatureImage?: string | null
+  invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLoginAt?: Date | string | null
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOwnerInput
+  invoiceSequences?: Prisma.InvoiceSequenceUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutPasswordResetTokensInput = {
@@ -760,10 +927,17 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   sellerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   invoices?: Prisma.InvoiceUpdateManyWithoutOwnerNestedInput
+  invoiceSequences?: Prisma.InvoiceSequenceUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
@@ -781,10 +955,17 @@ export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   sellerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOwnerNestedInput
+  invoiceSequences?: Prisma.InvoiceSequenceUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutInvoicesInput = {
@@ -801,10 +982,17 @@ export type UserCreateWithoutInvoicesInput = {
   sellerPAN?: string | null
   sellerState?: string | null
   sellerStateCode?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
+  signatureImage?: string | null
+  invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLoginAt?: Date | string | null
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  invoiceSequences?: Prisma.InvoiceSequenceCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutInvoicesInput = {
@@ -822,10 +1010,17 @@ export type UserUncheckedCreateWithoutInvoicesInput = {
   sellerPAN?: string | null
   sellerState?: string | null
   sellerStateCode?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
+  signatureImage?: string | null
+  invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLoginAt?: Date | string | null
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  invoiceSequences?: Prisma.InvoiceSequenceUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutInvoicesInput = {
@@ -858,10 +1053,17 @@ export type UserUpdateWithoutInvoicesInput = {
   sellerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  invoiceSequences?: Prisma.InvoiceSequenceUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInvoicesInput = {
@@ -879,9 +1081,142 @@ export type UserUncheckedUpdateWithoutInvoicesInput = {
   sellerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  invoiceSequences?: Prisma.InvoiceSequenceUncheckedUpdateManyWithoutOwnerNestedInput
+}
+
+export type UserCreateWithoutInvoiceSequencesInput = {
+  username: string
+  passwordHash: string
+  fullName: string
+  email: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  sellerName?: string | null
+  sellerPhone?: string | null
+  sellerAddress?: string | null
+  sellerGSTIN?: string | null
+  sellerPAN?: string | null
+  sellerState?: string | null
+  sellerStateCode?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
+  signatureImage?: string | null
+  invoiceNumberFormat?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLoginAt?: Date | string | null
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOwnerInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutInvoiceSequencesInput = {
+  id?: number
+  username: string
+  passwordHash: string
+  fullName: string
+  email: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  sellerName?: string | null
+  sellerPhone?: string | null
+  sellerAddress?: string | null
+  sellerGSTIN?: string | null
+  sellerPAN?: string | null
+  sellerState?: string | null
+  sellerStateCode?: string | null
+  bankName?: string | null
+  bankBranchName?: string | null
+  bankAccountNumber?: string | null
+  bankIfscCode?: string | null
+  signatureImage?: string | null
+  invoiceNumberFormat?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLoginAt?: Date | string | null
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOwnerInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutInvoiceSequencesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoiceSequencesInput, Prisma.UserUncheckedCreateWithoutInvoiceSequencesInput>
+}
+
+export type UserUpsertWithoutInvoiceSequencesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInvoiceSequencesInput, Prisma.UserUncheckedUpdateWithoutInvoiceSequencesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoiceSequencesInput, Prisma.UserUncheckedCreateWithoutInvoiceSequencesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInvoiceSequencesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInvoiceSequencesInput, Prisma.UserUncheckedUpdateWithoutInvoiceSequencesInput>
+}
+
+export type UserUpdateWithoutInvoiceSequencesInput = {
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sellerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sellerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sellerAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sellerGSTIN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sellerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sellerState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  invoices?: Prisma.InvoiceUpdateManyWithoutOwnerNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInvoiceSequencesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sellerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sellerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sellerAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sellerGSTIN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sellerPAN?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sellerState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sellerStateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankBranchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOwnerNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -893,11 +1228,13 @@ export type UserUncheckedUpdateWithoutInvoicesInput = {
 export type UserCountOutputType = {
   invoices: number
   passwordResetTokens: number
+  invoiceSequences: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   invoices?: boolean | UserCountOutputTypeCountInvoicesArgs
   passwordResetTokens?: boolean | UserCountOutputTypeCountPasswordResetTokensArgs
+  invoiceSequences?: boolean | UserCountOutputTypeCountInvoiceSequencesArgs
 }
 
 /**
@@ -924,6 +1261,13 @@ export type UserCountOutputTypeCountPasswordResetTokensArgs<ExtArgs extends runt
   where?: Prisma.PasswordResetTokenWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInvoiceSequencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceSequenceWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -940,11 +1284,18 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   sellerPAN?: boolean
   sellerState?: boolean
   sellerStateCode?: boolean
+  bankName?: boolean
+  bankBranchName?: boolean
+  bankAccountNumber?: boolean
+  bankIfscCode?: boolean
+  signatureImage?: boolean
+  invoiceNumberFormat?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lastLoginAt?: boolean
   invoices?: boolean | Prisma.User$invoicesArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
+  invoiceSequences?: boolean | Prisma.User$invoiceSequencesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -963,6 +1314,12 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   sellerPAN?: boolean
   sellerState?: boolean
   sellerStateCode?: boolean
+  bankName?: boolean
+  bankBranchName?: boolean
+  bankAccountNumber?: boolean
+  bankIfscCode?: boolean
+  signatureImage?: boolean
+  invoiceNumberFormat?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lastLoginAt?: boolean
@@ -983,6 +1340,12 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   sellerPAN?: boolean
   sellerState?: boolean
   sellerStateCode?: boolean
+  bankName?: boolean
+  bankBranchName?: boolean
+  bankAccountNumber?: boolean
+  bankIfscCode?: boolean
+  signatureImage?: boolean
+  invoiceNumberFormat?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lastLoginAt?: boolean
@@ -1003,15 +1366,22 @@ export type UserSelectScalar = {
   sellerPAN?: boolean
   sellerState?: boolean
   sellerStateCode?: boolean
+  bankName?: boolean
+  bankBranchName?: boolean
+  bankAccountNumber?: boolean
+  bankIfscCode?: boolean
+  signatureImage?: boolean
+  invoiceNumberFormat?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lastLoginAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "passwordHash" | "fullName" | "email" | "role" | "isActive" | "sellerName" | "sellerPhone" | "sellerAddress" | "sellerGSTIN" | "sellerPAN" | "sellerState" | "sellerStateCode" | "createdAt" | "updatedAt" | "lastLoginAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "passwordHash" | "fullName" | "email" | "role" | "isActive" | "sellerName" | "sellerPhone" | "sellerAddress" | "sellerGSTIN" | "sellerPAN" | "sellerState" | "sellerStateCode" | "bankName" | "bankBranchName" | "bankAccountNumber" | "bankIfscCode" | "signatureImage" | "invoiceNumberFormat" | "createdAt" | "updatedAt" | "lastLoginAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   invoices?: boolean | Prisma.User$invoicesArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
+  invoiceSequences?: boolean | Prisma.User$invoiceSequencesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1022,6 +1392,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     invoices: Prisma.$InvoicePayload<ExtArgs>[]
     passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
+    invoiceSequences: Prisma.$InvoiceSequencePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1038,6 +1409,12 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sellerPAN: string | null
     sellerState: string | null
     sellerStateCode: string | null
+    bankName: string | null
+    bankBranchName: string | null
+    bankAccountNumber: string | null
+    bankIfscCode: string | null
+    signatureImage: string | null
+    invoiceNumberFormat: string | null
     createdAt: Date
     updatedAt: Date
     lastLoginAt: Date | null
@@ -1437,6 +1814,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   invoices<T extends Prisma.User$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   passwordResetTokens<T extends Prisma.User$passwordResetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invoiceSequences<T extends Prisma.User$invoiceSequencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$invoiceSequencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceSequencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1480,6 +1858,12 @@ export interface UserFieldRefs {
   readonly sellerPAN: Prisma.FieldRef<"User", 'String'>
   readonly sellerState: Prisma.FieldRef<"User", 'String'>
   readonly sellerStateCode: Prisma.FieldRef<"User", 'String'>
+  readonly bankName: Prisma.FieldRef<"User", 'String'>
+  readonly bankBranchName: Prisma.FieldRef<"User", 'String'>
+  readonly bankAccountNumber: Prisma.FieldRef<"User", 'String'>
+  readonly bankIfscCode: Prisma.FieldRef<"User", 'String'>
+  readonly signatureImage: Prisma.FieldRef<"User", 'String'>
+  readonly invoiceNumberFormat: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly lastLoginAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -1921,6 +2305,30 @@ export type User$passwordResetTokensArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.PasswordResetTokenScalarFieldEnum | Prisma.PasswordResetTokenScalarFieldEnum[]
+}
+
+/**
+ * User.invoiceSequences
+ */
+export type User$invoiceSequencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InvoiceSequence
+   */
+  select?: Prisma.InvoiceSequenceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InvoiceSequence
+   */
+  omit?: Prisma.InvoiceSequenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceSequenceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceSequenceWhereInput
+  orderBy?: Prisma.InvoiceSequenceOrderByWithRelationInput | Prisma.InvoiceSequenceOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceSequenceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceSequenceScalarFieldEnum | Prisma.InvoiceSequenceScalarFieldEnum[]
 }
 
 /**

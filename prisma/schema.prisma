@@ -49,12 +49,29 @@ model User {
   sellerState     String?
   sellerStateCode String?
 
+  // Bank details printed on this user's invoices. Copied onto each invoice
+  // when it is saved (see Invoice bank snapshot).
+  bankName          String?
+  bankBranchName    String?
+  bankAccountNumber String?
+  bankIfscCode      String?
+
+  // Optional signature image (data: URL, resized client-side) shown above
+  // "Authorised Signatory" on this user's invoices. Read live from the
+  // owner, so it is not snapshotted onto invoices.
+  signatureImage String?
+
+  // Invoice number template, e.g. "KE/{FY}/{N3}" (see src/lib/invoiceNumber.ts).
+  // Null = default "{FY}/{N}" -> "26-27/01".
+  invoiceNumberFormat String?
+
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   lastLoginAt DateTime?
 
   invoices            Invoice[]
   passwordResetTokens PasswordResetToken[]
+  invoiceSequences    InvoiceSequence[]
 
   @@index([role])
 }
@@ -80,7 +97,12 @@ model PasswordResetToken {
 model Invoice {
   id Int @id @default(autoincrement())
 
-  invoiceNumber String   @unique
+  // Unique per owner: each user is a separate business with its own series.
+  invoiceNumber String
+  // Counter value used for an auto-numbered invoice (null when the number
+  // was entered manually). Lets deleting the latest invoice roll the
+  // owner's counter back so the next invoice reuses the number.
+  sequenceNumber Int?
   invoiceDate   DateTime
   financialYear String
 
@@ -102,6 +124,12 @@ model Invoice {
   sellerStateCode String?
   sellerEmail     String?
   sellerPhone     String?
+
+  // Bank snapshot, copied from the owner's bank details on every save
+  bankName          String?
+  bankBranchName    String?
+  bankAccountNumber String?
+  bankIfscCode      String?
 
   // Buyer snapshot
   buyerName      String
@@ -144,17 +172,24 @@ model Invoice {
   @@index([financialYear])
   @@index([status])
   @@index([buyerGSTIN])
+  @@unique([ownerId, invoiceNumber])
   @@index([ownerId])
 }
 
+// Auto-numbering counter, one per user per financial year.
 model InvoiceSequence {
   id Int @id @default(autoincrement())
 
-  financialYear String @unique
+  ownerId Int
+  owner   User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  financialYear String
   lastNumber    Int    @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([ownerId, financialYear])
 }
 
 model InvoiceItem {

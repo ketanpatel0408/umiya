@@ -8,10 +8,18 @@ export default function InvoiceHeader({ invoice }: { invoice: Invoice }) {
       </div>
 
       {invoice.sellerAddress && (
-        <div className="relative border-b border-current p-2 text-center text-sm">
-          {invoice.sellerAddress}
+        // Phone sits in its own column so a long address wraps instead of
+        // running underneath it. An invisible copy on the left keeps the
+        // address visually centred on the page.
+        <div className="flex items-end gap-2 border-b border-current p-2 text-sm">
           {invoice.sellerPhone && (
-            <span className="absolute right-1 bottom-2 font-semibold">
+            <span aria-hidden className="invisible shrink-0 whitespace-nowrap font-semibold">
+              Mo.: {invoice.sellerPhone}
+            </span>
+          )}
+          <span className="min-w-0 flex-1 text-center">{invoice.sellerAddress}</span>
+          {invoice.sellerPhone && (
+            <span className="shrink-0 whitespace-nowrap font-semibold">
               Mo.: {invoice.sellerPhone}
             </span>
           )}

@@ -39,6 +39,17 @@ export type Invoice = {
   sellerEmail: string | null;
   sellerPhone: string | null;
 
+  bankName: string | null;
+  bankBranchName: string | null;
+  bankAccountNumber: string | null;
+  bankIfscCode: string | null;
+
+  /** Live signature of the invoice owner (not snapshotted). */
+  owner?: { signatureImage: string | null } | null;
+
+  /** Newest invoice in the owner's series for its FY (only this one can be deleted). */
+  isLatest?: boolean;
+
   buyerName: string;
   buyerGSTIN: string | null;
   buyerPAN: string | null;
