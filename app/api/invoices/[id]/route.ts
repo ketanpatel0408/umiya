@@ -2,17 +2,25 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Prisma, InvoiceTaxType } from "@/generated/prisma/client";
 import { requireUser } from "@/lib/auth/guards";
+import {
+  CONTINUOUS_SEQUENCE_KEY,
+  formatInvoiceNumber,
+  sequenceKey,
+} from "@/lib/invoiceNumber";
 
 type Db = Pick<Prisma.TransactionClient, "invoice">;
 
-/** Id of the newest invoice in an owner's series for a financial year. */
+/**
+ * Id of the newest invoice in an owner's series: one financial year, or all
+ * years when the series key is CONTINUOUS_SEQUENCE_KEY.
+ */
 async function findLatestInvoiceId(
   db: Db,
   ownerId: number,
-  financialYear: string
+  key: string
 ): Promise<number | null> {
   const latest = await db.invoice.findFirst({
-    where: { ownerId, financialYear },
+    where: key === CONTINUOUS_SEQUENCE_KEY ? { ownerId } : { ownerId, financialYear: key },
     orderBy: { id: "desc" },
     select: { id: true },
   });
@@ -50,7 +58,13 @@ export async function GET(
         items: true,
         // Signature and the beneficiary toggle are read live from the owner,
         // so they reflect their profile.
-        owner: { select: { signatureImage: true, showBeneficiaryOnInvoice: true } },
+        owner: {
+          select: {
+            signatureImage: true,
+            showBeneficiaryOnInvoice: true,
+            invoiceNumberFormat: true,
+          },
+        },
       },
     });
 
@@ -64,7 +78,11 @@ export async function GET(
       );
     }
 
-    const latest = await findLatestInvoiceId(prisma, invoice.ownerId, invoice.financialYear);
+    const latest = await findLatestInvoiceId(
+      prisma,
+      invoice.ownerId,
+      sequenceKey(invoice.owner.invoiceNumberFormat, invoice.financialYear)
+    );
 
     return NextResponse.json(
       { ...invoice, isLatest: latest === invoice.id },
@@ -427,7 +445,13 @@ export async function DELETE(
 
   const invoice = await prisma.invoice.findUnique({
     where: { id: invoiceId },
-    select: { id: true, ownerId: true, financialYear: true, sequenceNumber: true },
+    select: {
+      id: true,
+      ownerId: true,
+      financialYear: true,
+      sequenceNumber: true,
+      owner: { select: { invoiceNumberFormat: true } },
+    },
   });
   if (
     !invoice ||
@@ -436,17 +460,20 @@ export async function DELETE(
     return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
   }
 
+  const format = invoice.owner.invoiceNumberFormat;
+  const key = sequenceKey(format, invoice.financialYear);
+
   try {
     await prisma.$transaction(async (tx) => {
       // Lock the owner's counter row so a concurrent create can't slip in
       // between the "is latest" check and the rollback.
       await tx.$executeRaw`
         SELECT 1 FROM "InvoiceSequence"
-        WHERE "ownerId" = ${invoice.ownerId} AND "financialYear" = ${invoice.financialYear}
+        WHERE "ownerId" = ${invoice.ownerId} AND "financialYear" = ${key}
         FOR UPDATE
       `;
 
-      const latestId = await findLatestInvoiceId(tx, invoice.ownerId, invoice.financialYear);
+      const latestId = await findLatestInvoiceId(tx, invoice.ownerId, key);
       if (latestId !== invoice.id) throw new NotLatestInvoiceError();
 
       // Items are removed by the ON DELETE CASCADE foreign key.
@@ -456,13 +483,31 @@ export async function DELETE(
       // the next invoice continues straight after it. This also closes gaps
       // left over from when all users shared one counter. Numbers taken by
       // manually entered invoices are skipped at create time.
-      const remaining = await tx.invoice.aggregate({
-        where: { ownerId: invoice.ownerId, financialYear: invoice.financialYear },
-        _max: { sequenceNumber: true },
-      });
+      let highest: number;
+      if (key === CONTINUOUS_SEQUENCE_KEY) {
+        // The running counter spans every year, but older invoices may come
+        // from a previous per-year format. Count only numbers this format
+        // produced.
+        const numbered = await tx.invoice.findMany({
+          where: { ownerId: invoice.ownerId, sequenceNumber: { not: null } },
+          select: { invoiceNumber: true, financialYear: true, sequenceNumber: true },
+        });
+        highest = numbered.reduce((max, inv) => {
+          const n = inv.sequenceNumber!;
+          return formatInvoiceNumber(format, inv.financialYear, n) === inv.invoiceNumber
+            ? Math.max(max, n)
+            : max;
+        }, 0);
+      } else {
+        const remaining = await tx.invoice.aggregate({
+          where: { ownerId: invoice.ownerId, financialYear: invoice.financialYear },
+          _max: { sequenceNumber: true },
+        });
+        highest = remaining._max.sequenceNumber ?? 0;
+      }
       await tx.invoiceSequence.updateMany({
-        where: { ownerId: invoice.ownerId, financialYear: invoice.financialYear },
-        data: { lastNumber: remaining._max.sequenceNumber ?? 0 },
+        where: { ownerId: invoice.ownerId, financialYear: key },
+        data: { lastNumber: highest },
       });
     });
 
@@ -470,7 +515,7 @@ export async function DELETE(
   } catch (error) {
     if (error instanceof NotLatestInvoiceError) {
       return NextResponse.json(
-        { error: "Only the latest invoice of a financial year can be deleted" },
+        { error: "Only the latest invoice in the series can be deleted" },
         { status: 409 }
       );
     }

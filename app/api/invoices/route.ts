@@ -4,6 +4,7 @@ import { Prisma, InvoiceTaxType } from "@/generated/prisma/client";
 import { requireUser } from "@/lib/auth/guards";
 import {
   formatInvoiceNumber,
+  sequenceKey,
   isValidManualInvoiceNumber,
 } from "@/lib/invoiceNumber";
 
@@ -25,20 +26,30 @@ export async function GET() {
         items: true,
         // Signature and the beneficiary toggle are read live from the owner,
         // so they reflect their profile.
-        owner: { select: { signatureImage: true, showBeneficiaryOnInvoice: true } },
+        owner: {
+          select: {
+            signatureImage: true,
+            showBeneficiaryOnInvoice: true,
+            invoiceNumberFormat: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
       },
     });
 
-    // Only the newest invoice in each owner's series (per FY) can be deleted.
-    const latest = await prisma.invoice.groupBy({
-      by: ["ownerId", "financialYear"],
-      where,
-      _max: { id: true },
-    });
-    const latestIds = new Set(latest.map((l) => l._max.id));
+    // Only the newest invoice in each owner's series can be deleted. A series
+    // is one financial year, or all years for a format without a year token.
+    const latestBySeries = new Map<string, number>();
+    for (const invoice of invoices) {
+      const key = `${invoice.ownerId}:${sequenceKey(
+        invoice.owner.invoiceNumberFormat,
+        invoice.financialYear
+      )}`;
+      latestBySeries.set(key, Math.max(latestBySeries.get(key) ?? 0, invoice.id));
+    }
+    const latestIds = new Set(latestBySeries.values());
 
     return NextResponse.json(
       invoices.map((invoice) => ({ ...invoice, isLatest: latestIds.has(invoice.id) })),
@@ -311,6 +322,7 @@ export async function POST(request: NextRequest) {
   const invoiceDate = new Date(body.invoiceDate as string);
   const financialYear = body.financialYear as string;
   const ownerId = auth.user.id;
+  const counterKey = sequenceKey(auth.user.invoiceNumberFormat, financialYear);
   const useExistingInvoiceNumber = Boolean(body.useExistingInvoiceNumber);
   const manualInvoiceNumber = useExistingInvoiceNumber
     ? (body.invoiceNumber as string).trim()
@@ -339,12 +351,13 @@ export async function POST(request: NextRequest) {
         // Atomic, per-user sequence allocation: upsert-then-increment in a
         // single statement avoids the read-modify-write race of SELECT + JS
         // increment + INSERT; Postgres row locking (implicit in UPDATE ...
-        // RETURNING) serializes concurrent requests for the same user + FY.
+        // RETURNING) serializes concurrent requests for the same user + series
+        // (the FY, or "ALL" for a format without a year token).
         // A number already taken (e.g. entered manually) is skipped.
         for (;;) {
           const rows = await tx.$queryRaw<{ lastNumber: number }[]>`
             INSERT INTO "InvoiceSequence" ("ownerId", "financialYear", "lastNumber", "createdAt", "updatedAt")
-            VALUES (${ownerId}, ${financialYear}, 1, NOW(), NOW())
+            VALUES (${ownerId}, ${counterKey}, 1, NOW(), NOW())
             ON CONFLICT ("ownerId", "financialYear")
             DO UPDATE SET "lastNumber" = "InvoiceSequence"."lastNumber" + 1, "updatedAt" = NOW()
             RETURNING "lastNumber"

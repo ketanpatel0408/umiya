@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   DEFAULT_INVOICE_NUMBER_FORMAT,
   formatInvoiceNumber,
+  hasYearToken,
   validateInvoiceNumberFormat,
 } from "@/lib/invoiceNumber";
 import { inputBase, labelBase } from "../components/ui";
@@ -87,7 +88,8 @@ export default function InvoiceNumberFormatInput({
           <p className="mt-1 text-xs text-slate-500">
             Tokens: <code>{"{FY}"}</code> 26-27, <code>{"{FY4}"}</code> 2026-27,{" "}
             <code>{"{YY}"}</code> 26, <code>{"{N}"}</code> 01, <code>{"{N3}"}</code> 001,{" "}
-            <code>{"{N4}"}</code> 0001. Must include one year token and one number token.
+            <code>{"{N4}"}</code> 0001. Must include one number token. Add a year token to
+            restart numbering every financial year.
           </p>
         </>
       )}
@@ -101,7 +103,9 @@ export default function InvoiceNumberFormatInput({
             {formatInvoiceNumber(format, fy, 1)}, {formatInvoiceNumber(format, fy, 2)}, ...
           </span>{" "}
           <span className="text-slate-500">
-            (restarts every financial year, separate for each user)
+            {hasYearToken(format)
+              ? "(restarts every financial year, separate for each user)"
+              : "(keeps counting across financial years, separate for each user)"}
           </span>
         </p>
       )}

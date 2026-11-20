@@ -50,7 +50,7 @@ export type Invoice = {
     showBeneficiaryOnInvoice?: boolean;
   } | null;
 
-  /** Newest invoice in the owner's series for its FY (only this one can be deleted). */
+  /** Newest invoice in the owner's series: its FY, or all years for a format without a year token (only this one can be deleted). */
   isLatest?: boolean;
 
   buyerName: string;
