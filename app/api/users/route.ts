@@ -36,6 +36,7 @@ export async function GET() {
       bankIfscCode: true,
       signatureImage: true,
       invoiceNumberFormat: true,
+      showBeneficiaryOnInvoice: true,
     },
   });
 
@@ -61,6 +62,7 @@ type IncomingUser = {
   bankIfscCode?: unknown;
   signatureImage?: unknown;
   invoiceNumberFormat?: unknown;
+  showBeneficiaryOnInvoice?: unknown;
 };
 
 function isNonEmptyString(value: unknown): value is string {
@@ -102,6 +104,12 @@ export async function POST(request: NextRequest) {
     const formatError = validateInvoiceNumberFormat(invoiceNumberFormat);
     if (formatError) errors.push(`invoiceNumberFormat: ${formatError}`);
   }
+  if (
+    body.showBeneficiaryOnInvoice !== undefined &&
+    typeof body.showBeneficiaryOnInvoice !== "boolean"
+  ) {
+    errors.push("showBeneficiaryOnInvoice must be a boolean");
+  }
   const role = isNonEmptyString(body.role) ? body.role : "USER";
   if (!VALID_ROLES.includes(role as UserRole)) {
     errors.push(`role must be one of: ${VALID_ROLES.join(", ")}`);
@@ -136,6 +144,7 @@ export async function POST(request: NextRequest) {
         bankIfscCode: optionalString(body.bankIfscCode),
         signatureImage,
         invoiceNumberFormat,
+        showBeneficiaryOnInvoice: body.showBeneficiaryOnInvoice === true,
       },
       select: {
         id: true,
@@ -158,6 +167,7 @@ export async function POST(request: NextRequest) {
         bankIfscCode: true,
         signatureImage: true,
         invoiceNumberFormat: true,
+        showBeneficiaryOnInvoice: true,
       },
     });
 

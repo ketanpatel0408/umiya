@@ -54,6 +54,7 @@ export type UserMinAggregateOutputType = {
   bankAccountNumber: string | null
   bankIfscCode: string | null
   signatureImage: string | null
+  showBeneficiaryOnInvoice: boolean | null
   invoiceNumberFormat: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -80,6 +81,7 @@ export type UserMaxAggregateOutputType = {
   bankAccountNumber: string | null
   bankIfscCode: string | null
   signatureImage: string | null
+  showBeneficiaryOnInvoice: boolean | null
   invoiceNumberFormat: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -106,6 +108,7 @@ export type UserCountAggregateOutputType = {
   bankAccountNumber: number
   bankIfscCode: number
   signatureImage: number
+  showBeneficiaryOnInvoice: number
   invoiceNumberFormat: number
   createdAt: number
   updatedAt: number
@@ -142,6 +145,7 @@ export type UserMinAggregateInputType = {
   bankAccountNumber?: true
   bankIfscCode?: true
   signatureImage?: true
+  showBeneficiaryOnInvoice?: true
   invoiceNumberFormat?: true
   createdAt?: true
   updatedAt?: true
@@ -168,6 +172,7 @@ export type UserMaxAggregateInputType = {
   bankAccountNumber?: true
   bankIfscCode?: true
   signatureImage?: true
+  showBeneficiaryOnInvoice?: true
   invoiceNumberFormat?: true
   createdAt?: true
   updatedAt?: true
@@ -194,6 +199,7 @@ export type UserCountAggregateInputType = {
   bankAccountNumber?: true
   bankIfscCode?: true
   signatureImage?: true
+  showBeneficiaryOnInvoice?: true
   invoiceNumberFormat?: true
   createdAt?: true
   updatedAt?: true
@@ -307,6 +313,7 @@ export type UserGroupByOutputType = {
   bankAccountNumber: string | null
   bankIfscCode: string | null
   signatureImage: string | null
+  showBeneficiaryOnInvoice: boolean
   invoiceNumberFormat: string | null
   createdAt: Date
   updatedAt: Date
@@ -356,6 +363,7 @@ export type UserWhereInput = {
   bankAccountNumber?: Prisma.StringNullableFilter<"User"> | string | null
   bankIfscCode?: Prisma.StringNullableFilter<"User"> | string | null
   signatureImage?: Prisma.StringNullableFilter<"User"> | string | null
+  showBeneficiaryOnInvoice?: Prisma.BoolFilter<"User"> | boolean
   invoiceNumberFormat?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -385,6 +393,7 @@ export type UserOrderByWithRelationInput = {
   bankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   bankIfscCode?: Prisma.SortOrderInput | Prisma.SortOrder
   signatureImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  showBeneficiaryOnInvoice?: Prisma.SortOrder
   invoiceNumberFormat?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -417,6 +426,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   bankAccountNumber?: Prisma.StringNullableFilter<"User"> | string | null
   bankIfscCode?: Prisma.StringNullableFilter<"User"> | string | null
   signatureImage?: Prisma.StringNullableFilter<"User"> | string | null
+  showBeneficiaryOnInvoice?: Prisma.BoolFilter<"User"> | boolean
   invoiceNumberFormat?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -446,6 +456,7 @@ export type UserOrderByWithAggregationInput = {
   bankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   bankIfscCode?: Prisma.SortOrderInput | Prisma.SortOrder
   signatureImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  showBeneficiaryOnInvoice?: Prisma.SortOrder
   invoiceNumberFormat?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -480,6 +491,7 @@ export type UserScalarWhereWithAggregatesInput = {
   bankAccountNumber?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   bankIfscCode?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   signatureImage?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  showBeneficiaryOnInvoice?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   invoiceNumberFormat?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -505,6 +517,7 @@ export type UserCreateInput = {
   bankAccountNumber?: string | null
   bankIfscCode?: string | null
   signatureImage?: string | null
+  showBeneficiaryOnInvoice?: boolean
   invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -534,6 +547,7 @@ export type UserUncheckedCreateInput = {
   bankAccountNumber?: string | null
   bankIfscCode?: string | null
   signatureImage?: string | null
+  showBeneficiaryOnInvoice?: boolean
   invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -562,6 +576,7 @@ export type UserUpdateInput = {
   bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  showBeneficiaryOnInvoice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -591,6 +606,7 @@ export type UserUncheckedUpdateInput = {
   bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  showBeneficiaryOnInvoice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -620,6 +636,7 @@ export type UserCreateManyInput = {
   bankAccountNumber?: string | null
   bankIfscCode?: string | null
   signatureImage?: string | null
+  showBeneficiaryOnInvoice?: boolean
   invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -645,6 +662,7 @@ export type UserUpdateManyMutationInput = {
   bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  showBeneficiaryOnInvoice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -671,6 +689,7 @@ export type UserUncheckedUpdateManyInput = {
   bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  showBeneficiaryOnInvoice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -697,6 +716,7 @@ export type UserCountOrderByAggregateInput = {
   bankAccountNumber?: Prisma.SortOrder
   bankIfscCode?: Prisma.SortOrder
   signatureImage?: Prisma.SortOrder
+  showBeneficiaryOnInvoice?: Prisma.SortOrder
   invoiceNumberFormat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -727,6 +747,7 @@ export type UserMaxOrderByAggregateInput = {
   bankAccountNumber?: Prisma.SortOrder
   bankIfscCode?: Prisma.SortOrder
   signatureImage?: Prisma.SortOrder
+  showBeneficiaryOnInvoice?: Prisma.SortOrder
   invoiceNumberFormat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -753,6 +774,7 @@ export type UserMinOrderByAggregateInput = {
   bankAccountNumber?: Prisma.SortOrder
   bankIfscCode?: Prisma.SortOrder
   signatureImage?: Prisma.SortOrder
+  showBeneficiaryOnInvoice?: Prisma.SortOrder
   invoiceNumberFormat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -861,6 +883,7 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   bankAccountNumber?: string | null
   bankIfscCode?: string | null
   signatureImage?: string | null
+  showBeneficiaryOnInvoice?: boolean
   invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -889,6 +912,7 @@ export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   bankAccountNumber?: string | null
   bankIfscCode?: string | null
   signatureImage?: string | null
+  showBeneficiaryOnInvoice?: boolean
   invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -932,6 +956,7 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  showBeneficiaryOnInvoice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -960,6 +985,7 @@ export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  showBeneficiaryOnInvoice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -987,6 +1013,7 @@ export type UserCreateWithoutInvoicesInput = {
   bankAccountNumber?: string | null
   bankIfscCode?: string | null
   signatureImage?: string | null
+  showBeneficiaryOnInvoice?: boolean
   invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1015,6 +1042,7 @@ export type UserUncheckedCreateWithoutInvoicesInput = {
   bankAccountNumber?: string | null
   bankIfscCode?: string | null
   signatureImage?: string | null
+  showBeneficiaryOnInvoice?: boolean
   invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1058,6 +1086,7 @@ export type UserUpdateWithoutInvoicesInput = {
   bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  showBeneficiaryOnInvoice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1086,6 +1115,7 @@ export type UserUncheckedUpdateWithoutInvoicesInput = {
   bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  showBeneficiaryOnInvoice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1113,6 +1143,7 @@ export type UserCreateWithoutInvoiceSequencesInput = {
   bankAccountNumber?: string | null
   bankIfscCode?: string | null
   signatureImage?: string | null
+  showBeneficiaryOnInvoice?: boolean
   invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1141,6 +1172,7 @@ export type UserUncheckedCreateWithoutInvoiceSequencesInput = {
   bankAccountNumber?: string | null
   bankIfscCode?: string | null
   signatureImage?: string | null
+  showBeneficiaryOnInvoice?: boolean
   invoiceNumberFormat?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1184,6 +1216,7 @@ export type UserUpdateWithoutInvoiceSequencesInput = {
   bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  showBeneficiaryOnInvoice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1212,6 +1245,7 @@ export type UserUncheckedUpdateWithoutInvoiceSequencesInput = {
   bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bankIfscCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  showBeneficiaryOnInvoice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   invoiceNumberFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1289,6 +1323,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   bankAccountNumber?: boolean
   bankIfscCode?: boolean
   signatureImage?: boolean
+  showBeneficiaryOnInvoice?: boolean
   invoiceNumberFormat?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1319,6 +1354,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   bankAccountNumber?: boolean
   bankIfscCode?: boolean
   signatureImage?: boolean
+  showBeneficiaryOnInvoice?: boolean
   invoiceNumberFormat?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1345,6 +1381,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   bankAccountNumber?: boolean
   bankIfscCode?: boolean
   signatureImage?: boolean
+  showBeneficiaryOnInvoice?: boolean
   invoiceNumberFormat?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1371,13 +1408,14 @@ export type UserSelectScalar = {
   bankAccountNumber?: boolean
   bankIfscCode?: boolean
   signatureImage?: boolean
+  showBeneficiaryOnInvoice?: boolean
   invoiceNumberFormat?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lastLoginAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "passwordHash" | "fullName" | "email" | "role" | "isActive" | "sellerName" | "sellerPhone" | "sellerAddress" | "sellerGSTIN" | "sellerPAN" | "sellerState" | "sellerStateCode" | "bankName" | "bankBranchName" | "bankAccountNumber" | "bankIfscCode" | "signatureImage" | "invoiceNumberFormat" | "createdAt" | "updatedAt" | "lastLoginAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "passwordHash" | "fullName" | "email" | "role" | "isActive" | "sellerName" | "sellerPhone" | "sellerAddress" | "sellerGSTIN" | "sellerPAN" | "sellerState" | "sellerStateCode" | "bankName" | "bankBranchName" | "bankAccountNumber" | "bankIfscCode" | "signatureImage" | "showBeneficiaryOnInvoice" | "invoiceNumberFormat" | "createdAt" | "updatedAt" | "lastLoginAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   invoices?: boolean | Prisma.User$invoicesArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
@@ -1414,6 +1452,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     bankAccountNumber: string | null
     bankIfscCode: string | null
     signatureImage: string | null
+    showBeneficiaryOnInvoice: boolean
     invoiceNumberFormat: string | null
     createdAt: Date
     updatedAt: Date
@@ -1863,6 +1902,7 @@ export interface UserFieldRefs {
   readonly bankAccountNumber: Prisma.FieldRef<"User", 'String'>
   readonly bankIfscCode: Prisma.FieldRef<"User", 'String'>
   readonly signatureImage: Prisma.FieldRef<"User", 'String'>
+  readonly showBeneficiaryOnInvoice: Prisma.FieldRef<"User", 'Boolean'>
   readonly invoiceNumberFormat: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>

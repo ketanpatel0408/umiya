@@ -22,6 +22,7 @@ export type ManagedUser = {
   bankIfscCode: string | null;
   signatureImage: string | null;
   invoiceNumberFormat: string | null;
+  showBeneficiaryOnInvoice: boolean;
 };
 
 export type SellerDetailsForm = {
@@ -40,6 +41,8 @@ export type SellerDetailsForm = {
   signatureImage: string;
   /** "" = default format. */
   invoiceNumberFormat: string;
+  /** Ask for Beneficiary Name / TIN No. on invoices and print them. */
+  showBeneficiaryOnInvoice: boolean;
 };
 
 export function emptySellerDetails(): SellerDetailsForm {
@@ -57,5 +60,6 @@ export function emptySellerDetails(): SellerDetailsForm {
     bankIfscCode: "",
     signatureImage: "",
     invoiceNumberFormat: "",
+    showBeneficiaryOnInvoice: false,
   };
 }
