@@ -5,6 +5,7 @@ import {
   DEFAULT_INVOICE_NUMBER_FORMAT,
   formatInvoiceNumber,
   hasYearToken,
+  suggestInvoiceNumberFormat,
   validateInvoiceNumberFormat,
 } from "@/lib/invoiceNumber";
 import { inputBase, labelBase } from "../components/ui";
@@ -43,6 +44,7 @@ export default function InvoiceNumberFormatInput({
   const [custom, setCustom] = useState(() => !PRESETS.includes(format));
   const fy = currentFinancialYear();
   const error = validateInvoiceNumberFormat(format);
+  const suggestion = error ? suggestInvoiceNumberFormat(format) : null;
 
   function handleSelect(selected: string) {
     if (selected === CUSTOM) {
@@ -95,7 +97,24 @@ export default function InvoiceNumberFormatInput({
       )}
 
       {error ? (
-        <p className="mt-1 text-xs text-red-600">{error}</p>
+        <>
+          <p className="mt-1 text-xs text-red-600">{error}</p>
+          {suggestion && (
+            <p className="mt-1.5 flex flex-wrap items-center gap-2 text-xs text-slate-700">
+              <span>
+                Did you mean <code className="font-semibold">{suggestion}</code>? (gives{" "}
+                {formatInvoiceNumber(suggestion, fy, 1)}, {formatInvoiceNumber(suggestion, fy, 2)}, ...)
+              </span>
+              <button
+                type="button"
+                onClick={() => onChange(suggestion)}
+                className="cursor-pointer rounded-md border border-indigo-200 bg-indigo-50 px-2 py-0.5 font-medium text-indigo-700 hover:bg-indigo-100"
+              >
+                Use {suggestion}
+              </button>
+            </p>
+          )}
+        </>
       ) : (
         <p className="mt-1 text-xs text-slate-600">
           Preview:{" "}
