@@ -7,6 +7,7 @@ import ConfirmDialog from "@/components/common/ConfirmDialog";
 import PasswordInput from "@/components/common/PasswordInput";
 import SignatureInput from "./SignatureInput";
 import InvoiceNumberFormatInput from "./InvoiceNumberFormatInput";
+import { validateInvoiceNumberFormat } from "@/lib/invoiceNumber";
 import BeneficiaryToggle from "./BeneficiaryToggle";
 import { btnPrimary, btnSecondary, btnSmall, initials, inputBase } from "../components/ui";
 import Select from "../components/Select";
@@ -58,6 +59,8 @@ export default function UserRow({
     value: SellerDetailsForm[K]
   ) {
     setSeller((prev) => ({ ...prev, [key]: value }));
+    // Drop a stale "Invoice Number Format" error once the format is edited.
+    if (key === "invoiceNumberFormat") setError(null);
   }
 
   async function patch(body: Record<string, unknown>) {
@@ -87,6 +90,13 @@ export default function UserRow({
   }
 
   async function handleSaveSeller() {
+    const formatError = seller.invoiceNumberFormat.trim()
+      ? validateInvoiceNumberFormat(seller.invoiceNumberFormat.trim())
+      : null;
+    if (formatError) {
+      setError(`Invoice Number Format: ${formatError}`);
+      return;
+    }
     const ok = await patch(seller);
     if (ok) setEditing(false);
   }
@@ -357,6 +367,7 @@ export default function UserRow({
               >
                 Cancel
               </button>
+              {error && <p className="self-center text-xs text-red-600">{error}</p>}
             </div>
           </td>
         </tr>

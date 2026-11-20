@@ -39,6 +39,24 @@ export function validateInvoiceNumberFormat(format: string): string | null {
   return null;
 }
 
+/**
+ * Fix for the common mistake of typing a real number instead of a template:
+ * "NPD/01" -> "NPD/{N}", "NPD/001" -> "NPD/{N3}", "NPD" -> "NPD/{N}".
+ * Returns null when the format already has a number token or no fix is found.
+ */
+export function suggestInvoiceNumberFormat(format: string): string | null {
+  const trimmed = format.trim();
+  if (!trimmed) return null;
+  const tokens = [...trimmed.matchAll(TOKEN_PATTERN)].map((m) => m[1]);
+  if (tokens.some((t) => t in SEQ_TOKENS)) return null;
+  const digits = trimmed.match(/\d+$/);
+  const suggestion = digits
+    ? trimmed.slice(0, -digits[0].length) +
+      (digits[0].length <= 2 ? "{N}" : digits[0].length === 3 ? "{N3}" : "{N4}")
+    : `${trimmed.replace(/[/\-_. ]+$/, "")}/{N}`;
+  return validateInvoiceNumberFormat(suggestion) === null ? suggestion : null;
+}
+
 /** True when the template restarts its sequence every financial year. */
 export function hasYearToken(format: string | null | undefined): boolean {
   const tokens = [...(format || DEFAULT_INVOICE_NUMBER_FORMAT).matchAll(TOKEN_PATTERN)];

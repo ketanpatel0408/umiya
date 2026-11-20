@@ -7,6 +7,7 @@ import PasswordInput from "@/components/common/PasswordInput";
 import { UserPlus, Store, Landmark } from "lucide-react";
 import SignatureInput from "./SignatureInput";
 import InvoiceNumberFormatInput from "./InvoiceNumberFormatInput";
+import { validateInvoiceNumberFormat } from "@/lib/invoiceNumber";
 import BeneficiaryToggle from "./BeneficiaryToggle";
 import { Alert, CardHeader, btnPrimary, btnSecondary, inputBase, labelBase } from "../components/ui";
 import Select from "../components/Select";
@@ -33,6 +34,8 @@ export default function NewUserForm({
     value: SellerDetailsForm[K]
   ) {
     setSeller((prev) => ({ ...prev, [key]: value }));
+    // Drop a stale "Invoice Number Format" error once the format is edited.
+    if (key === "invoiceNumberFormat") setError(null);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -40,6 +43,13 @@ export default function NewUserForm({
     setError(null);
     if (password !== confirmPassword) {
       setError("Password and Confirm Password do not match.");
+      return;
+    }
+    const formatError = seller.invoiceNumberFormat.trim()
+      ? validateInvoiceNumberFormat(seller.invoiceNumberFormat.trim())
+      : null;
+    if (formatError) {
+      setError(`Invoice Number Format: ${formatError}`);
       return;
     }
     setSaving(true);
@@ -198,7 +208,9 @@ export default function NewUserForm({
         />
       </div>
 
-      <div className="flex justify-end gap-3 border-t border-slate-100 bg-slate-50/60 px-5 py-4">
+      <div className="flex items-center justify-end gap-3 border-t border-slate-100 bg-slate-50/60 px-5 py-4">
+        {/* Repeated here: the top alert is out of view when saving at the bottom. */}
+        {error && <p className="mr-auto text-sm text-red-600">{error}</p>}
         <button type="button" onClick={onCancel} className={btnSecondary}>
           Cancel
         </button>
