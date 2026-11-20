@@ -9,8 +9,9 @@
  *   {N3}   sequence, min 3 digits  1 -> "001"
  *   {N4}   sequence, min 4 digits  1 -> "0001"
  *
- * The sequence restarts every financial year, so a template must contain
- * exactly one {N..} token and at least one year token to stay unique.
+ * A template must contain exactly one {N..} token. With a year token the
+ * sequence restarts every financial year; without one (e.g. "NPD/{N}") it
+ * keeps running across years, so numbers never repeat.
  */
 
 export const DEFAULT_INVOICE_NUMBER_FORMAT = "{FY}/{N}";
@@ -29,9 +30,6 @@ export function validateInvoiceNumberFormat(format: string): string | null {
   if (unknown.length > 0) return `Unknown token {${unknown[0]}}`;
   const seqCount = tokens.filter((t) => t in SEQ_TOKENS).length;
   if (seqCount !== 1) return "Format must contain exactly one of {N}, {N3} or {N4}";
-  if (!tokens.some((t) => YEAR_TOKENS.includes(t))) {
-    return "Format must contain a year token: {FY}, {FY4} or {YY}";
-  }
   if (!LITERAL_PATTERN.test(format.replace(TOKEN_PATTERN, ""))) {
     return "Only letters, numbers, spaces and / - _ . are allowed";
   }
@@ -39,6 +37,25 @@ export function validateInvoiceNumberFormat(format: string): string | null {
     return "Format is too long";
   }
   return null;
+}
+
+/** True when the template restarts its sequence every financial year. */
+export function hasYearToken(format: string | null | undefined): boolean {
+  const tokens = [...(format || DEFAULT_INVOICE_NUMBER_FORMAT).matchAll(TOKEN_PATTERN)];
+  return tokens.some((m) => YEAR_TOKENS.includes(m[1]));
+}
+
+/**
+ * InvoiceSequence.financialYear value used as the series key: one counter per
+ * financial year, or a single running counter for formats without a year.
+ */
+export const CONTINUOUS_SEQUENCE_KEY = "ALL";
+
+export function sequenceKey(
+  format: string | null | undefined,
+  financialYear: string
+): string {
+  return hasYearToken(format) ? financialYear : CONTINUOUS_SEQUENCE_KEY;
 }
 
 /** Builds an invoice number from a template, e.g. ("KE/{FY}/{N3}", "2026-27", 5) -> "KE/26-27/005". */
