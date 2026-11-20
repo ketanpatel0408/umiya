@@ -38,6 +38,10 @@ export default function CreateInvoicePage() {
     buyerState: "",
     buyerStateCode: "",
 
+    showBeneficiary: false,
+    beneficiaryName: "",
+    beneficiaryTin: "",
+
     deliveryNote: "",
     buyerOrderNo: "",
     buyerOrderDate: "",
@@ -78,6 +82,7 @@ export default function CreateInvoicePage() {
           sellerPAN: user.sellerPAN ?? "",
           sellerState: user.sellerState ?? "",
           sellerStateCode: user.sellerStateCode ?? "",
+          showBeneficiary: user.showBeneficiaryOnInvoice === true,
         }));
         setSellerStatus("ready");
       } catch {

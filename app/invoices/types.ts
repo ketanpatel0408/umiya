@@ -44,8 +44,11 @@ export type Invoice = {
   bankAccountNumber: string | null;
   bankIfscCode: string | null;
 
-  /** Live signature of the invoice owner (not snapshotted). */
-  owner?: { signatureImage: string | null } | null;
+  /** Live signature and beneficiary toggle of the invoice owner (not snapshotted). */
+  owner?: {
+    signatureImage: string | null;
+    showBeneficiaryOnInvoice?: boolean;
+  } | null;
 
   /** Newest invoice in the owner's series for its FY (only this one can be deleted). */
   isLatest?: boolean;
@@ -59,6 +62,9 @@ export type Invoice = {
   buyerEmail: string | null;
   buyerPhone: string | null;
   buyerAadhaar: string | null;
+
+  beneficiaryName: string | null;
+  beneficiaryTin: string | null;
 
   deliveryNote: string | null;
   buyerOrderNo: string | null;

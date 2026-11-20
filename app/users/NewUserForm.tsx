@@ -7,6 +7,7 @@ import PasswordInput from "@/components/common/PasswordInput";
 import { UserPlus, Store, Landmark } from "lucide-react";
 import SignatureInput from "./SignatureInput";
 import InvoiceNumberFormatInput from "./InvoiceNumberFormatInput";
+import BeneficiaryToggle from "./BeneficiaryToggle";
 import { Alert, CardHeader, btnPrimary, btnSecondary, inputBase, labelBase } from "../components/ui";
 import Select from "../components/Select";
 
@@ -189,6 +190,11 @@ export default function NewUserForm({
         <InvoiceNumberFormatInput
           value={seller.invoiceNumberFormat}
           onChange={(v) => updateSeller("invoiceNumberFormat", v)}
+        />
+        <BeneficiaryToggle
+          checked={seller.showBeneficiaryOnInvoice}
+          onChange={(v) => updateSeller("showBeneficiaryOnInvoice", v)}
+          disabled={saving}
         />
       </div>
 

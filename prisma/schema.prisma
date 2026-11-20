@@ -61,6 +61,11 @@ model User {
   // owner, so it is not snapshotted onto invoices.
   signatureImage String?
 
+  // Client-specific: when on, the Create/Edit Invoice form asks for a
+  // Beneficiary Name and TIN No. and the invoice prints them under the buyer
+  // GSTIN. Read live from the owner, so turning it off hides them everywhere.
+  showBeneficiaryOnInvoice Boolean @default(false)
+
   // Invoice number template, e.g. "KE/{FY}/{N3}" (see src/lib/invoiceNumber.ts).
   // Null = default "{FY}/{N}" -> "26-27/01".
   invoiceNumberFormat String?
@@ -141,6 +146,11 @@ model Invoice {
   buyerEmail     String?
   buyerPhone     String?
   buyerAadhaar   String?
+
+  // Printed under the buyer GSTIN only while the owner's
+  // showBeneficiaryOnInvoice is on.
+  beneficiaryName String?
+  beneficiaryTin  String?
 
   // Additional invoice metadata (Umiya template fields)
   deliveryNote      String?

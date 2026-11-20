@@ -21,6 +21,7 @@ export type CurrentUser = {
   bankAccountNumber: string | null;
   bankIfscCode: string | null;
   invoiceNumberFormat: string | null;
+  showBeneficiaryOnInvoice: boolean;
 };
 
 /**
@@ -58,6 +59,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     bankAccountNumber: user.bankAccountNumber,
     bankIfscCode: user.bankIfscCode,
     invoiceNumberFormat: user.invoiceNumberFormat,
+    showBeneficiaryOnInvoice: user.showBeneficiaryOnInvoice,
   };
 }
 

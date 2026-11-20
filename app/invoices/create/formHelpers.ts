@@ -66,6 +66,11 @@ export type InvoiceFormState = {
   buyerState: string;
   buyerStateCode: string;
 
+  /** Owner's toggle: show/save Beneficiary Name and TIN No. (not sent as a field). */
+  showBeneficiary: boolean;
+  beneficiaryName: string;
+  beneficiaryTin: string;
+
   deliveryNote: string;
   buyerOrderNo: string;
   buyerOrderDate: string;
@@ -250,6 +255,10 @@ export function buildPreviewInvoice(form: InvoiceFormState) {
     buyerPhone: null,
     buyerAadhaar: form.buyerAadhaar || null,
 
+    beneficiaryName: form.beneficiaryName || null,
+    beneficiaryTin: form.beneficiaryTin || null,
+    owner: { signatureImage: null, showBeneficiaryOnInvoice: form.showBeneficiary },
+
     deliveryNote: form.deliveryNote || null,
     buyerOrderNo: form.buyerOrderNo || null,
     buyerOrderDate: form.buyerOrderDate || null,
@@ -304,6 +313,10 @@ export function toFormState(invoice: Invoice): InvoiceFormState {
     buyerAadhaar: invoice.buyerAadhaar ?? "",
     buyerState: invoice.buyerState ?? "",
     buyerStateCode: invoice.buyerStateCode ?? "",
+
+    showBeneficiary: invoice.owner?.showBeneficiaryOnInvoice ?? false,
+    beneficiaryName: invoice.beneficiaryName ?? "",
+    beneficiaryTin: invoice.beneficiaryTin ?? "",
 
     deliveryNote: invoice.deliveryNote ?? "",
     buyerOrderNo: invoice.buyerOrderNo ?? "",

@@ -28,6 +28,7 @@ const USER_SELECT = {
   bankIfscCode: true,
   signatureImage: true,
   invoiceNumberFormat: true,
+  showBeneficiaryOnInvoice: true,
 } as const;
 
 const VALID_ROLES = Object.values(UserRole);
@@ -51,6 +52,7 @@ type IncomingPatch = {
   bankIfscCode?: unknown;
   signatureImage?: unknown;
   invoiceNumberFormat?: unknown;
+  showBeneficiaryOnInvoice?: unknown;
 };
 
 const SELLER_FIELDS = [
@@ -160,6 +162,14 @@ export async function PATCH(
       const formatError = validateInvoiceNumberFormat(trimmed);
       if (formatError) errors.push(`invoiceNumberFormat: ${formatError}`);
       else data.invoiceNumberFormat = trimmed;
+    }
+  }
+
+  if (body.showBeneficiaryOnInvoice !== undefined) {
+    if (typeof body.showBeneficiaryOnInvoice !== "boolean") {
+      errors.push("showBeneficiaryOnInvoice must be a boolean");
+    } else {
+      data.showBeneficiaryOnInvoice = body.showBeneficiaryOnInvoice;
     }
   }
 

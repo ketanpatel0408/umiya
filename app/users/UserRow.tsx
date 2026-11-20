@@ -7,6 +7,7 @@ import ConfirmDialog from "@/components/common/ConfirmDialog";
 import PasswordInput from "@/components/common/PasswordInput";
 import SignatureInput from "./SignatureInput";
 import InvoiceNumberFormatInput from "./InvoiceNumberFormatInput";
+import BeneficiaryToggle from "./BeneficiaryToggle";
 import { btnPrimary, btnSecondary, btnSmall, initials, inputBase } from "../components/ui";
 import Select from "../components/Select";
 
@@ -27,6 +28,7 @@ function sellerFromUser(user: ManagedUser): SellerDetailsForm {
     bankIfscCode: user.bankIfscCode ?? "",
     signatureImage: user.signatureImage ?? "",
     invoiceNumberFormat: user.invoiceNumberFormat ?? "",
+    showBeneficiaryOnInvoice: user.showBeneficiaryOnInvoice,
   };
 }
 
@@ -334,6 +336,11 @@ export default function UserRow({
               <InvoiceNumberFormatInput
                 value={seller.invoiceNumberFormat}
                 onChange={(v) => updateSeller("invoiceNumberFormat", v)}
+              />
+              <BeneficiaryToggle
+                checked={seller.showBeneficiaryOnInvoice}
+                onChange={(v) => updateSeller("showBeneficiaryOnInvoice", v)}
+                disabled={busy}
               />
             </div>
             <div className="mt-3 flex gap-2">

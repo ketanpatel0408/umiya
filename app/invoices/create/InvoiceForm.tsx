@@ -13,7 +13,7 @@ import {
   type InvoiceFormState,
 } from "./formHelpers";
 import { SellerSection, BuyerSection, InvoiceDetailsSection } from "./FormSections";
-import { MetadataSection, NotesSection } from "./FormSectionsExtra";
+import { MetadataSection, NotesSection, BeneficiarySection } from "./FormSectionsExtra";
 import ItemsSection from "./ItemsSection";
 import TotalsSummary from "./TotalsSummary";
 import InvoiceDocument from "../[id]/InvoiceDocument";
@@ -100,6 +100,10 @@ export default function InvoiceForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          showBeneficiary: undefined,
+          // Keep saved values untouched when the toggle is off.
+          beneficiaryName: form.showBeneficiary ? form.beneficiaryName : undefined,
+          beneficiaryTin: form.showBeneficiary ? form.beneficiaryTin : undefined,
           items: form.items.map((it) => ({
             description: it.description,
             hsn: it.hsn || null,
@@ -182,6 +186,9 @@ export default function InvoiceForm({
               sellerStatus={sellerStatus}
             />
             <BuyerSection form={form} updateField={updateField} />
+            {form.showBeneficiary && (
+              <BeneficiarySection form={form} updateField={updateField} />
+            )}
             <MetadataSection form={form} updateField={updateField} />
             <ItemsSection
               items={form.items}

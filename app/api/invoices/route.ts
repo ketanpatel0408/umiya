@@ -7,6 +7,11 @@ import {
   isValidManualInvoiceNumber,
 } from "@/lib/invoiceNumber";
 
+/** Trimmed string, or null when missing/blank/not a string. */
+function optionalText(value: unknown): string | null {
+  return typeof value === "string" && value.trim() !== "" ? value.trim() : null;
+}
+
 export async function GET() {
   const auth = await requireUser();
   if (!auth.ok) return auth.response;
@@ -18,8 +23,9 @@ export async function GET() {
       where,
       include: {
         items: true,
-        // Signature is read live from the owner, so it reflects their profile.
-        owner: { select: { signatureImage: true } },
+        // Signature and the beneficiary toggle are read live from the owner,
+        // so they reflect their profile.
+        owner: { select: { signatureImage: true, showBeneficiaryOnInvoice: true } },
       },
       orderBy: {
         createdAt: "desc",
@@ -106,6 +112,8 @@ type IncomingInvoice = {
   buyerEmail?: unknown;
   buyerPhone?: unknown;
   buyerAadhaar?: unknown;
+  beneficiaryName?: unknown;
+  beneficiaryTin?: unknown;
 
   deliveryNote?: unknown;
   buyerOrderNo?: unknown;
@@ -395,6 +403,8 @@ export async function POST(request: NextRequest) {
           buyerEmail: (body.buyerEmail as string | null | undefined) ?? null,
           buyerPhone: (body.buyerPhone as string | null | undefined) ?? null,
           buyerAadhaar: (body.buyerAadhaar as string | null | undefined) ?? null,
+          beneficiaryName: optionalText(body.beneficiaryName),
+          beneficiaryTin: optionalText(body.beneficiaryTin),
 
           deliveryNote: (body.deliveryNote as string | null | undefined) ?? null,
           buyerOrderNo: (body.buyerOrderNo as string | null | undefined) ?? null,

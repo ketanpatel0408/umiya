@@ -18,6 +18,20 @@ export default function InvoiceMeta({ invoice }: { invoice: Invoice }) {
           <p className="font-semibold whitespace-nowrap">GSTIN No. :</p>
           <span className="ml-3">{invoice.buyerGSTIN ?? ""}</span>
         </div>
+        {/* Client-specific (owner toggle). Sits in the blank space beside the
+            dispatch grid, so the row height and page layout stay the same. */}
+        {invoice.owner?.showBeneficiaryOnInvoice && (
+          <div className="px-1">
+            <div className="flex">
+              <p className="font-semibold whitespace-nowrap">Beneficiary Name :</p>
+              <span className="ml-3 uppercase">{invoice.beneficiaryName ?? ""}</span>
+            </div>
+            <div className="mt-1 flex">
+              <p className="font-semibold whitespace-nowrap">TIN No. :</p>
+              <span className="ml-3">{invoice.beneficiaryTin ?? ""}</span>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="w-5/12">

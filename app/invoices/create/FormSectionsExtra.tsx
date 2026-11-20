@@ -1,4 +1,4 @@
-import { Truck, StickyNote } from "lucide-react";
+import { Truck, StickyNote, UserCheck } from "lucide-react";
 import type { InvoiceFormState } from "./formHelpers";
 import { Field, inputClass, SectionCard, DateInput } from "./FormSections";
 
@@ -62,6 +62,33 @@ export function MetadataSection({ form, updateField }: Props) {
           className={inputClass}
           value={form.destination}
           onChange={(e) => updateField("destination", e.target.value)}
+        />
+      </Field>
+    </SectionCard>
+  );
+}
+
+export function BeneficiarySection({ form, updateField }: Props) {
+  return (
+    <SectionCard
+      title="Beneficiary Details"
+      description="Printed below the buyer GSTIN on the invoice"
+      icon={UserCheck}
+    >
+      <Field label="Beneficiary Name">
+        <input
+          className={inputClass}
+          value={form.beneficiaryName}
+          maxLength={60}
+          onChange={(e) => updateField("beneficiaryName", e.target.value)}
+        />
+      </Field>
+      <Field label="TIN No.">
+        <input
+          className={inputClass}
+          value={form.beneficiaryTin}
+          maxLength={30}
+          onChange={(e) => updateField("beneficiaryTin", e.target.value)}
         />
       </Field>
     </SectionCard>

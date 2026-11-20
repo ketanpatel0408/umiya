@@ -80,6 +80,8 @@ export type InvoiceMinAggregateOutputType = {
   buyerEmail: string | null
   buyerPhone: string | null
   buyerAadhaar: string | null
+  beneficiaryName: string | null
+  beneficiaryTin: string | null
   deliveryNote: string | null
   buyerOrderNo: string | null
   buyerOrderDate: Date | null
@@ -129,6 +131,8 @@ export type InvoiceMaxAggregateOutputType = {
   buyerEmail: string | null
   buyerPhone: string | null
   buyerAadhaar: string | null
+  beneficiaryName: string | null
+  beneficiaryTin: string | null
   deliveryNote: string | null
   buyerOrderNo: string | null
   buyerOrderDate: Date | null
@@ -178,6 +182,8 @@ export type InvoiceCountAggregateOutputType = {
   buyerEmail: number
   buyerPhone: number
   buyerAadhaar: number
+  beneficiaryName: number
+  beneficiaryTin: number
   deliveryNote: number
   buyerOrderNo: number
   buyerOrderDate: number
@@ -253,6 +259,8 @@ export type InvoiceMinAggregateInputType = {
   buyerEmail?: true
   buyerPhone?: true
   buyerAadhaar?: true
+  beneficiaryName?: true
+  beneficiaryTin?: true
   deliveryNote?: true
   buyerOrderNo?: true
   buyerOrderDate?: true
@@ -302,6 +310,8 @@ export type InvoiceMaxAggregateInputType = {
   buyerEmail?: true
   buyerPhone?: true
   buyerAadhaar?: true
+  beneficiaryName?: true
+  beneficiaryTin?: true
   deliveryNote?: true
   buyerOrderNo?: true
   buyerOrderDate?: true
@@ -351,6 +361,8 @@ export type InvoiceCountAggregateInputType = {
   buyerEmail?: true
   buyerPhone?: true
   buyerAadhaar?: true
+  beneficiaryName?: true
+  beneficiaryTin?: true
   deliveryNote?: true
   buyerOrderNo?: true
   buyerOrderDate?: true
@@ -487,6 +499,8 @@ export type InvoiceGroupByOutputType = {
   buyerEmail: string | null
   buyerPhone: string | null
   buyerAadhaar: string | null
+  beneficiaryName: string | null
+  beneficiaryTin: string | null
   deliveryNote: string | null
   buyerOrderNo: string | null
   buyerOrderDate: Date | null
@@ -559,6 +573,8 @@ export type InvoiceWhereInput = {
   buyerEmail?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerPhone?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerAadhaar?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  beneficiaryName?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  beneficiaryTin?: Prisma.StringNullableFilter<"Invoice"> | string | null
   deliveryNote?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerOrderNo?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerOrderDate?: Prisma.DateTimeNullableFilter<"Invoice"> | Date | string | null
@@ -610,6 +626,8 @@ export type InvoiceOrderByWithRelationInput = {
   buyerEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerPhone?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerAadhaar?: Prisma.SortOrderInput | Prisma.SortOrder
+  beneficiaryName?: Prisma.SortOrderInput | Prisma.SortOrder
+  beneficiaryTin?: Prisma.SortOrderInput | Prisma.SortOrder
   deliveryNote?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerOrderNo?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerOrderDate?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -665,6 +683,8 @@ export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
   buyerEmail?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerPhone?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerAadhaar?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  beneficiaryName?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  beneficiaryTin?: Prisma.StringNullableFilter<"Invoice"> | string | null
   deliveryNote?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerOrderNo?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerOrderDate?: Prisma.DateTimeNullableFilter<"Invoice"> | Date | string | null
@@ -716,6 +736,8 @@ export type InvoiceOrderByWithAggregationInput = {
   buyerEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerPhone?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerAadhaar?: Prisma.SortOrderInput | Prisma.SortOrder
+  beneficiaryName?: Prisma.SortOrderInput | Prisma.SortOrder
+  beneficiaryTin?: Prisma.SortOrderInput | Prisma.SortOrder
   deliveryNote?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerOrderNo?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerOrderDate?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -773,6 +795,8 @@ export type InvoiceScalarWhereWithAggregatesInput = {
   buyerEmail?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
   buyerPhone?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
   buyerAadhaar?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
+  beneficiaryName?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
+  beneficiaryTin?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
   deliveryNote?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
   buyerOrderNo?: Prisma.StringNullableWithAggregatesFilter<"Invoice"> | string | null
   buyerOrderDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Invoice"> | Date | string | null
@@ -820,6 +844,8 @@ export type InvoiceCreateInput = {
   buyerEmail?: string | null
   buyerPhone?: string | null
   buyerAadhaar?: string | null
+  beneficiaryName?: string | null
+  beneficiaryTin?: string | null
   deliveryNote?: string | null
   buyerOrderNo?: string | null
   buyerOrderDate?: Date | string | null
@@ -871,6 +897,8 @@ export type InvoiceUncheckedCreateInput = {
   buyerEmail?: string | null
   buyerPhone?: string | null
   buyerAadhaar?: string | null
+  beneficiaryName?: string | null
+  beneficiaryTin?: string | null
   deliveryNote?: string | null
   buyerOrderNo?: string | null
   buyerOrderDate?: Date | string | null
@@ -919,6 +947,8 @@ export type InvoiceUpdateInput = {
   buyerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerAadhaar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryTin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -970,6 +1000,8 @@ export type InvoiceUncheckedUpdateInput = {
   buyerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerAadhaar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryTin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1020,6 +1052,8 @@ export type InvoiceCreateManyInput = {
   buyerEmail?: string | null
   buyerPhone?: string | null
   buyerAadhaar?: string | null
+  beneficiaryName?: string | null
+  beneficiaryTin?: string | null
   deliveryNote?: string | null
   buyerOrderNo?: string | null
   buyerOrderDate?: Date | string | null
@@ -1067,6 +1101,8 @@ export type InvoiceUpdateManyMutationInput = {
   buyerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerAadhaar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryTin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1116,6 +1152,8 @@ export type InvoiceUncheckedUpdateManyInput = {
   buyerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerAadhaar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryTin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1180,6 +1218,8 @@ export type InvoiceCountOrderByAggregateInput = {
   buyerEmail?: Prisma.SortOrder
   buyerPhone?: Prisma.SortOrder
   buyerAadhaar?: Prisma.SortOrder
+  beneficiaryName?: Prisma.SortOrder
+  beneficiaryTin?: Prisma.SortOrder
   deliveryNote?: Prisma.SortOrder
   buyerOrderNo?: Prisma.SortOrder
   buyerOrderDate?: Prisma.SortOrder
@@ -1241,6 +1281,8 @@ export type InvoiceMaxOrderByAggregateInput = {
   buyerEmail?: Prisma.SortOrder
   buyerPhone?: Prisma.SortOrder
   buyerAadhaar?: Prisma.SortOrder
+  beneficiaryName?: Prisma.SortOrder
+  beneficiaryTin?: Prisma.SortOrder
   deliveryNote?: Prisma.SortOrder
   buyerOrderNo?: Prisma.SortOrder
   buyerOrderDate?: Prisma.SortOrder
@@ -1290,6 +1332,8 @@ export type InvoiceMinOrderByAggregateInput = {
   buyerEmail?: Prisma.SortOrder
   buyerPhone?: Prisma.SortOrder
   buyerAadhaar?: Prisma.SortOrder
+  beneficiaryName?: Prisma.SortOrder
+  beneficiaryTin?: Prisma.SortOrder
   deliveryNote?: Prisma.SortOrder
   buyerOrderNo?: Prisma.SortOrder
   buyerOrderDate?: Prisma.SortOrder
@@ -1434,6 +1478,8 @@ export type InvoiceCreateWithoutOwnerInput = {
   buyerEmail?: string | null
   buyerPhone?: string | null
   buyerAadhaar?: string | null
+  beneficiaryName?: string | null
+  beneficiaryTin?: string | null
   deliveryNote?: string | null
   buyerOrderNo?: string | null
   buyerOrderDate?: Date | string | null
@@ -1483,6 +1529,8 @@ export type InvoiceUncheckedCreateWithoutOwnerInput = {
   buyerEmail?: string | null
   buyerPhone?: string | null
   buyerAadhaar?: string | null
+  beneficiaryName?: string | null
+  beneficiaryTin?: string | null
   deliveryNote?: string | null
   buyerOrderNo?: string | null
   buyerOrderDate?: Date | string | null
@@ -1562,6 +1610,8 @@ export type InvoiceScalarWhereInput = {
   buyerEmail?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerPhone?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerAadhaar?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  beneficiaryName?: Prisma.StringNullableFilter<"Invoice"> | string | null
+  beneficiaryTin?: Prisma.StringNullableFilter<"Invoice"> | string | null
   deliveryNote?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerOrderNo?: Prisma.StringNullableFilter<"Invoice"> | string | null
   buyerOrderDate?: Prisma.DateTimeNullableFilter<"Invoice"> | Date | string | null
@@ -1609,6 +1659,8 @@ export type InvoiceCreateWithoutItemsInput = {
   buyerEmail?: string | null
   buyerPhone?: string | null
   buyerAadhaar?: string | null
+  beneficiaryName?: string | null
+  beneficiaryTin?: string | null
   deliveryNote?: string | null
   buyerOrderNo?: string | null
   buyerOrderDate?: Date | string | null
@@ -1659,6 +1711,8 @@ export type InvoiceUncheckedCreateWithoutItemsInput = {
   buyerEmail?: string | null
   buyerPhone?: string | null
   buyerAadhaar?: string | null
+  beneficiaryName?: string | null
+  beneficiaryTin?: string | null
   deliveryNote?: string | null
   buyerOrderNo?: string | null
   buyerOrderDate?: Date | string | null
@@ -1722,6 +1776,8 @@ export type InvoiceUpdateWithoutItemsInput = {
   buyerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerAadhaar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryTin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1772,6 +1828,8 @@ export type InvoiceUncheckedUpdateWithoutItemsInput = {
   buyerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerAadhaar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryTin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1820,6 +1878,8 @@ export type InvoiceCreateManyOwnerInput = {
   buyerEmail?: string | null
   buyerPhone?: string | null
   buyerAadhaar?: string | null
+  beneficiaryName?: string | null
+  beneficiaryTin?: string | null
   deliveryNote?: string | null
   buyerOrderNo?: string | null
   buyerOrderDate?: Date | string | null
@@ -1867,6 +1927,8 @@ export type InvoiceUpdateWithoutOwnerInput = {
   buyerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerAadhaar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryTin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1916,6 +1978,8 @@ export type InvoiceUncheckedUpdateWithoutOwnerInput = {
   buyerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerAadhaar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryTin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1965,6 +2029,8 @@ export type InvoiceUncheckedUpdateManyWithoutOwnerInput = {
   buyerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerAadhaar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  beneficiaryTin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerOrderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2045,6 +2111,8 @@ export type InvoiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   buyerEmail?: boolean
   buyerPhone?: boolean
   buyerAadhaar?: boolean
+  beneficiaryName?: boolean
+  beneficiaryTin?: boolean
   deliveryNote?: boolean
   buyerOrderNo?: boolean
   buyerOrderDate?: boolean
@@ -2097,6 +2165,8 @@ export type InvoiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   buyerEmail?: boolean
   buyerPhone?: boolean
   buyerAadhaar?: boolean
+  beneficiaryName?: boolean
+  beneficiaryTin?: boolean
   deliveryNote?: boolean
   buyerOrderNo?: boolean
   buyerOrderDate?: boolean
@@ -2147,6 +2217,8 @@ export type InvoiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   buyerEmail?: boolean
   buyerPhone?: boolean
   buyerAadhaar?: boolean
+  beneficiaryName?: boolean
+  beneficiaryTin?: boolean
   deliveryNote?: boolean
   buyerOrderNo?: boolean
   buyerOrderDate?: boolean
@@ -2197,6 +2269,8 @@ export type InvoiceSelectScalar = {
   buyerEmail?: boolean
   buyerPhone?: boolean
   buyerAadhaar?: boolean
+  beneficiaryName?: boolean
+  beneficiaryTin?: boolean
   deliveryNote?: boolean
   buyerOrderNo?: boolean
   buyerOrderDate?: boolean
@@ -2216,7 +2290,7 @@ export type InvoiceSelectScalar = {
   updatedAt?: boolean
 }
 
-export type InvoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "invoiceNumber" | "sequenceNumber" | "invoiceDate" | "financialYear" | "ownerId" | "status" | "taxType" | "sellerName" | "sellerGSTIN" | "sellerPAN" | "sellerAddress" | "sellerState" | "sellerStateCode" | "sellerEmail" | "sellerPhone" | "bankName" | "bankBranchName" | "bankAccountNumber" | "bankIfscCode" | "buyerName" | "buyerGSTIN" | "buyerPAN" | "buyerAddress" | "buyerState" | "buyerStateCode" | "buyerEmail" | "buyerPhone" | "buyerAadhaar" | "deliveryNote" | "buyerOrderNo" | "buyerOrderDate" | "dispatchDocNo" | "deliveryNoteDate" | "dispatchedThrough" | "destination" | "subtotal" | "totalCGST" | "totalSGST" | "totalIGST" | "roundOff" | "grandTotal" | "notes" | "termsAndConditions" | "createdAt" | "updatedAt", ExtArgs["result"]["invoice"]>
+export type InvoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "invoiceNumber" | "sequenceNumber" | "invoiceDate" | "financialYear" | "ownerId" | "status" | "taxType" | "sellerName" | "sellerGSTIN" | "sellerPAN" | "sellerAddress" | "sellerState" | "sellerStateCode" | "sellerEmail" | "sellerPhone" | "bankName" | "bankBranchName" | "bankAccountNumber" | "bankIfscCode" | "buyerName" | "buyerGSTIN" | "buyerPAN" | "buyerAddress" | "buyerState" | "buyerStateCode" | "buyerEmail" | "buyerPhone" | "buyerAadhaar" | "beneficiaryName" | "beneficiaryTin" | "deliveryNote" | "buyerOrderNo" | "buyerOrderDate" | "dispatchDocNo" | "deliveryNoteDate" | "dispatchedThrough" | "destination" | "subtotal" | "totalCGST" | "totalSGST" | "totalIGST" | "roundOff" | "grandTotal" | "notes" | "termsAndConditions" | "createdAt" | "updatedAt", ExtArgs["result"]["invoice"]>
 export type InvoiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   items?: boolean | Prisma.Invoice$itemsArgs<ExtArgs>
@@ -2265,6 +2339,8 @@ export type $InvoicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     buyerEmail: string | null
     buyerPhone: string | null
     buyerAadhaar: string | null
+    beneficiaryName: string | null
+    beneficiaryTin: string | null
     deliveryNote: string | null
     buyerOrderNo: string | null
     buyerOrderDate: Date | null
@@ -2736,6 +2812,8 @@ export interface InvoiceFieldRefs {
   readonly buyerEmail: Prisma.FieldRef<"Invoice", 'String'>
   readonly buyerPhone: Prisma.FieldRef<"Invoice", 'String'>
   readonly buyerAadhaar: Prisma.FieldRef<"Invoice", 'String'>
+  readonly beneficiaryName: Prisma.FieldRef<"Invoice", 'String'>
+  readonly beneficiaryTin: Prisma.FieldRef<"Invoice", 'String'>
   readonly deliveryNote: Prisma.FieldRef<"Invoice", 'String'>
   readonly buyerOrderNo: Prisma.FieldRef<"Invoice", 'String'>
   readonly buyerOrderDate: Prisma.FieldRef<"Invoice", 'DateTime'>
